@@ -16,7 +16,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-neutral-50/50 dark:bg-neutral-900/50 border-t border-neutral-200/50 dark:border-white/10 mt-auto">
+    <footer className="w-full bg-white/70 dark:bg-[oklch(0.13_0.04_260)]/95 backdrop-blur-2xl border-t border-primary/10 dark:border-primary/20 mt-auto">
       <div className="container mx-auto px-6 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Column 1: School Info */}
@@ -25,7 +25,7 @@ const Footer = () => {
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 hover:scale-110">
                 <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
               </div>
-              <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 to-neutral-600 dark:from-white dark:to-neutral-400">
+              <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60 dark:from-primary dark:to-primary/70">
                 DCMS
               </span>
             </Link>
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Column 2: Important Links */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-bold text-neutral-900 dark:text-white tracking-tight">
+            <h3 className="font-bold text-primary dark:text-primary/90 tracking-tight">
               {t("importantLinks")}
             </h3>
             <ul className="flex flex-col gap-2.5">
@@ -78,7 +78,7 @@ const Footer = () => {
 
           {/* Column 3: Quick Links */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-bold text-neutral-900 dark:text-white tracking-tight">
+            <h3 className="font-bold text-primary dark:text-primary/90 tracking-tight">
               {t("quickLinks")}
             </h3>
             <ul className="flex flex-col gap-2.5">
@@ -108,7 +108,7 @@ const Footer = () => {
 
           {/* Column 4: Newsletter & Socials */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-bold text-neutral-900 dark:text-white tracking-tight">
+            <h3 className="font-bold text-primary dark:text-primary/90 tracking-tight">
               {t("newsletterTitle")}
             </h3>
             <p className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -121,7 +121,7 @@ const Footer = () => {
               <Input
                 type="email"
                 placeholder={t("newsletterPlaceholder")}
-                className="bg-white dark:bg-neutral-950/50"
+                className="bg-white/80 dark:bg-primary/5 border-primary/20 dark:border-primary/20 placeholder:text-muted-foreground/60"
                 required
               />
               <Button type="submit" className="w-full">
@@ -160,7 +160,7 @@ const Footer = () => {
       </div>
 
       {/* Copyright Bottom Bar */}
-      <div className="border-t border-neutral-200/50 dark:border-white/10">
+      <div className="border-t border-primary/10 dark:border-primary/20">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 text-center md:text-left">
             {t("copyright", { year: currentYear })}
