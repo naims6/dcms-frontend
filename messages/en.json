@@ -1,5 +1,19 @@
 {
   "HomePage": {
     "title": "Hello world! dafdf"
+  },
+  "Navbar": {
+    "home": "Home",
+    "about": "About",
+    "admissions": "Admissions",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "notice": "Notice",
+    "toggleTheme": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "login": "Login",
+    "register": "Register"
   }
 }

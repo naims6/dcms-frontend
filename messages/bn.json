@@ -1,5 +1,19 @@
 {
   "HomePage": {
     "title": "হ্যালো বিশ্ব!"
+  },
+  "Navbar": {
+    "home": "হোম",
+    "about": "আমাদের সম্পর্কে",
+    "admissions": "ভর্তি",
+    "gallery": "গ্যালারি",
+    "contact": "যোগাযোগ",
+    "notice": "নোটিশ",
+    "toggleTheme": "থিম পরিবর্তন",
+    "light": "হালকা",
+    "dark": "গাঢ়",
+    "system": "সিস্টেম",
+    "login": "লগইন",
+    "register": "নিবন্ধন"
   }
 }
