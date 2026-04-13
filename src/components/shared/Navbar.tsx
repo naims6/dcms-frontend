@@ -9,8 +9,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { MobileMenu } from "./MobileMenu";
 import { Button } from "@/components/ui/button";
-import { navMenuItems } from "@/app/constants/navMenuItems";
-
+import { navMenuItems } from "@/constants/navMenuItems";
 
 const Navbar = () => {
   const t = useTranslations("Navbar");
@@ -41,7 +40,7 @@ const Navbar = () => {
                   "relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
                   isActive
                     ? "text-primary bg-primary/10 dark:bg-primary/20"
-                    : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/50"
+                    : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/50",
                 )}
               >
                 {t(link.labelKey)}
@@ -55,15 +54,22 @@ const Navbar = () => {
           <div className="hidden sm:flex items-center gap-1 lg:gap-2">
             <ThemeToggle />
             <LanguageToggle />
-            
+
             <div className="h-6 w-px bg-neutral-200 dark:bg-white/10 mx-1 hidden lg:block" />
-            
+
             <div className="hidden lg:flex items-center gap-2 ml-1">
-              <Button variant="ghost" className="font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-full" asChild>
-                <Link href="/login">{t('login')}</Link>
+              <Button
+                variant="ghost"
+                className="font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-full"
+                asChild
+              >
+                <Link href="/login">{t("login")}</Link>
               </Button>
-              <Button className="font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5 rounded-full" asChild>
-                <Link href="/register">{t('register')}</Link>
+              <Button
+                className="font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5 rounded-full"
+                asChild
+              >
+                <Link href="/register">{t("register")}</Link>
               </Button>
             </div>
           </div>

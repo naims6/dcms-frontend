@@ -16,6 +16,12 @@
     "login": "Login",
     "register": "Register"
   },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for doesn't exist or has been moved.",
+    "backHome": "Back to Home",
+    "contactSupport": "Contact Support"
+  },
   "Footer": {
     "description": "A premier educational institution dedicated to fostering knowledge, character, and leadership in students.",
     "importantLinks": "Important Links",
