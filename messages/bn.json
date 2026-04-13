@@ -15,5 +15,26 @@
     "system": "সিস্টেম",
     "login": "লগইন",
     "register": "নিবন্ধন"
+  },
+  "Footer": {
+    "description": "শিক্ষার্থীদের জ্ঞান, চরিত্র এবং নেতৃত্ব বিকাশে নিবেদিত একটি প্রধান শিক্ষাপ্রতিষ্ঠান।",
+    "importantLinks": "গুরুত্বপূর্ণ লিংক",
+    "quickLinks": "দ্রুত লিংক",
+    "contactInfo": "যোগাযোগের তথ্য",
+    "addressTitle": "ঠিকানা:",
+    "address": "ধনবাড়ী, টাঙ্গাইল, বাংলাদেশ",
+    "phoneTitle": "ফোন:",
+    "phone": "+৮৮০ ১২৩ ৪৫৬ ৭৮৯০",
+    "emailTitle": "ইমেইল:",
+    "email": "info@dcms.edu.bd",
+    "studentPortal": "স্টুডেন্ট পোর্টাল",
+    "noticeBoard": "নোটিশ বোর্ড",
+    "events": "ইভেন্ট",
+    "careers": "ক্যারিয়ার",
+    "newsletterTitle": "নিউজলেটার সাবস্ক্রাইব করুন",
+    "newsletterDesc": "সবশেষ আপডেট এবং খবর সরাসরি আপনার ইনবক্সে পান।",
+    "newsletterPlaceholder": "আপনার ইমেইল লিখুন",
+    "subscribe": "সাবস্ক্রাইব করুন",
+    "copyright": "© {year} ধনবাড়ী কলেজিয়েট মডেল স্কুল। সর্বস্বত্ব সংরক্ষিত।"
   }
 }

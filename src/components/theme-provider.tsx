@@ -7,7 +7,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 // This is a known false positive with next-themes and React 19 Turbopack.
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   const orig = console.error;
-  console.error = (...args: any[]) => {
+  console.error = (...args: unknown[]) => {
     if (typeof args[0] === "string" && args[0].includes("Encountered a script tag")) {
       return;
     }

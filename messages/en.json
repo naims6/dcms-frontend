@@ -15,5 +15,26 @@
     "system": "System",
     "login": "Login",
     "register": "Register"
+  },
+  "Footer": {
+    "description": "A premier educational institution dedicated to fostering knowledge, character, and leadership in students.",
+    "importantLinks": "Important Links",
+    "quickLinks": "Quick Links",
+    "contactInfo": "Contact Info",
+    "addressTitle": "Address:",
+    "address": "Dhanbari, Tangail, Bangladesh",
+    "phoneTitle": "Phone:",
+    "phone": "+880 123 456 7890",
+    "emailTitle": "Email:",
+    "email": "info@dcms.edu.bd",
+    "studentPortal": "Student Portal",
+    "noticeBoard": "Notice Board",
+    "events": "Events",
+    "careers": "Careers",
+    "newsletterTitle": "Subscribe to Newsletter",
+    "newsletterDesc": "Get the latest updates and news directly in your inbox.",
+    "newsletterPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "copyright": "© {year} Dhanbari Collegiate Model School. All rights reserved."
   }
 }
