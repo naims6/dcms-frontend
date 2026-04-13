@@ -29,7 +29,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center gap-1.5 lg:gap-2">
+        <nav className="hidden xl:flex items-center gap-1.5 lg:gap-2">
           {navMenuItems.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -55,9 +55,9 @@ const Navbar = () => {
             <ThemeToggle />
             <LanguageToggle />
 
-            <div className="h-6 w-px bg-primary/15 dark:bg-primary/25 mx-1 hidden lg:block" />
+            <div className="h-6 w-px bg-primary/15 dark:bg-primary/25 mx-1 hidden xl:block" />
 
-            <div className="hidden lg:flex items-center gap-2 ml-1">
+            <div className="hidden xl:flex items-center gap-2 ml-1">
               <Button
                 variant="ghost"
                 className="font-medium text-neutral-600 dark:text-primary/70 hover:text-primary dark:hover:text-primary hover:bg-primary/8 dark:hover:bg-primary/15 rounded-full"
