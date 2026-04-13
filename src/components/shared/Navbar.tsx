@@ -16,7 +16,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <header className="w-full sticky top-0 z-50 border-b border-primary/10 dark:border-primary/20 bg-white/80 dark:bg-[oklch(0.13_0.04_260)]/90 backdrop-blur-2xl shadow-[0_1px_40px_0_rgba(99,102,241,0.08)] dark:shadow-[0_1px_40px_0_rgba(99,102,241,0.15)] transition-colors duration-300">
+    <header className="w-full sticky top-0 z-50 border-b border-primary/10 dark:border-primary/20 bg-background/80 backdrop-blur-2xl shadow-[0_1px_40px_0_rgba(99,102,241,0.08)] dark:shadow-[0_1px_40px_0_rgba(99,102,241,0.15)] transition-colors duration-300">
       <div className="container mx-auto flex items-center justify-between px-6 h-16 sm:h-20">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">

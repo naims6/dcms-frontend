@@ -96,7 +96,7 @@
 
 .dark {
   /* BACKGROUNDS: Deep, structured indigo-slate. Easier on eyes than pure black */
-  --background: oklch(0.18 0.02 260);
+  --background: #0F1629;
   --foreground: oklch(0.96 0.01 260);
 
   /* CARDS: Lifted slightly from the deep background for depth */
@@ -149,5 +149,33 @@
   }
   html {
     @apply font-sans;
+  }
+
+  /* High-End Professional Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    /* Using oklch for precise opacity control - feels lightweight and premium */
+    background: oklch(from var(--primary) l c h / 0.2);
+    border-radius: 20px;
+    border: 3px solid transparent; /* Creates the padding/floating effect */
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(from var(--primary) l c h / 0.5);
+  }
+
+  /* Firefox Support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(from var(--primary) l c h / 0.2) transparent;
   }
 }

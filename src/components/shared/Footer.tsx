@@ -16,7 +16,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-white/70 dark:bg-[oklch(0.13_0.04_260)]/95 backdrop-blur-2xl border-t border-primary/10 dark:border-primary/20 mt-auto">
+    <footer className="w-full bg-background/70 backdrop-blur-2xl border-t border-primary/10 dark:border-primary/20 mt-auto">
       <div className="container mx-auto px-6 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Column 1: School Info */}

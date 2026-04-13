@@ -15,16 +15,40 @@ export function HeroSection() {
 
   return (
     <section className="relative w-full min-h-[850px] overflow-hidden bg-background flex items-center">
-
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute -top-24 right-0 w-[400px] h-[400px] rounded-full bg-indigo-400/10 dark:bg-indigo-400/8 blur-[100px]" />
+        {/* 1st layer  */}
+        <div className="absolute right-[28%] top-0 hidden h-[150px] w-[200px] rotate-12 rounded-3xl bg-gradient-to-l from-blue-600 to-sky-400 opacity-15 blur-3xl filter dark:block dark:opacity-20 lg:top-44 lg:-right-20 lg:h-72 lg:w-[350px] xl:h-80 xl:w-[450px]"></div>
+
+        {/* 2nd gradient  */}
+        <div className="absolute bottom-44 -left-64 hidden h-[150px] w-[900px] -rotate-45 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-800 opacity-15 blur-3xl filter dark:block lg:bottom-24 lg:-left-20 lg:h-28 lg:w-[250px] lg:-rotate-12 lg:opacity-20 xl:h-40 xl:w-[400px]"></div>
+
+        {/* 3rd gradient */}
+        <div className="absolute left-[28%] top-28 hidden rotate-12 rounded-3xl bg-sky-800 opacity-60 blur-3xl filter dark:opacity-20 lg:h-32 lg:w-[450px] dark:lg:block xl:h-44 xl:w-[600px]"></div>
+
+        <div className="min-h-full w-full relative">
+          {/* Top Fade Grid Background */}
+          <div
+            className="absolute inset-0 z-0 dark:opacity-5 opacity-55"
+            style={{
+              backgroundImage: `
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
+      `,
+              backgroundSize: "20px 30px",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+              maskImage:
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+            }}
+          />
+          {/* Your Content/Components */}
+        </div>
       </div>
 
       {/* ── Content ── */}
       <div className="container mx-auto px-6 py-16 md:py-28 relative z-10">
         <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 xl:gap-20 items-center">
-
           {/* ── Left: Text Content ── */}
           <div
             className="flex flex-col justify-center space-y-8"
