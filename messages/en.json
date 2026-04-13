@@ -1,7 +1,4 @@
 {
-  "HomePage": {
-    "title": "Hello world! dafdf"
-  },
   "Navbar": {
     "home": "Home",
     "about": "About",
@@ -42,5 +39,19 @@
     "newsletterPlaceholder": "Enter your email",
     "subscribe": "Subscribe",
     "copyright": "© {year} Dhanbari Collegiate Model School. All rights reserved."
+  },
+  "Hero": {
+    "badge": "Top Rated School",
+    "headline": "Shaping Future Leaders",
+    "subheading": "A premier educational institution dedicated to fostering knowledge, character, and leadership in students. Join us on a journey of discovery and excellence.",
+    "applyNow": "Apply Now",
+    "learnMore": "Learn More",
+    "students": "Active Students",
+    "teachers": "Expert Teachers",
+    "alumni": "Alumni Network",
+    "imageAlt": "Students at school campus",
+    "captionText": "Excellence in Education Since {year}",
+    "passRateLabel": "Pass Rate",
+    "studentsFloatLabel": "Students"
   }
 }

@@ -17,7 +17,7 @@ const Footer = () => {
 
   return (
     <footer className="w-full bg-neutral-50/50 dark:bg-neutral-900/50 border-t border-neutral-200/50 dark:border-white/10 mt-auto">
-      <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
+      <div className="container mx-auto px-6 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Column 1: School Info */}
           <div className="flex flex-col gap-4">
