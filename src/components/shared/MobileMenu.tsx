@@ -25,7 +25,7 @@ export function MobileMenu() {
 
   return (
     <>
-      <div className="md:hidden z-50 cursor-pointer -mr-2 text-neutral-800 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white transition-colors">
+      <div className="xl:hidden z-50 cursor-pointer -mr-2 text-neutral-800 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white transition-colors">
         <Hamburger
           toggled={open}
           toggle={setOpen}

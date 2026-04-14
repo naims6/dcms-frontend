@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, GraduationCap, Users, Trophy } from "lucide-react";
+import { ArrowRight, GraduationCap, Trophy } from "lucide-react";
 import {
   HERO_STATS,
   HERO_PASS_RATE_CARD,
@@ -14,37 +14,47 @@ export function HeroSection() {
   const t = useTranslations("Hero");
 
   return (
-    <section className="relative w-full overflow-hidden bg-background flex items-center">
+    <section className="relative w-full min-h-200 overflow-hidden bg-background flex items-center border-b border-border/40">
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Subtle dot grid */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, hsl(var(--primary) / 0.15) 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-            maskImage:
-              "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
-          }}
-        />
+        {/* 1st layer  */}
+        <div className="absolute right-[28%] top-0 hidden h-37.5 w-50 rotate-12 rounded-3xl bg-linear-to-l from-blue-600 to-sky-400 opacity-15 blur-3xl filter dark:block dark:opacity-20 lg:top-44 lg:-right-20 lg:h-72 lg:w-87.5 xl:h-80 xl:w-112.5"></div>
 
-        {/* Large ambient orb — top-left */}
-        <div className="absolute -top-32 -left-32 w-[640px] h-[640px] rounded-full bg-primary/10 blur-[120px]" />
-        {/* Large ambient orb — bottom-right */}
-        <div className="absolute -bottom-32 -right-32 w-[560px] h-[560px] rounded-full bg-primary/8 blur-[100px]" />
+        {/* 2nd linear  */}
+        <div className="absolute bottom-44 -left-64 hidden h-37.5 w-225 -rotate-45 rounded-3xl bg-linear-to-r from-violet-600 to-indigo-800 opacity-15 blur-3xl filter dark:block lg:bottom-24 lg:-left-20 lg:h-28 lg:w-62.5 lg:-rotate-12 lg:opacity-20 xl:h-40 xl:w-100"></div>
+
+        {/* 3rd linear */}
+        <div className="absolute left-[28%] top-28 hidden rotate-12 rounded-3xl bg-sky-800 opacity-60 blur-3xl filter dark:opacity-20 lg:h-32 lg:w-112.5 dark:lg:block xl:h-44 xl:w-150"></div>
+
+        <div className="min-h-full w-full relative">
+          {/* Top Fade Grid Background */}
+          <div
+            className="absolute inset-0 z-0 dark:opacity-5 opacity-55"
+            style={{
+              backgroundImage: `
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
+      `,
+              backgroundSize: "20px 30px",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+              maskImage:
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+            }}
+          />
+        </div>
       </div>
 
-      <div className="container mx-auto px-6 py-20 md:py-28 relative z-10">
+      {/* ── Content ── */}
+      <div className="container mx-auto px-6 py-16 md:py-28 relative z-10 ">
         <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 xl:gap-20 items-center">
-
           {/* ── Left: Text Content ── */}
           <div
             className="flex flex-col justify-center space-y-8"
             style={{ animation: "heroFadeUp 0.7s ease both" }}
           >
-            {/* Badge */}
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-4 py-1.5 text-sm font-medium text-primary shadow-sm backdrop-blur-md">
+            {/* Badge — glassmorphism pill */}
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/25 bg-primary/8 dark:bg-primary/12 px-4 py-1.5 text-sm font-medium text-primary shadow-sm shadow-primary/10 backdrop-blur-md dark:backdrop-blur-xl">
               <GraduationCap className="h-4 w-4" />
               {t("badge")}
             </div>
@@ -55,7 +65,7 @@ export function HeroSection() {
                 <span className="text-foreground">{t("headline")}</span>
               </h1>
 
-              <p className="max-w-[540px] text-muted-foreground text-base md:text-lg leading-relaxed">
+              <p className="max-w-135 text-muted-foreground text-base md:text-lg leading-relaxed">
                 {t("subheading")}
               </p>
             </div>
@@ -64,7 +74,7 @@ export function HeroSection() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button
                 size="lg"
-                className="h-12 px-8 rounded-xl gap-2 font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:-translate-y-0.5 transition-all duration-300"
+                className="h-12 px-8 rounded-xl gap-2 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300"
               >
                 {t("applyNow")}
                 <ArrowRight className="h-4 w-4" />
@@ -72,7 +82,7 @@ export function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-12 px-8 rounded-xl font-semibold border-border/60 bg-background/60 backdrop-blur-md hover:bg-accent/60 hover:-translate-y-0.5 transition-all duration-300"
+                className="h-12 px-8 rounded-xl font-semibold border-primary/20 bg-primary/5 dark:bg-primary/8 backdrop-blur-md hover:bg-primary/10 dark:hover:bg-primary/15 transition-all duration-300"
               >
                 {t("learnMore")}
               </Button>
@@ -101,25 +111,29 @@ export function HeroSection() {
             className="relative w-full"
             style={{ animation: "heroFadeUp 0.9s 0.15s ease both" }}
           >
-            {/* Decorative glow behind image */}
-            <div className="absolute -inset-4 rounded-3xl bg-primary/10 blur-2xl z-0" />
+            {/* Multi-layer glow behind image */}
+            <div className="absolute -inset-6 rounded-3xl bg-primary/8 blur-3xl z-0" />
+            <div className="absolute -inset-2 rounded-3xl bg-primary/12 blur-xl z-0" />
 
-            {/* Main rectangular image card */}
-            <div className="relative z-10 w-full overflow-hidden rounded-2xl border border-white/20 dark:border-white/8 shadow-[0_24px_80px_-16px_rgba(0,0,0,0.22)] bg-card">
-              {/* Gradient overlay on image */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 via-transparent to-transparent z-10 pointer-events-none" />
+            {/* Main rectangular image card — glassmorphism border */}
+            <div className="relative z-10 w-full overflow-hidden rounded-2xl border border-white/30 dark:border-primary/25  bg-card ring-1 ring-primary/10">
+              {/* linear overlay on image */}
+              <div className="absolute inset-0 bg-linear-to-tr from-primary/20 via-transparent to-transparent z-10 pointer-events-none" />
+
+              {/* Top shimmer line */}
+              <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent z-20" />
 
               <Image
                 src="/images/hero-school2.png"
                 alt={t("imageAlt")}
                 width={900}
                 height={600}
-                className="w-full h-auto object-cover aspect-[3/2] transition-transform duration-700 hover:scale-[1.03]"
+                className="w-full h-auto object-cover aspect-3/2 transition-transform duration-700 hover:scale-[1.03]"
                 priority
               />
 
-              {/* Bottom gradient caption bar */}
-              <div className="absolute bottom-0 inset-x-0 z-20 h-28 bg-gradient-to-t from-black/55 to-transparent" />
+              {/* Bottom linear caption bar */}
+              <div className="absolute bottom-0 inset-x-0 z-20 h-28 bg-linear-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3">
                 <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/40">
                   <GraduationCap className="h-4 w-4 text-primary-foreground" />
@@ -130,9 +144,9 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Floating "Pass Rate" card — bottom-right */}
+            {/* Floating "Pass Rate" card — glassmorphism */}
             <div
-              className="absolute -bottom-5 -right-4 md:-right-8 z-20 px-5 py-4 rounded-2xl border border-white/30 dark:border-white/10 bg-white/80 dark:bg-card/90 backdrop-blur-xl shadow-2xl hidden sm:block"
+              className="absolute -bottom-5 -right-4 md:-right-8 z-20 px-5 py-4 rounded-2xl border border-primary/20 dark:border-primary/30 bg-white/85 dark:bg-[oklch(0.18_0.04_260)]/90 backdrop-blur-2xl shadow-2xl shadow-primary/15 hidden sm:block ring-1 ring-primary/10"
               style={{ animation: "heroFloat 3s ease-in-out infinite" }}
             >
               <div className="flex items-center gap-3">
@@ -149,16 +163,6 @@ export function HeroSection() {
                 </div>
               </div>
             </div>
-
-            {/* Dot accent */}
-            <div
-              className="absolute top-1/2 -right-10 z-0 h-28 w-28 opacity-30"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle, hsl(var(--primary) / 0.5) 1.5px, transparent 1.5px)",
-                backgroundSize: "10px 10px",
-              }}
-            />
           </div>
         </div>
       </div>

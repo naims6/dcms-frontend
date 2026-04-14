@@ -53,5 +53,52 @@
     "captionText": "Excellence in Education Since {year}",
     "passRateLabel": "Pass Rate",
     "studentsFloatLabel": "Students"
+  },
+  "QuickInfo": {
+    "admissionStatus": "✨ Admissions Open",
+    "admissionMessage": "Apply now for the upcoming academic year. Limited seats available.",
+    "timingLabel": "School Timing",
+    "timingValue": "08:00 AM - 04:00 PM",
+    "callLabel": "Call",
+    "applyButton": "Apply Now"
+  },
+  "About": {
+    "badge": "About Us",
+    "title": "About Our School",
+    "description1": "Dhanbari Collegiate Model School is a leading educational institution committed to providing holistic education that develops not just academic excellence but also character, leadership, and social responsibility. Since our establishment, we have been nurturing young minds to become responsible citizens and leaders.",
+    "description2": "Our state-of-the-art facilities, experienced faculty, and student-centric approach ensure that every student reaches their full potential. We believe in creating an environment where learning is engaging, meaningful, and transformative.",
+    "highlight1": "Expert Faculty with International Qualifications",
+    "highlight2": "Comprehensive Curriculum with Modern Teaching Methods",
+    "highlight3": "Safe, Inclusive, and Technologically Advanced Campus",
+    "imageAlt": "School Building",
+    "imagePlaceholder": "School Campus",
+    "ctaButton": "Explore Full Story"
+  },
+  "Stats": {
+    "title": "By The Numbers",
+    "subtitle": "Our achievements reflect our commitment to educational excellence and student success.",
+    "students": {
+      "value": "1,200+",
+      "label": "Active Students",
+      "description": "Learn from a diverse community of talented students from across the region."
+    },
+    "courses": {
+      "value": "30+",
+      "label": "Courses Offered",
+      "description": "Comprehensive curriculum covering sciences, humanities, and commerce streams."
+    },
+    "passRate": {
+      "value": "98%",
+      "label": "Pass Rate",
+      "description": "Consistently excellent results with top scores in national exams."
+    },
+    "awards": {
+      "value": "50+",
+      "label": "Awards Won",
+      "description": "Recognized for academic, sports, and cultural achievements nationally."
+    },
+    "ctaTitle": "Ready to Join Our Learning Community?",
+    "ctaDescription": "Take the first step towards an exceptional educational journey with us today.",
+    "ctaButton": "Start Your Journey"
   }
 }
