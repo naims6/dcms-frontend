@@ -14,7 +14,7 @@ export function HeroSection() {
   const t = useTranslations("Hero");
 
   return (
-    <section className="relative w-full min-h-200 overflow-hidden bg-background flex items-center">
+    <section className="relative w-full min-h-200 overflow-hidden bg-background flex items-center border-b border-border/40">
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* 1st layer  */}
@@ -32,21 +32,21 @@ export function HeroSection() {
             className="absolute inset-0 z-0 dark:opacity-5 opacity-55"
             style={{
               backgroundImage: `
-        linear-linear(to right, #e2e8f0 1px, transparent 1px),
-        linear-linear(to bottom, #e2e8f0 1px, transparent 1px)
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
       `,
               backgroundSize: "20px 30px",
               WebkitMaskImage:
-                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
               maskImage:
-                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
             }}
           />
         </div>
       </div>
 
       {/* ── Content ── */}
-      <div className="container mx-auto px-6 py-16 md:py-28 relative z-10">
+      <div className="container mx-auto px-6 py-16 md:py-28 relative z-10 ">
         <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 xl:gap-20 items-center">
           {/* ── Left: Text Content ── */}
           <div
@@ -74,7 +74,7 @@ export function HeroSection() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button
                 size="lg"
-                className="h-12 px-8 rounded-xl gap-2 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300"
+                className="h-12 px-8 rounded-xl gap-2 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300"
               >
                 {t("applyNow")}
                 <ArrowRight className="h-4 w-4" />
@@ -82,7 +82,7 @@ export function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-12 px-8 rounded-xl font-semibold border-primary/20 bg-primary/5 dark:bg-primary/8 backdrop-blur-md hover:bg-primary/10 dark:hover:bg-primary/15 hover:-translate-y-0.5 transition-all duration-300"
+                className="h-12 px-8 rounded-xl font-semibold border-primary/20 bg-primary/5 dark:bg-primary/8 backdrop-blur-md hover:bg-primary/10 dark:hover:bg-primary/15 transition-all duration-300"
               >
                 {t("learnMore")}
               </Button>

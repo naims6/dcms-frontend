@@ -2,118 +2,84 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 
 export function AboutSection() {
   const t = useTranslations("About");
 
   return (
-    <section className="relative w-full py-16 md:py-24 lg:py-32 bg-background overflow-hidden">
-      {/* Premium background gradient elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/8 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/6 rounded-full blur-3xl" />
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="w-full py-16 md:py-24 lg:py-32 bg-background border-b border-border/40">
+      <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: Image (on large devices) */}
           <div
-            className="relative h-80 md:h-[420px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl shadow-primary/15 order-2 lg:order-1"
+            className="relative h-[300px] sm:h-[400px] lg:h-[550px] rounded-3xl overflow-hidden shadow-lg border border-border/50 order-2 lg:order-1"
             style={{
               animation: "fadeInLeft 0.8s ease both",
             }}
           >
-            {/* Image Placeholder with premium styling */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/25 via-accent/10 to-primary/20">
+            <div className="absolute inset-0 bg-muted">
               <div className="absolute inset-0 flex items-center justify-center">
                 <Image
                   src="/images/hero-school2.png"
                   alt={t("imageAlt")}
                   fill
-                  className="object-cover w-full h-full"
+                  className="object-cover object-center w-full h-full transition-transform duration-700 hover:scale-105"
                 />
+                
+                {/* Subtle overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               </div>
             </div>
-
-            {/* Decorative corner accents */}
-            <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
-
-            {/* Premium border effect */}
-            <div className="absolute inset-0 rounded-2xl border-2 border-primary/20" />
           </div>
 
           {/* Right: Content */}
           <div
-            className="space-y-6 md:space-y-8 order-1 lg:order-2"
+            className="flex flex-col justify-center space-y-8 order-1 lg:order-2"
             style={{
               animation: "fadeInRight 0.8s ease both",
             }}
           >
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 w-fit backdrop-blur-sm">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-xs font-bold text-primary uppercase tracking-wide">
+            <div className="space-y-6">
+              {/* Badge */}
+              <Badge variant="secondary" className="w-fit text-primary bg-primary/10 hover:bg-primary/20 gap-2 px-3 py-1.5 text-sm font-medium">
+                <Sparkles className="h-4 w-4" />
                 {t("badge")}
-              </span>
-            </div>
+              </Badge>
 
-            {/* Heading */}
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl lg:text-6xl font-black tracking-tight leading-tight text-foreground">
+              {/* Heading */}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.15]">
                 {t("title")}
               </h2>
-              <div className="h-1.5 w-24 bg-gradient-to-r from-primary via-primary/70 to-accent rounded-full" />
-            </div>
 
-            {/* Description */}
-            <div className="space-y-4">
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-medium">
-                {t("description1")}
-              </p>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-medium">
-                {t("description2")}
-              </p>
+              {/* Description */}
+              <div className="space-y-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+                <p>{t("description1")}</p>
+                <p>{t("description2")}</p>
+              </div>
             </div>
 
             {/* Highlights List */}
-            <div className="space-y-3.5 pt-6 border-t border-border/40">
+            <ul className="space-y-4 pt-6 mt-6 border-t border-border">
               {(["highlight1", "highlight2", "highlight3"] as const).map(
                 (key, idx) => (
-                  <div key={idx} className="flex gap-3.5 items-start group">
-                    <div className="flex-shrink-0 mt-1">
-                      <div className="flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 text-primary group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300">
-                        <svg
-                          className="w-3.5 h-3.5 font-bold"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <p className="text-sm md:text-base font-semibold text-foreground leading-snug pt-0.5">
+                  <li key={idx} className="flex gap-3 items-start">
+                    <CheckCircle2 className="h-6 w-6 text-primary shrink-0" />
+                    <span className="text-base font-medium text-foreground">
                       {t(key)}
-                    </p>
-                  </div>
+                    </span>
+                  </li>
                 ),
               )}
-            </div>
+            </ul>
 
             {/* CTA Button */}
-            <div className="pt-2">
-              <Button
-                size="lg"
-                className="gap-2 font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
-              >
+            <div className="pt-4">
+              <Button size="lg" className="h-12 px-8 gap-2 group text-base">
                 {t("ctaButton")}
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
           </div>
