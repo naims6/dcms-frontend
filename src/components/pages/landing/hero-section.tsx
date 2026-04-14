@@ -14,17 +14,17 @@ export function HeroSection() {
   const t = useTranslations("Hero");
 
   return (
-    <section className="relative w-full min-h-[850px] overflow-hidden bg-background flex items-center">
+    <section className="relative w-full min-h-200 overflow-hidden bg-background flex items-center">
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* 1st layer  */}
-        <div className="absolute right-[28%] top-0 hidden h-[150px] w-[200px] rotate-12 rounded-3xl bg-gradient-to-l from-blue-600 to-sky-400 opacity-15 blur-3xl filter dark:block dark:opacity-20 lg:top-44 lg:-right-20 lg:h-72 lg:w-[350px] xl:h-80 xl:w-[450px]"></div>
+        <div className="absolute right-[28%] top-0 hidden h-37.5 w-50 rotate-12 rounded-3xl bg-linear-to-l from-blue-600 to-sky-400 opacity-15 blur-3xl filter dark:block dark:opacity-20 lg:top-44 lg:-right-20 lg:h-72 lg:w-87.5 xl:h-80 xl:w-112.5"></div>
 
-        {/* 2nd gradient  */}
-        <div className="absolute bottom-44 -left-64 hidden h-[150px] w-[900px] -rotate-45 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-800 opacity-15 blur-3xl filter dark:block lg:bottom-24 lg:-left-20 lg:h-28 lg:w-[250px] lg:-rotate-12 lg:opacity-20 xl:h-40 xl:w-[400px]"></div>
+        {/* 2nd linear  */}
+        <div className="absolute bottom-44 -left-64 hidden h-37.5 w-225 -rotate-45 rounded-3xl bg-linear-to-r from-violet-600 to-indigo-800 opacity-15 blur-3xl filter dark:block lg:bottom-24 lg:-left-20 lg:h-28 lg:w-62.5 lg:-rotate-12 lg:opacity-20 xl:h-40 xl:w-100"></div>
 
-        {/* 3rd gradient */}
-        <div className="absolute left-[28%] top-28 hidden rotate-12 rounded-3xl bg-sky-800 opacity-60 blur-3xl filter dark:opacity-20 lg:h-32 lg:w-[450px] dark:lg:block xl:h-44 xl:w-[600px]"></div>
+        {/* 3rd linear */}
+        <div className="absolute left-[28%] top-28 hidden rotate-12 rounded-3xl bg-sky-800 opacity-60 blur-3xl filter dark:opacity-20 lg:h-32 lg:w-112.5 dark:lg:block xl:h-44 xl:w-150"></div>
 
         <div className="min-h-full w-full relative">
           {/* Top Fade Grid Background */}
@@ -32,17 +32,16 @@ export function HeroSection() {
             className="absolute inset-0 z-0 dark:opacity-5 opacity-55"
             style={{
               backgroundImage: `
-        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
-        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
+        linear-linear(to right, #e2e8f0 1px, transparent 1px),
+        linear-linear(to bottom, #e2e8f0 1px, transparent 1px)
       `,
               backgroundSize: "20px 30px",
               WebkitMaskImage:
-                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
               maskImage:
-                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
             }}
           />
-          {/* Your Content/Components */}
         </div>
       </div>
 
@@ -66,7 +65,7 @@ export function HeroSection() {
                 <span className="text-foreground">{t("headline")}</span>
               </h1>
 
-              <p className="max-w-[540px] text-muted-foreground text-base md:text-lg leading-relaxed">
+              <p className="max-w-135 text-muted-foreground text-base md:text-lg leading-relaxed">
                 {t("subheading")}
               </p>
             </div>
@@ -118,23 +117,23 @@ export function HeroSection() {
 
             {/* Main rectangular image card — glassmorphism border */}
             <div className="relative z-10 w-full overflow-hidden rounded-2xl border border-white/30 dark:border-primary/25  bg-card ring-1 ring-primary/10">
-              {/* Gradient overlay on image */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent z-10 pointer-events-none" />
+              {/* linear overlay on image */}
+              <div className="absolute inset-0 bg-linear-to-tr from-primary/20 via-transparent to-transparent z-10 pointer-events-none" />
 
               {/* Top shimmer line */}
-              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent z-20" />
+              <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent z-20" />
 
               <Image
                 src="/images/hero-school2.png"
                 alt={t("imageAlt")}
                 width={900}
                 height={600}
-                className="w-full h-auto object-cover aspect-[3/2] transition-transform duration-700 hover:scale-[1.03]"
+                className="w-full h-auto object-cover aspect-3/2 transition-transform duration-700 hover:scale-[1.03]"
                 priority
               />
 
-              {/* Bottom gradient caption bar */}
-              <div className="absolute bottom-0 inset-x-0 z-20 h-28 bg-gradient-to-t from-black/60 to-transparent" />
+              {/* Bottom linear caption bar */}
+              <div className="absolute bottom-0 inset-x-0 z-20 h-28 bg-linear-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3">
                 <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/40">
                   <GraduationCap className="h-4 w-4 text-primary-foreground" />
