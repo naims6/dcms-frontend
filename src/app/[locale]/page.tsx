@@ -3,7 +3,7 @@ import { HeroSection } from "@/components/pages/landing/hero-section";
 import { QuickInfoBar } from "@/components/pages/landing/quick-info-bar";
 import { AboutSection } from "@/components/pages/landing/about-section";
 import { StatsSection } from "@/components/pages/landing/stats-section";
-
+import { LeadershipSection } from "@/components/pages/landing/leadership-section";
 export default function Home({
   params: { locale },
 }: {
@@ -17,6 +17,7 @@ export default function Home({
       <HeroSection />
       <AboutSection />
       <StatsSection />
+      <LeadershipSection />
     </main>
   );
 }
