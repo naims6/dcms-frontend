@@ -100,5 +100,66 @@
     "ctaTitle": "Ready to Join Our Learning Community?",
     "ctaDescription": "Take the first step towards an exceptional educational journey with us today.",
     "ctaButton": "Start Your Journey"
+  },
+  "Leadership": {
+    "sectionTitle": "Teachers and Committee Members",
+    "viewAllBtn": "View All",
+    "welcomeTitle": "Welcome to our Institution!",
+    "welcomeText1": "Education, culture, and literature are the lights by which we are proud to enrich the educational community of green Bangladesh. We are preparing for education to build an ideal society, where students can grow subject to fair values, support, and respect.",
+    "welcomeText2": "We provide close support with the preparation of school education. Education, culture, and literature are the lights by which we are proud to enrich the educational community of green Bangladesh. We are preparing for education to build an ideal society, where students can grow subject to fair values, support, and respect.",
+    "card1Name": "President Name",
+    "card1Role": "President",
+    "card1Btn": "President Info >",
+    "card2Name": "S. M. Masud Kabir",
+    "card2Role": "Head Teacher",
+    "card2Btn": "Head Teacher Info >",
+    "card3Name": "Mohammad Abul Hossain",
+    "card3Role": "Assistant Head Teacher",
+    "card3Btn": "Assistant Head Teacher Info >"
+  },
+  "NoticeBoard": {
+    "sectionTitle": "NOTICE BOARD",
+    "tabs": {
+      "general": "General Notice",
+      "scholarship": "Scholarship and Fellowship",
+      "jobs": "Job Circulars",
+      "tender": "Tender & Procurement"
+    },
+    "table": {
+      "date": "Date",
+      "title": "Title",
+      "attachment": "Attachment",
+      "viewDetails": "View Details"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "entries": "entries"
+    },
+    "entriesPerPage": "entries per page",
+    "search": "Search:"
+  },
+  "Gallery": {
+    "sectionTitle": "Our Moments",
+    "sectionSubtitle": "A glimpse into the vibrant life, events, and academic journey at our institution.",
+    "viewAll": "View All Media"
+  },
+  "ContactSection": {
+    "title": "Get in Touch",
+    "subtitle": "Have questions or want to learn more about our institution? We'd love to hear from you.",
+    "formName": "Your Name",
+    "formEmail": "Email Address",
+    "formSubject": "Subject",
+    "formMessage": "Your Message",
+    "formSubmit": "Send Message",
+    "infoTitle": "Contact Information",
+    "infoDesc": "Reach out to us using the contact details below or visit our campus during office hours.",
+    "addressTitle": "Our Location",
+    "addressText": "Dhanbari, Tangail, Bangladesh",
+    "phoneTitle": "Phone Number",
+    "phoneText": "+880 123 456 7890",
+    "emailTitle": "Email Address",
+    "emailText": "info@dcms.edu.bd"
   }
 }
