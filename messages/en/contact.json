@@ -3,10 +3,16 @@
     "heroBadge": "Get in Touch",
     "heroTitle": "Contact",
     "heroTitleHighlight": "Us",
-    "heroSubtitle": "We are here to help and answer any question you might have. We look forward to hearing from you.",
-    "supportCardTitle": "Student Support",
-    "supportCardText": "Our support team is available during school hours to assist students and parents.",
-    "adminCardTitle": "Administration",
-    "adminCardText": "Contact our administrative office for admissions, records, and general inquiries."
+    "heroSubtitle": "We are here to help and answer any question you might have. We look forward to hearing from you."
+  },
+  "ContactInfoCards": {
+    "phoneTitle": "Phone",
+    "phoneDesc": "+880-2-XXXX-XXXX (Main Office)",
+    "emailTitle": "Email",
+    "emailDesc": "info@dhanbari.edu.bd",
+    "locationTitle": "Location",
+    "locationDesc": "Dhanbari, Tangail, Bangladesh",
+    "hoursTitle": "Office Hours",
+    "hoursDesc": "Monday - Friday: 8:00 AM - 4:00 PM"
   }
 }
