@@ -7,7 +7,15 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 
 // Statically load the default english translations for the root layout fallback
-import enMessages from '../../messages/en.json';
+import commonMessages from '../../messages/en/common.json';
+import landingMessages from '../../messages/en/landing.json';
+import aboutMessages from '../../messages/en/about.json';
+
+const enMessages = {
+  ...commonMessages,
+  ...landingMessages,
+  ...aboutMessages,
+};
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
