@@ -139,5 +139,27 @@
     },
     "entriesPerPage": "entries per page",
     "search": "Search:"
+  },
+  "Gallery": {
+    "sectionTitle": "Our Moments",
+    "sectionSubtitle": "A glimpse into the vibrant life, events, and academic journey at our institution.",
+    "viewAll": "View All Media"
+  },
+  "ContactSection": {
+    "title": "Get in Touch",
+    "subtitle": "Have questions or want to learn more about our institution? We'd love to hear from you.",
+    "formName": "Your Name",
+    "formEmail": "Email Address",
+    "formSubject": "Subject",
+    "formMessage": "Your Message",
+    "formSubmit": "Send Message",
+    "infoTitle": "Contact Information",
+    "infoDesc": "Reach out to us using the contact details below or visit our campus during office hours.",
+    "addressTitle": "Our Location",
+    "addressText": "Dhanbari, Tangail, Bangladesh",
+    "phoneTitle": "Phone Number",
+    "phoneText": "+880 123 456 7890",
+    "emailTitle": "Email Address",
+    "emailText": "info@dcms.edu.bd"
   }
 }

@@ -5,6 +5,9 @@ import { AboutSection } from "@/components/pages/landing/about-section";
 import { StatsSection } from "@/components/pages/landing/stats-section";
 import { LeadershipSection } from "@/components/pages/landing/leadership-section";
 import { NoticeBoardSection } from "@/components/pages/landing/notice-board-section";
+import { GallerySection } from "@/components/pages/landing/gallery-section";
+import { ContactSection } from "@/components/pages/landing/contact-section";
+
 export default function Home({
   params: { locale },
 }: {
@@ -20,6 +23,8 @@ export default function Home({
       <AboutSection />
       <StatsSection />
       <LeadershipSection />
+      <GallerySection />
+      <ContactSection />
     </main>
   );
 }
