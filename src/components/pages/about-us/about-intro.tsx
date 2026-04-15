@@ -28,21 +28,19 @@ const AboutIntro = () => {
       </div>
 
       <div className="container mx-auto px-4 md:px-6 py-18 md:py-24 xl:py-28 relative z-10">
-        <div className="">
-          <div className="grid xl:grid-cols-[1.1fr_0.9fr] gap-8 xl:gap-12 items-center">
-            <div className="space-y-6 text-center xl:text-left">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
-                <GraduationCap className="h-4 w-4" />
-                {t("heroBadge")}
-              </div>
-              <h1 className="text-4xl font-extrabold tracking-tight leading-tight sm:text-5xl lg:text-6xl xl:text-[3.45rem]">
-                <span className="text-foreground">{t("heroTitle")}</span>{" "}
-                <span className="text-primary">{t("heroTitleHighlight")}</span>
-              </h1>
-              <p className="mx-auto max-w-2xl text-muted-foreground text-base md:text-lg leading-relaxed xl:mx-0 xl:max-w-xl">
-                {t("heroSubtitle")}
-              </p>
+        <div className="flex flex-col items-center justify-center text-center">
+          <div className="space-y-6 max-w-3xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
+              <GraduationCap className="h-4 w-4" />
+              {t("heroBadge")}
             </div>
+            <h1 className="text-4xl font-extrabold tracking-tight leading-tight sm:text-5xl lg:text-6xl xl:text-[3.45rem]">
+              <span className="text-foreground">{t("heroTitle")}</span>{" "}
+              <span className="text-primary">{t("heroTitleHighlight")}</span>
+            </h1>
+            <p className="mx-auto max-w-2xl text-muted-foreground text-base md:text-lg leading-relaxed">
+              {t("heroSubtitle")}
+            </p>
           </div>
         </div>
 

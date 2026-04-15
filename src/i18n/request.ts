@@ -12,6 +12,7 @@ export default getRequestConfig(async ({requestLocale}) => {
   const common = (await import(`../../messages/${locale}/common.json`)).default;
   const landing = (await import(`../../messages/${locale}/landing.json`)).default;
   const about = (await import(`../../messages/${locale}/about.json`)).default;
+  const contact = (await import(`../../messages/${locale}/contact.json`)).default;
 
   // When you add a new page, just add another import above and spread it below
   return {
@@ -20,6 +21,7 @@ export default getRequestConfig(async ({requestLocale}) => {
       ...common,
       ...landing,
       ...about,
+      ...contact,
     },
   };
 });
