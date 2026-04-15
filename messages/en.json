@@ -116,5 +116,28 @@
     "card3Name": "Mohammad Abul Hossain",
     "card3Role": "Assistant Head Teacher",
     "card3Btn": "Assistant Head Teacher Info >"
+  },
+  "NoticeBoard": {
+    "sectionTitle": "NOTICE BOARD",
+    "tabs": {
+      "general": "General Notice",
+      "scholarship": "Scholarship and Fellowship",
+      "jobs": "Job Circulars",
+      "tender": "Tender & Procurement"
+    },
+    "table": {
+      "date": "Date",
+      "title": "Title",
+      "attachment": "Attachment",
+      "viewDetails": "View Details"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "entries": "entries"
+    },
+    "entriesPerPage": "entries per page",
+    "search": "Search:"
   }
 }

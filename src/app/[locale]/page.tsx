@@ -4,6 +4,7 @@ import { QuickInfoBar } from "@/components/pages/landing/quick-info-bar";
 import { AboutSection } from "@/components/pages/landing/about-section";
 import { StatsSection } from "@/components/pages/landing/stats-section";
 import { LeadershipSection } from "@/components/pages/landing/leadership-section";
+import { NoticeBoardSection } from "@/components/pages/landing/notice-board-section";
 export default function Home({
   params: { locale },
 }: {
@@ -15,6 +16,7 @@ export default function Home({
     <main className="flex min-h-screen flex-col">
       <QuickInfoBar />
       <HeroSection />
+      <NoticeBoardSection />
       <AboutSection />
       <StatsSection />
       <LeadershipSection />
