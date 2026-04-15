@@ -1,7 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, GraduationCap, Trophy } from "lucide-react";
 import {
@@ -61,8 +60,14 @@ export function HeroSection() {
 
             {/* Headline */}
             <div className="space-y-4">
-              <h1 className="text-4xl font-extrabold tracking-tight leading-tight sm:text-5xl lg:text-6xl xl:text-[4rem] 2xl:text-[4.5rem]">
-                <span className="text-foreground">{t("headline")}</span>
+              <h1 className="text-4xl font-extrabold tracking-tight leading-tight sm:text-5xl lg:text-6xl xl:text-6xl 2xl:text-6xl">
+                <span className="block text-foreground mb-1 md:mb-3">{t("headlineLine1")}</span>
+                <span className="block text-foreground pb-2">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 dark:from-primary dark:to-primary/80">
+                    {t("headlineHighlight")}
+                  </span>
+                  {t("headlineLine2")}
+                </span>
               </h1>
 
               <p className="max-w-135 text-muted-foreground text-base md:text-lg leading-relaxed">
@@ -75,16 +80,22 @@ export function HeroSection() {
               <Button
                 size="lg"
                 className="h-12 px-8 rounded-xl gap-2 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300"
+                asChild
               >
-                {t("applyNow")}
-                <ArrowRight className="h-4 w-4" />
+                <Link href="#">
+                  {t("applyNow")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="h-12 px-8 rounded-xl font-semibold border-primary/20 bg-primary/5 dark:bg-primary/8 backdrop-blur-md hover:bg-primary/10 dark:hover:bg-primary/15 transition-all duration-300"
+                asChild
               >
-                {t("learnMore")}
+                <Link href="/about">
+                  {t("learnMore")}
+                </Link>
               </Button>
             </div>
 
