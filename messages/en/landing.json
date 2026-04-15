@@ -1,10 +1,12 @@
 {
   "Hero": {
-    "badge": "Top Rated School",
-    "headline": "Shaping Future Leaders",
+    "badge": "Excellence in Education",
+    "headlineLine1": "Welcome to Dhanbari",
+    "headlineHighlight": "Collegiate",
+    "headlineLine2": " Model School",
     "subheading": "A premier educational institution dedicated to fostering knowledge, character, and leadership in students. Join us on a journey of discovery and excellence.",
-    "applyNow": "Apply Now",
-    "learnMore": "Learn More",
+    "applyNow": "Get admitted",
+    "learnMore": "About Us",
     "students": "Active Students",
     "teachers": "Expert Teachers",
     "alumni": "Alumni Network",

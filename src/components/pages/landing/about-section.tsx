@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function AboutSection() {
   const t = useTranslations("About");
@@ -25,7 +26,7 @@ export function AboutSection() {
                   fill
                   className="object-cover object-center w-full h-full transition-transform duration-700 hover:scale-105"
                 />
-                
+
                 {/* Subtle overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               </div>
@@ -33,13 +34,8 @@ export function AboutSection() {
           </div>
 
           {/* Right: Content */}
-          <div
-            className="flex flex-col justify-center space-y-8 order-1 lg:order-2"
-            style={{
-              animation: "fadeInRight 0.8s ease both",
-            }}
-          >
-            <div className="space-y-6">
+          <div className="flex flex-col justify-center space-y-6 order-1 lg:order-2">
+            <div className="space-y-5">
               {/* Heading */}
               <div className="text-center lg:text-left">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
@@ -56,10 +52,13 @@ export function AboutSection() {
             </div>
 
             {/* Highlights List */}
-            <ul className="space-y-4 pt-6 mt-6 border-t border-border">
+            <ul className="space-y-4 pt-6 mt-3 border-t border-border">
               {(["highlight1", "highlight2", "highlight3"] as const).map(
                 (key, idx) => (
-                  <li key={idx} className="flex gap-3 items-start justify-center lg:justify-start">
+                  <li
+                    key={idx}
+                    className="flex gap-3 items-start lg:justify-start"
+                  >
                     <CheckCircle2 className="h-6 w-6 text-primary shrink-0" />
                     <span className="text-base font-medium text-foreground text-left">
                       {t(key)}
@@ -71,10 +70,12 @@ export function AboutSection() {
 
             {/* CTA Button */}
             <div className="pt-4 flex justify-center lg:justify-start">
-              <Button size="lg" className="h-12 px-8 gap-2 group text-base">
-                {t("ctaButton")}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
+              <Link href="/about">
+                <Button size="lg" className="h-12 px-8 gap-2 group text-base">
+                  {t("ctaButton")}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
