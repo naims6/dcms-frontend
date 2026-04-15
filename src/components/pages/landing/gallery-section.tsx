@@ -12,7 +12,7 @@ const galleryItems = [
     src: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=2071&auto=format&fit=crop",
     title: "Science Fair 2025",
     category: "Events",
-    className: "col-span-2 md:col-span-2 md:row-span-2",
+    className: "col-span-2 row-span-2 md:col-span-2 md:row-span-2",
   },
   {
     id: 2,
@@ -85,7 +85,7 @@ export function GallerySection() {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 auto-rows-[160px] sm:auto-rows-[200px] md:auto-rows-[250px]">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 auto-rows-[200px] sm:auto-rows-[220px] md:auto-rows-[250px]">
           {galleryItems.map((item) => (
             <div
               key={item.id}

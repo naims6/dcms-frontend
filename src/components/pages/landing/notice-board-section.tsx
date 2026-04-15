@@ -48,11 +48,11 @@ export function NoticeBoardSection() {
       <div className="container mx-auto px-4">
         
         {/* Title */}
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold tracking-tight text-primary uppercase">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
             {t("sectionTitle")}
           </h2>
-          <div className="w-16 h-1 bg-destructive mx-auto mt-4 rounded-full" />
+          <div className="w-16 h-1.5 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Notices Board Container */}

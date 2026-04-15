@@ -43,19 +43,16 @@ export function AboutSection() {
             }}
           >
             <div className="space-y-6">
-              {/* Badge */}
-              <Badge variant="secondary" className="w-fit text-primary bg-primary/10 hover:bg-primary/20 gap-2 px-3 py-1.5 text-sm font-medium">
-                <Sparkles className="h-4 w-4" />
-                {t("badge")}
-              </Badge>
-
               {/* Heading */}
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.15]">
-                {t("title")}
-              </h2>
+              <div className="text-center lg:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
+                  {t("title")}
+                </h2>
+                <div className="w-16 h-1.5 bg-primary rounded-full mb-6 mx-auto lg:mx-0" />
+              </div>
 
               {/* Description */}
-              <div className="space-y-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-base sm:text-lg text-muted-foreground leading-relaxed lg:text-left">
                 <p>{t("description1")}</p>
                 <p>{t("description2")}</p>
               </div>
@@ -65,9 +62,9 @@ export function AboutSection() {
             <ul className="space-y-4 pt-6 mt-6 border-t border-border">
               {(["highlight1", "highlight2", "highlight3"] as const).map(
                 (key, idx) => (
-                  <li key={idx} className="flex gap-3 items-start">
+                  <li key={idx} className="flex gap-3 items-start justify-center lg:justify-start">
                     <CheckCircle2 className="h-6 w-6 text-primary shrink-0" />
-                    <span className="text-base font-medium text-foreground">
+                    <span className="text-base font-medium text-foreground text-left">
                       {t(key)}
                     </span>
                   </li>
@@ -76,7 +73,7 @@ export function AboutSection() {
             </ul>
 
             {/* CTA Button */}
-            <div className="pt-4">
+            <div className="pt-4 flex justify-center lg:justify-start">
               <Button size="lg" className="h-12 px-8 gap-2 group text-base">
                 {t("ctaButton")}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

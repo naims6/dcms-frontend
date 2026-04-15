@@ -17,12 +17,12 @@ export function LeadershipSection() {
       <div className="container mx-auto px-4 relative z-10">
         
         {/* Header Section */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 sm:mb-16 gap-4">
-          <div className="space-y-1">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-12 sm:mb-16 gap-4">
+          <div className="text-center sm:text-left w-full sm:w-auto">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
               {t("sectionTitle")}
             </h2>
-            <div className="w-20 h-1.5 bg-primary/80 rounded-full mt-4" />
+            <div className="w-16 h-1.5 bg-primary rounded-full mx-auto sm:mx-0" />
           </div>
           <Button variant="outline" className="gap-2 group">
             {t("viewAllBtn")} 

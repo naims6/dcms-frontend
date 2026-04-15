@@ -161,23 +161,37 @@ const Footer = () => {
 
       {/* Copyright Bottom Bar */}
       <div className="border-t border-primary/10 dark:border-primary/20">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 text-center md:text-left">
-            {t("copyright", { year: currentYear })}
+        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col items-center gap-3">
+          {/* Developer credit */}
+          <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 flex-wrap justify-center">
+            Developed{" "}
+            <span className="text-red-500 animate-pulse text-base">❤️</span>{" "}
+            by{" "}
+            <a
+              href="https://www.facebook.com/naim.sorker6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-semibold text-primary hover:text-primary/80 hover:underline underline-offset-4 transition-all duration-200"
+            >
+              <FaFacebook className="h-3.5 w-3.5" />
+              Naim Sorker
+            </a>
           </p>
-          <div className="flex gap-4 text-xs md:text-sm text-neutral-500 dark:text-neutral-400">
-            <Link
-              href="/privacy"
-              className="hover:text-primary transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms"
-              className="hover:text-primary transition-colors"
-            >
-              Terms of Service
-            </Link>
+
+          {/* Copyright & Links row */}
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 text-xs text-neutral-400 dark:text-neutral-500">
+            <p className="text-center">
+              {t("copyright", { year: currentYear })}
+            </p>
+            <span className="hidden sm:inline text-neutral-300 dark:text-neutral-700">·</span>
+            <div className="flex gap-4">
+              <Link href="/privacy" className="hover:text-primary transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="hover:text-primary transition-colors">
+                Terms of Service
+              </Link>
+            </div>
           </div>
         </div>
       </div>
