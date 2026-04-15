@@ -1,9 +1,17 @@
-import React from 'react'
+import { Metadata } from "next";
+import { ContactSection } from "@/components/pages/landing/contact-section";
+import ContactIntro from "@/components/pages/contact-us/contact-intro";
 
-const page = () => {
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Get in touch with Dhanbari Collegiate Model School.",
+};
+
+export default function ContactPage() {
   return (
-    <div>contact</div>
-  )
+    <main className="flex-1 overflow-hidden">
+      <ContactIntro />
+      <ContactSection />
+    </main>
+  );
 }
-
-export default page
