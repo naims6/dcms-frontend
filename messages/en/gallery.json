@@ -1,0 +1,24 @@
+{
+  "GalleryPage": {
+    "badge": "Our Vision in Frames",
+    "title": "School ",
+    "titleHighlight": "Gallery",
+    "subtitle": "Explore our vibrant campus life, academic achievements, and memorable events captured through the lens.",
+    "searchPlaceholder": "Search by event or category...",
+    "allBatches": "All Batches",
+    "allCategories": "All Categories",
+    "noResults": "No images found matching your search.",
+    "filters": {
+      "batch": "Filter by Batch",
+      "category": "Category"
+    },
+    "categories": {
+      "all": "All",
+      "events": "Events",
+      "academic": "Academic",
+      "campus": "Campus",
+      "sports": "Sports",
+      "workshop": "Workshop"
+    }
+  }
+}
