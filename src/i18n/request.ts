@@ -14,6 +14,7 @@ export default getRequestConfig(async ({requestLocale}) => {
   const about = (await import(`../../messages/${locale}/about.json`)).default;
   const contact = (await import(`../../messages/${locale}/contact.json`)).default;
   const notice = (await import(`../../messages/${locale}/notice.json`)).default;
+  const gallery = (await import(`../../messages/${locale}/gallery.json`)).default;
 
   // When you add a new page, just add another import above and spread it below
   return {
@@ -24,6 +25,7 @@ export default getRequestConfig(async ({requestLocale}) => {
       ...about,
       ...contact,
       ...notice,
+      ...gallery,
     },
   };
 });
