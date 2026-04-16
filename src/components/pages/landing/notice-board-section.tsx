@@ -26,7 +26,7 @@ const mockNotices: Notice[] = [
   { id: "8", date: "15-03-2026", title: "স্কুলের নতুন একাডেমিক ভবন নির্মাণের জন্য উন্মুক্ত ই-টেন্ডার আহ্বান", category: "tender" },
 ];
 
-export function NoticeBoardSection() {
+export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean }) {
   const t = useTranslations("NoticeBoard");
   const [activeTab, setActiveTab] = useState<TabId>("general");
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,16 +44,18 @@ export function NoticeBoardSection() {
   ];
 
   return (
-    <section className="w-full py-16 md:py-24 bg-background">
+    <section className={`w-full ${hideTitle ? 'pb-16 pt-8 md:pb-24 md:pt-12' : 'py-16 md:py-24'} bg-background`}>
       <div className="container mx-auto px-4">
         
         {/* Title */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
-            {t("sectionTitle")}
-          </h2>
-          <div className="w-16 h-1.5 bg-primary mx-auto rounded-full" />
-        </div>
+        {!hideTitle && (
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
+              {t("sectionTitle")}
+            </h2>
+            <div className="w-16 h-1.5 bg-primary mx-auto rounded-full" />
+          </div>
+        )}
 
         {/* Notices Board Container */}
         <div className="border border-border/60 bg-card rounded-xl shadow-md overflow-hidden flex flex-col">
@@ -120,7 +122,7 @@ export function NoticeBoardSection() {
           <div className="w-full">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-[#0A4250] dark:bg-primary/90 text-white">
+                <tr className="bg-primary text-primary-foreground">
                   <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[20%] sm:w-[15%]">{t("table.date")}</th>
                   <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[55%] sm:w-[70%] border-l border-white/20">{t("table.title")}</th>
                   <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[25%] sm:w-[15%] text-center border-l border-white/20">{t("table.attachment")}</th>
