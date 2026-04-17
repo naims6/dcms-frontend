@@ -31,14 +31,14 @@ export function HeroSection() {
             className="absolute inset-0 z-0 dark:opacity-5 opacity-55"
             style={{
               backgroundImage: `
-        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
-        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
+        linear-linear(to right, #e2e8f0 1px, transparent 1px),
+        linear-linear(to bottom, #e2e8f0 1px, transparent 1px)
       `,
               backgroundSize: "20px 30px",
               WebkitMaskImage:
-                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
               maskImage:
-                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
             }}
           />
         </div>
@@ -61,9 +61,11 @@ export function HeroSection() {
             {/* Headline */}
             <div className="space-y-4">
               <h1 className="text-4xl font-extrabold tracking-tight leading-tight sm:text-5xl lg:text-6xl xl:text-6xl 2xl:text-6xl">
-                <span className="block text-foreground mb-1 md:mb-3">{t("headlineLine1")}</span>
+                <span className="block text-foreground mb-1 md:mb-3">
+                  {t("headlineLine1")}
+                </span>
                 <span className="block text-foreground pb-2">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 dark:from-primary dark:to-primary/80">
+                  <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/70 dark:from-primary dark:to-primary/80">
                     {t("headlineHighlight")}
                   </span>
                   {t("headlineLine2")}
@@ -93,9 +95,7 @@ export function HeroSection() {
                 className="h-12 px-8 rounded-xl font-semibold border-primary/20 bg-primary/5 dark:bg-primary/8 backdrop-blur-md hover:bg-primary/10 dark:hover:bg-primary/15 transition-all duration-300"
                 asChild
               >
-                <Link href="/about">
-                  {t("learnMore")}
-                </Link>
+                <Link href="/about">{t("learnMore")}</Link>
               </Button>
             </div>
 

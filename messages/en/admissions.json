@@ -1,0 +1,117 @@
+{
+  "admissions": {
+    "title": "Student Admission",
+    "titleHightlight": "Form",
+    "badge": "Enroll Now",
+    "subtitle": "Please fill out all required fields to complete your application",
+    "sections": {
+      "student": {
+        "title": "Student Information",
+        "description": "Basic details about the student"
+      },
+      "academic": {
+        "title": "Academic Information",
+        "description": "Previous education and class applying for"
+      },
+      "parent": {
+        "title": "Parent Information",
+        "description": "Details about father and mother"
+      },
+      "fatherInfo": "Father's Information",
+      "motherInfo": "Mother's Information",
+      "contact": {
+        "title": "Contact Information",
+        "description": "Address and contact details"
+      },
+      "additional": {
+        "title": "Additional Information",
+        "description": "Guardian details and special notes"
+      }
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "dateOfBirth": "Date of Birth",
+      "gender": "Gender",
+      "bloodGroup": "Blood Group",
+      "religion": "Religion",
+      "studentPhoto": "Student Photo",
+      "classApplying": "Class Applying For",
+      "previousSchool": "Previous School Name",
+      "previousClass": "Previous Class",
+      "previousGrade": "Result/Grade",
+      "name": "Name",
+      "occupation": "Occupation",
+      "phone": "Phone Number",
+      "fatherName": "Father's Name",
+      "fatherOccupation": "Father's Occupation",
+      "fatherPhone": "Father's Phone Number",
+      "motherName": "Mother's Name",
+      "motherOccupation": "Mother's Occupation",
+      "motherPhone": "Mother's Phone Number",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "email": "Email",
+      "emergencyContact": "Emergency Contact",
+      "guardianName": "Guardian Name (if applicable)",
+      "specialNotes": "Special Notes",
+      "agreeTerms": "I agree to the terms and conditions"
+    },
+    "placeholders": {
+      "fullName": "Enter full name",
+      "selectGender": "Select gender",
+      "selectBloodGroup": "Select blood group",
+      "selectReligion": "Select religion",
+      "religion": "Enter religion",
+      "chooseFile": "Choose File",
+      "selectClass": "Select class",
+      "previousSchool": "Enter previous school",
+      "previousClass": "e.g., Class 5",
+      "previousGrade": "e.g., A+, 85%",
+      "fatherName": "Father's name",
+      "occupation": "Occupation",
+      "phone": "+880 1700 000000",
+      "motherName": "Mother's name",
+      "address": "Enter full address",
+      "city": "Enter city",
+      "postalCode": "Enter postal code",
+      "email": "email@example.com",
+      "guardianName": "Enter guardian name",
+      "specialNotes": "Any special requirements, medical conditions, or additional information..."
+    },
+    "options": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "islam": "Islam",
+      "hindu": "Hindu",
+      "christian": "Christian",
+      "class-5": "Class 5",
+      "class-6": "Class 6",
+      "class-7": "Class 7",
+      "class-8": "Class 8",
+      "class-9": "Class 9",
+      "class-10": "Class 10"
+    },
+    "buttons": {
+      "submit": "Submit Application",
+      "submitting": "Submitting..."
+    },
+    "messages": {
+      "success": "Application submitted successfully!",
+      "error": "Submission failed. Please try again.",
+      "termsDescription": "By checking this box, you confirm that all information provided is accurate and complete."
+    },
+    "errors": {
+      "required": "This field is required",
+      "minLength": "Must be at least {min} characters",
+      "maxLength": "Must be no more than {max} characters",
+      "invalidEmail": "Invalid email address",
+      "invalidPhone": "Invalid phone number format",
+      "minPhoneLength": "Phone number must be at least 10 digits",
+      "fileTooLarge": "File size must be less than 5MB",
+      "invalidFileType": "Please upload a valid image file",
+      "agreeTerms": "You must agree to the terms and conditions"
+    }
+  }
+}

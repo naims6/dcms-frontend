@@ -8,6 +8,7 @@ import Footer from "@/components/shared/Footer";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/theme-provider";
+import ScrollToTop from "@/components/shared/ScrollToTop";
 
 const hindSiliguri = Hind_Siliguri({ 
   subsets: ["bengali", "latin"], 
@@ -128,6 +129,7 @@ export default async function RootLayout({
             <Navbar />
             {children}
             <Footer />
+            <ScrollToTop />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

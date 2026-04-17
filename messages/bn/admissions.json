@@ -1,0 +1,117 @@
+{
+  "admissions": {
+    "title": "শিক্ষার্থী ভর্তি",
+    "titleHightlight": "ফর্ম",
+    "badge": "ভর্তি হোন",
+    "subtitle": "আপনার আবেদন সম্পূর্ণ করতে সমস্ত প্রয়োজনীয় ক্ষেত্র পূরণ করুন",
+    "sections": {
+      "student": {
+        "title": "শিক্ষার্থীর তথ্য",
+        "description": "শিক্ষার্থী সম্পর্কে মৌলিক বিবরণ"
+      },
+      "academic": {
+        "title": "শিক্ষাগত তথ্য",
+        "description": "পূর্ববর্তী শিক্ষা এবং যে শ্রেণীতে আবেদন করছেন"
+      },
+      "parent": {
+        "title": "অভিভাবকের তথ্য",
+        "description": "পিতা এবং মাতার বিবরণ"
+      },
+      "fatherInfo": "পিতার তথ্য",
+      "motherInfo": "মাতার তথ্য",
+      "contact": {
+        "title": "যোগাযোগের তথ্য",
+        "description": "ঠিকানা এবং যোগাযোগের বিবরণ"
+      },
+      "additional": {
+        "title": "অতিরিক্ত তথ্য",
+        "description": "অভিভাবকের বিবরণ এবং বিশেষ নোট"
+      }
+    },
+    "fields": {
+      "fullName": "পূর্ণ নাম",
+      "dateOfBirth": "জন্ম তারিখ",
+      "gender": "লিঙ্গ",
+      "bloodGroup": "রক্তের গ্রুপ",
+      "religion": "ধর্ম",
+      "studentPhoto": "শিক্ষার্থীর ছবি",
+      "classApplying": "যে শ্রেণীতে আবেদন করছেন",
+      "previousSchool": "পূর্ববর্তী স্কুলের নাম",
+      "previousClass": "পূর্ববর্তী শ্রেণী",
+      "previousGrade": "ফলাফল/গ্রেড",
+      "name": "নাম",
+      "occupation": "পেশা",
+      "phone": "ফোন নম্বর",
+      "fatherName": "পিতার নাম",
+      "fatherOccupation": "পিতার পেশা",
+      "fatherPhone": "পিতার ফোন নম্বর",
+      "motherName": "মাতার নাম",
+      "motherOccupation": "মাতার পেশা",
+      "motherPhone": "মাতার ফোন নম্বর",
+      "address": "ঠিকানা",
+      "city": "শহর",
+      "postalCode": "পোস্টাল কোড",
+      "email": "ইমেইল",
+      "emergencyContact": "জরুরি যোগাযোগ",
+      "guardianName": "অভিভাবকের নাম (প্রযোজনীয় হলে)",
+      "specialNotes": "বিশেষ নোট",
+      "agreeTerms": "আমি শর্তাবলীতে সম্মত"
+    },
+    "placeholders": {
+      "fullName": "পূর্ণ নাম লিখুন",
+      "selectGender": "লিঙ্গ নির্বাচন করুন",
+      "selectBloodGroup": "রক্তের গ্রুপ নির্বাচন করুন",
+      "selectReligion": "ধর্ম নির্বাচন করুন",
+      "religion": "ধর্ম লিখুন",
+      "chooseFile": "ফাইল নির্বাচন করুন",
+      "selectClass": "শ্রেণী নির্বাচন করুন",
+      "previousSchool": "পূর্ববর্তী স্কুল লিখুন",
+      "previousClass": "যেমন, শ্রেণী ৫",
+      "previousGrade": "যেমন, এ+, ৮৫%",
+      "fatherName": "পিতার নাম",
+      "occupation": "পেশা",
+      "phone": "+৮৮০ ১৭১২-৩৪৫৬৭৮",
+      "motherName": "মাতার নাম",
+      "address": "সম্পূর্ণ ঠিকানা লিখুন",
+      "city": "শহর লিখুন",
+      "postalCode": "পোস্টাল কোড লিখুন",
+      "email": "email@example.com",
+      "guardianName": "অভিভাবকের নাম লিখুন",
+      "specialNotes": "কোনো বিশেষ প্রয়োজনীয়তা, চিকিৎসা অবস্থা বা অতিরিক্ত তথ্য..."
+    },
+    "options": {
+      "male": "পুরুষ",
+      "female": "মহিলা",
+      "other": "অন্যান্য",
+      "islam": "ইসলাম",
+      "hindu": "হিন্দু",
+      "christian": "খ্রিস্টান",
+      "class-5": "শ্রেণী ৫",
+      "class-6": "শ্রেণী ৬",
+      "class-7": "শ্রেণী ৭",
+      "class-8": "শ্রেণী ৮",
+      "class-9": "শ্রেণী ৯",
+      "class-10": "শ্রেণী ১০"
+    },
+    "buttons": {
+      "submit": "আবেদন জমা দিন",
+      "submitting": "জমা দেওয়া হচ্ছে..."
+    },
+    "messages": {
+      "success": "আবেদন সফলভাবে জমা দেওয়া হয়েছে!",
+      "error": "জমা দিতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+      "termsDescription": "এই বক্সটি চেক করে, আপনি নিশ্চিত করছেন যে প্রদত্ত সমস্ত তথ্য সঠিক এবং সম্পূর্ণ।"
+    },
+    "errors": {
+      "required": "এই ক্ষেত্রটি প্রয়োজনীয়",
+      "minLength": "কমপক্ষে {min} অক্ষর হতে হবে",
+      "maxLength": "{max} অক্ষরের বেশি হতে পারে না",
+      "invalidEmail": "অবৈধ ইমেইল ঠিকানা",
+      "invalidPhone": "অবৈধ ফোন নম্বর ফরম্যাট",
+      "minPhoneLength": "ফোন নম্বর কমপক্ষে ১০ সংখ্যা হতে হবে",
+      "fileTooLarge": "ফাইলের আকার ৫ এমবির কম হতে হবে",
+      "invalidFileType": "অনুগ্রহ করে একটি বৈধ ইমেজ ফাইল আপলোড করুন",
+      "agreeTerms": "আপনাকে শর্তাবলী সম্মত করতে হবে"
+    }
+  }
+}

@@ -25,7 +25,7 @@ const Footer = () => {
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 hover:scale-110">
                 <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
               </div>
-              <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60 dark:from-primary dark:to-primary/70">
+              <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60 dark:from-primary dark:to-primary/70">
                 DCMS
               </span>
             </Link>
@@ -165,8 +165,7 @@ const Footer = () => {
           {/* Developer credit */}
           <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 flex-wrap justify-center">
             Developed{" "}
-            <span className="text-red-500 animate-pulse text-base">❤️</span>{" "}
-            by{" "}
+            <span className="text-red-500 animate-pulse text-base">❤️</span> by{" "}
             <a
               href="https://www.facebook.com/naim.sorker6"
               target="_blank"
@@ -183,12 +182,20 @@ const Footer = () => {
             <p className="text-center">
               {t("copyright", { year: currentYear })}
             </p>
-            <span className="hidden sm:inline text-neutral-300 dark:text-neutral-700">·</span>
+            <span className="hidden sm:inline text-neutral-300 dark:text-neutral-700">
+              ·
+            </span>
             <div className="flex gap-4">
-              <Link href="/privacy" className="hover:text-primary transition-colors">
+              <Link
+                href="/privacy"
+                className="hover:text-primary transition-colors"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-primary transition-colors">
+              <Link
+                href="/terms"
+                className="hover:text-primary transition-colors"
+              >
                 Terms of Service
               </Link>
             </div>

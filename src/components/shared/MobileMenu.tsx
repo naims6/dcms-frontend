@@ -47,7 +47,7 @@ export function MobileMenu() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shadow-sm">
                 <GraduationCap className="h-4 w-4" strokeWidth={2.5} />
               </div>
-              <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 to-neutral-600 dark:from-white dark:to-neutral-400">
+              <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-neutral-900 to-neutral-600 dark:from-white dark:to-neutral-400">
                 DCMS
               </span>
             </SheetTitle>
