@@ -1,0 +1,33 @@
+{
+  "TeacherPage": {
+    "heroBadge": "Our Faculty",
+    "heroTitle": "Meet Our",
+    "heroTitleHighlight": "Teachers",
+    "heroSubtitle": "Dedicated educators who inspire curiosity, nurture talent, and guide every student toward their fullest potential.",
+    "teachersSectionTitle": "Our Teaching Staff",
+    "teachersSectionSubtitle": "A diverse team of qualified educators committed to academic excellence and student growth.",
+    "searchPlaceholder": "Search by name, subject or department...",
+    "filterAll": "All",
+    "noResults": "No teachers found matching your search.",
+    "noResultsHint": "Try a different name or subject.",
+    "viewProfile": "View Profile",
+    "closeProfile": "Close",
+    "detailSubject": "Subject",
+    "detailDepartment": "Department",
+    "detailExperience": "Experience",
+    "detailEmail": "Email",
+    "detailPhone": "Phone",
+    "detailEducation": "Education",
+    "detailBio": "About",
+    "yearsExp": "years",
+    "backToTeachers": "Back to Teachers",
+    "notFound": "Teacher not found",
+    "notFoundHint": "The teacher you are looking for does not exist.",
+    "contactTeacher": "Contact Teacher",
+    "quickStats": "Quick Overview",
+    "teachingPhilosophy": "Teaching Philosophy",
+    "philosophyText": "Committed to fostering a love of learning through engaging, student-centered instruction that builds both knowledge and character.",
+    "sendEmail": "Send Email",
+    "callNow": "Call Now"
+  }
+}

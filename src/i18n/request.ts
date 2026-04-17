@@ -20,6 +20,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     .default;
   const admissions = (await import(`../../messages/${locale}/admissions.json`))
     .default;
+  const teacher = (await import(`../../messages/${locale}/teacher.json`))
+    .default;
 
   // When you add a new page, just add another import above and spread it below
   return {
@@ -32,6 +34,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...notice,
       ...gallery,
       ...admissions,
+      ...teacher,
     },
   };
 });

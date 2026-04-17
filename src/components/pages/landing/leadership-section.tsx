@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
@@ -21,10 +22,12 @@ export function LeadershipSection() {
             </h2>
             <div className="w-16 h-1.5 bg-primary rounded-full mx-auto sm:mx-0" />
           </div>
-          <Button variant="outline" className="gap-2 group">
-            {t("viewAllBtn")}
-            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
+          <Link href="/teacher" className="inline-flex">
+            <Button variant="outline" className="gap-2 group">
+              {t("viewAllBtn")}
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
         </div>
 
         {/* Content Section */}
