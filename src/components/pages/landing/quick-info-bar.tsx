@@ -12,7 +12,7 @@ export function QuickInfoBar() {
   if (!isOpen) return null;
 
   return (
-    <section className="w-full bg-gradient-to-r from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm border-b border-border/40 sticky top-0 z-40 shadow-sm">
+    <section className="w-full bg-linear-to-r from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm border-b border-border/40 sticky top-0 z-40 shadow-sm">
       <div className="container mx-auto px-4 py-3 md:py-4">
         {/* Desktop Layout */}
         <div className="hidden md:flex items-center justify-between gap-8 flex-row">

@@ -14,7 +14,7 @@ interface PageIntroProps {
 /**
  * PageIntro
  * A reusable hero section for pages, maintaining consistent branding and design across the site.
- * Features a grid background with decorative primary color splashes and a masked gradient.
+ * Features a grid background with decorative primary color splashes and a masked linear.
  */
 export default function PageIntro({
   badgeIcon,
@@ -26,7 +26,12 @@ export default function PageIntro({
   children,
 }: PageIntroProps) {
   return (
-    <section className={cn("relative w-full overflow-hidden bg-background border-b border-border/40", className)}>
+    <section
+      className={cn(
+        "relative w-full overflow-hidden bg-background border-b border-border/40",
+        className,
+      )}
+    >
       {/* Decorative background elements */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute left-1/2 -top-32 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl opacity-70" />
@@ -35,14 +40,14 @@ export default function PageIntro({
           className="absolute inset-0 opacity-55 dark:opacity-10"
           style={{
             backgroundImage: `
-                linear-gradient(to right, oklch(from var(--border) l c h / 0.7) 1px, transparent 1px),
-                linear-gradient(to bottom, oklch(from var(--border) l c h / 0.7) 1px, transparent 1px)
+                linear-linear(to right, oklch(from var(--border) l c h / 0.7) 1px, transparent 1px),
+                linear-linear(to bottom, oklch(from var(--border) l c h / 0.7) 1px, transparent 1px)
               `,
             backgroundSize: "26px 26px",
             WebkitMaskImage:
-              "radial-gradient(circle at 50% 20%, #000 35%, transparent 100%)",
+              "radial-linear(circle at 50% 20%, #000 35%, transparent 100%)",
             maskImage:
-              "radial-gradient(circle at 50% 20%, #000 35%, transparent 100%)",
+              "radial-linear(circle at 50% 20%, #000 35%, transparent 100%)",
           }}
         />
       </div>
@@ -59,7 +64,9 @@ export default function PageIntro({
             {/* Title */}
             <h1 className="text-4xl font-extrabold tracking-tight leading-tight sm:text-5xl lg:text-6xl xl:text-[3.45rem]">
               <span className="text-foreground">{title}</span>{" "}
-              {titleHighlight && <span className="text-primary">{titleHighlight}</span>}
+              {titleHighlight && (
+                <span className="text-primary">{titleHighlight}</span>
+              )}
             </h1>
 
             {/* Subtitle */}
@@ -70,11 +77,7 @@ export default function PageIntro({
         </div>
 
         {/* Additional Content (Optional) */}
-        {children && (
-          <div className="w-full relative z-10">
-            {children}
-          </div>
-        )}
+        {children && <div className="w-full relative z-10">{children}</div>}
       </div>
     </section>
   );

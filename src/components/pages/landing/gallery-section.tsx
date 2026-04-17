@@ -60,7 +60,9 @@ const galleryItems = [
 
 export function GallerySection() {
   const t = useTranslations("Gallery");
-  const [selectedImg, setSelectedImg] = useState<typeof galleryItems[0] | null>(null);
+  const [selectedImg, setSelectedImg] = useState<
+    (typeof galleryItems)[0] | null
+  >(null);
 
   // Close lightbox on Escape key
   if (typeof window !== "undefined") {
@@ -72,7 +74,6 @@ export function GallerySection() {
   return (
     <section className="w-full py-16 md:py-24 bg-muted/30">
       <div className="container mx-auto px-4 lg:px-8">
-        
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
@@ -101,9 +102,9 @@ export function GallerySection() {
                 placeholder="blur"
                 blurDataURL={`${item.src}&blur=20`} // Basic blur fallback
               />
-              
+
               {/* Overlay Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 sm:p-6">
+              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 sm:p-6">
                 <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                   <span className="inline-block px-2 sm:px-3 py-1 mb-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-primary-foreground bg-primary/90 backdrop-blur-sm rounded-full">
                     {item.category}
@@ -124,17 +125,22 @@ export function GallerySection() {
 
         {/* View All Button */}
         <div className="mt-12 flex justify-center">
-          <Button variant="default" className="px-8 py-6 rounded-full text-base font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300">
+          <Button
+            variant="default"
+            className="px-8 py-6 rounded-full text-base font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+          >
             {t("viewAll")}
           </Button>
         </div>
-
       </div>
 
       {/* Lightbox Modal */}
       {selectedImg && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 sm:p-8" onClick={() => setSelectedImg(null)}>
-          <button 
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 sm:p-8"
+          onClick={() => setSelectedImg(null)}
+        >
+          <button
             className="absolute top-4 right-4 sm:top-8 sm:right-8 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
             onClick={(e) => {
               e.stopPropagation();
@@ -143,8 +149,8 @@ export function GallerySection() {
           >
             <X className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
-          
-          <div 
+
+          <div
             className="relative w-full max-w-5xl aspect-video sm:aspect-auto sm:h-[80vh] rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300"
             onClick={(e) => e.stopPropagation()}
           >
@@ -155,7 +161,7 @@ export function GallerySection() {
               className="object-contain"
               sizes="100vw"
             />
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 sm:p-8">
+            <div className="absolute bottom-0 inset-x-0 bg-linear-to-t from-black/90 via-black/50 to-transparent p-6 sm:p-8">
               <span className="text-primary font-medium tracking-wide uppercase text-sm sm:text-base">
                 {selectedImg.category}
               </span>
