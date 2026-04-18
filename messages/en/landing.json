@@ -9,7 +9,7 @@
     "learnMore": "About Us",
     "students": "Active Students",
     "teachers": "Expert Teachers",
-    "alumni": "Alumni Network",
+    "passRate": "Pass Rate",
     "imageAlt": "Students at school campus",
     "captionText": "Excellence in Education Since {year}",
     "passRateLabel": "Pass Rate",
@@ -36,7 +36,7 @@
     "ctaButton": "Explore Full Story"
   },
   "Stats": {
-    "title": "By The Numbers",
+    "title": "School Stats",
     "subtitle": "Our achievements reflect our commitment to educational excellence and student success.",
     "students": {
       "value": "1,200+",
