@@ -1,4 +1,4 @@
-﻿import { Users, GraduationCap, Star } from "lucide-react";
+﻿import { Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import PageIntro from "@/components/shared/PageIntro";
 import { TeacherGrid } from "@/components/pages/teacher";

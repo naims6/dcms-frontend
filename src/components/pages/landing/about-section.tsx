@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +13,7 @@ export function AboutSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: Image (on large devices) */}
           <div
-            className="relative h-[300px] sm:h-[400px] lg:h-[550px] rounded-3xl overflow-hidden shadow-lg border border-border/50 order-2 lg:order-1"
+            className="relative h-75 sm:h-100 lg:h-137.5 rounded-3xl overflow-hidden shadow-lg border border-border/50 order-2 lg:order-1"
             style={{
               animation: "fadeInLeft 0.8s ease both",
             }}
@@ -21,7 +21,7 @@ export function AboutSection() {
             <div className="absolute inset-0 bg-muted">
               <div className="absolute inset-0 flex items-center justify-center">
                 <Image
-                  src="/images/hero-school2.png"
+                  src="/images/school.jpg"
                   alt={t("imageAlt")}
                   fill
                   className="object-cover object-center w-full h-full transition-transform duration-700 hover:scale-105"

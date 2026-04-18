@@ -10,8 +10,8 @@ export function LeadershipSection() {
   return (
     <section className="w-full py-16 md:py-24 lg:py-32 bg-background/50 relative overflow-hidden">
       {/* Background visual flair */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-secondary/5 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-75 h-75 bg-secondary/5 rounded-full blur-[80px] pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header Section */}
@@ -36,7 +36,7 @@ export function LeadershipSection() {
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {/* Card 1 */}
             <div className="flex flex-col space-y-4 group">
-              <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-primary/20">
+              <div className="relative aspect-3/4 w-full rounded-2xl overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-primary/20">
                 <div className="absolute inset-0 bg-[#0d505a] translate-x-3 translate-y-3 rounded-2xl transition-transform group-hover:translate-x-4 group-hover:translate-y-4" />
                 <div className="absolute inset-0 bg-muted border border-border z-10 rounded-2xl overflow-hidden">
                   <Image
@@ -65,7 +65,7 @@ export function LeadershipSection() {
 
             {/* Card 2 */}
             <div className="flex flex-col space-y-4 group">
-              <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-primary/20">
+              <div className="relative aspect-3/4 w-full rounded-2xl overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-primary/20">
                 <div className="absolute inset-0 bg-[#0d505a] -translate-x-3 translate-y-3 rounded-2xl transition-transform group-hover:-translate-x-4 group-hover:translate-y-4" />
                 <div className="absolute inset-0 bg-[#e6f4ea] border border-border z-10 rounded-2xl overflow-hidden">
                   <Image
@@ -93,7 +93,7 @@ export function LeadershipSection() {
 
             {/* Card 3 */}
             <div className="flex flex-col space-y-4 group">
-              <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-primary/20">
+              <div className="relative aspect-3/4 w-full rounded-2xl overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-primary/20">
                 <div className="absolute inset-0 bg-[#0d505a] -translate-x-3 -translate-y-3 rounded-2xl transition-transform group-hover:-translate-x-4 group-hover:-translate-y-4" />
                 <div className="absolute inset-0 bg-muted border border-border z-10 rounded-2xl overflow-hidden">
                   <Image
