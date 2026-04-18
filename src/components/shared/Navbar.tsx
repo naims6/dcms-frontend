@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import { GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { ThemeToggle } from "./ThemeToggle";
@@ -10,6 +9,7 @@ import { LanguageToggle } from "./LanguageToggle";
 import { MobileMenu } from "./MobileMenu";
 import { Button } from "@/components/ui/button";
 import { navMenuItems } from "@/constants/navMenuItems";
+import Logo from "./Logo";
 
 const Navbar = () => {
   const t = useTranslations("Navbar");
@@ -19,14 +19,7 @@ const Navbar = () => {
     <header className="w-full sticky top-0 z-50 border-b border-primary/10 dark:border-primary/20 bg-background/80 backdrop-blur-2xl shadow-[0_1px_40px_0_rgba(99,102,241,0.08)] dark:shadow-[0_1px_40px_0_rgba(99,102,241,0.15)] transition-colors duration-300">
       <div className="container mx-auto flex items-center justify-between px-6 h-16 sm:h-20">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20">
-            <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
-          </div>
-          <span className="font-extrabold text-xl md:text-2xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60 dark:from-primary dark:to-primary/70 transition-colors">
-            DCMS
-          </span>
-        </Link>
+        <Logo />
 
         {/* Desktop Menu */}
         <nav className="hidden xl:flex items-center gap-1.5 lg:gap-2">

@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Squash as Hamburger } from "hamburger-react";
 import { GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 import {
   Sheet,
@@ -21,7 +21,7 @@ import { navMenuItems } from "@/constants/navMenuItems";
 export function MobileMenu() {
   const t = useTranslations("Navbar");
   const pathname = usePathname();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -40,7 +40,7 @@ export function MobileMenu() {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="right"
-          className="w-[85vw] sm:w-[400px] p-0 flex flex-col border-l-0 shadow-2xl"
+          className="w-[85vw] sm:w-100 p-0 flex flex-col border-l-0 shadow-2xl"
         >
           <SheetHeader className="p-6 pb-4 text-left border-b border-neutral-100 dark:border-neutral-800/50">
             <SheetTitle className="flex items-center gap-2.5">

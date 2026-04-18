@@ -9,6 +9,7 @@ import { FaFacebook, FaTwitter, FaYoutube } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Logo from "./Logo";
 
 const Footer = () => {
   const t = useTranslations("Footer");
@@ -21,14 +22,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Column 1: School Info */}
           <div className="flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 hover:scale-110">
-                <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
-              </div>
-              <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60 dark:from-primary dark:to-primary/70">
-                DCMS
-              </span>
-            </Link>
+            <Logo />
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-xs">
               {t("description")}
             </p>
