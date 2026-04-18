@@ -7,12 +7,9 @@ import { GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { DialogTitle } from "@radix-ui/react-dialog";
+
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 
 import { ThemeToggle } from "./ThemeToggle";
@@ -40,19 +37,33 @@ export function MobileMenu() {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="right"
-          className="w-[85vw] sm:w-100 p-0 flex flex-col border-l-0 shadow-2xl"
+          className="w-[85vw] sm:w-100 p-0 flex flex-col border-l-0 shadow-2xl [&>button]:hidden"
         >
-          <SheetHeader className="p-6 pb-4 text-left border-b border-neutral-100 dark:border-neutral-800/50">
-            <SheetTitle className="flex items-center gap-2.5">
+          {/* header */}
+          <DialogTitle className="sr-only">Mobile Menu</DialogTitle>
+          <div className="p-6 pb-4 text-left border-b border-neutral-100 dark:border-neutral-800/50 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shadow-sm">
                 <GraduationCap className="h-4 w-4" strokeWidth={2.5} />
               </div>
               <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-neutral-900 to-neutral-600 dark:from-white dark:to-neutral-400">
                 DCMS
               </span>
-            </SheetTitle>
-          </SheetHeader>
+            </div>
+            <div className="cursor-pointer text-neutral-800 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white transition-colors">
+              <Hamburger
+                toggled={open}
+                toggle={setOpen}
+                size={20}
+                color="currentColor"
+                rounded
+                label="Close menu"
+                distance="sm"
+              />
+            </div>
+          </div>
 
+          {/* middle navigation navitem */}
           <div className="flex flex-col flex-1 overflow-y-auto p-6">
             <nav className="flex flex-col gap-2.5">
               {navMenuItems.map((link) => {

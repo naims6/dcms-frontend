@@ -1,10 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { navMenuItems } from "@/constants/navMenuItems";
-import { GraduationCap } from "lucide-react";
 import { FaFacebook, FaTwitter, FaYoutube } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
