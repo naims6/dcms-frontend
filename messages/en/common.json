@@ -30,7 +30,14 @@
     "loggingIn": "Logging in...",
     "admissionNote": "Don't have credentials?",
     "admissionLink": "Get Admission",
-    "error": "An error occurred. Please try again."
+    "error": "An error occurred. Please try again.",
+    "errors": {
+      "registeredIdRequired": "Registered ID is required",
+      "registeredIdMinLength": "Registered ID must be at least 3 characters",
+      "pinRequired": "PIN is required",
+      "pinMinLength": "PIN must be at least 4 digits",
+      "pinNumeric": "PIN must contain only numbers"
+    }
   },
   "NotFound": {
     "title": "Page Not Found",

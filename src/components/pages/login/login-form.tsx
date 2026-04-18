@@ -20,9 +20,11 @@ import {
 import { cn } from "@/lib/utils";
 import { LoginFormValues, loginSchema } from "@/schemas/login";
 import Link from "next/link";
+import { useFormError } from "@/hooks/use-form-error";
 
 export function LoginForm() {
   const t = useTranslations("Login");
+  const getErrorMessage = useFormError("Login");
   const [showPin, setShowPin] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -100,7 +102,7 @@ export function LoginForm() {
                 role="alert"
                 className="text-xs text-destructive mt-1"
               >
-                {errors.registeredId.message}
+                {getErrorMessage(errors.registeredId.message)}
               </p>
             )}
           </div>
@@ -154,7 +156,7 @@ export function LoginForm() {
                 role="alert"
                 className="text-xs text-destructive mt-1"
               >
-                {errors.pin.message}
+                {getErrorMessage(errors.pin.message)}
               </p>
             )}
           </div>
