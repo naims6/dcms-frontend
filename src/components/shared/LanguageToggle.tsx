@@ -30,8 +30,8 @@ export function LanguageToggle() {
     >
       <div 
         className={cn(
-          "absolute inset-y-1 w-[26px] bg-white dark:bg-neutral-600 rounded-full shadow-sm transition-all duration-300 ease-spring",
-          locale === "bn" ? "left-[34px]" : "left-1"
+          "absolute inset-y-1 w-6.5 bg-white dark:bg-neutral-600 rounded-full shadow-sm transition-all duration-300 ease-spring",
+          locale === "bn" ? "left-8.5" : "left-1"
         )} 
       />
       <div className="relative z-10 flex w-full justify-between px-1.5 text-[0.65rem] font-bold text-neutral-500 dark:text-neutral-400">

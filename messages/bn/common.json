@@ -5,13 +5,39 @@
     "admissions": "ভর্তি",
     "gallery": "গ্যালারি",
     "contact": "যোগাযোগ",
+    "teacher": "শিক্ষক",
     "notice": "নোটিশ",
+    "alumniForum": "প্রাক্তন ফোরাম",
     "toggleTheme": "থিম পরিবর্তন",
     "light": "হালকা",
     "dark": "গাঢ়",
     "system": "সিস্টেম",
     "login": "লগইন",
-    "register": "নিবন্ধন"
+    "admissionPortal": "ভর্তি পোর্টাল"
+  },
+  "Login": {
+    "title": "লগইন",
+    "subtitle": "শিক্ষার্থী এবং প্রশাসক প্রবেশাধিকার",
+    "registeredId": "নিবন্ধিত আইডি",
+    "registeredIdPlaceholder": "আপনার আইডি প্রবেশ করুন",
+    "pin": "পিন",
+    "pinPlaceholder": "আপনার পিন প্রবেশ করুন",
+    "forgotPin": "পিন ভুলে গেছেন?",
+    "showPin": "পিন দেখান",
+    "hidePin": "পিন লুকান",
+    "rememberMe": "আমাকে মনে রাখুন",
+    "loginButton": "লগইন করুন",
+    "loggingIn": "লগইন হচ্ছে...",
+    "admissionNote": "কোন শংসাপত্র নেই?",
+    "admissionLink": "ভর্তি নিন",
+    "error": "একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন।",
+    "errors": {
+      "registeredIdRequired": "নিবন্ধিত আইডি প্রয়োজন",
+      "registeredIdMinLength": "নিবন্ধিত আইডি কমপক্ষে ৩ অক্ষরের হতে হবে",
+      "pinRequired": "পিন প্রয়োজন",
+      "pinMinLength": "পিন কমপক্ষে ৪ সংখ্যার হতে হবে",
+      "pinNumeric": "পিন শুধুমাত্র সংখ্যা ধারণ করতে হবে"
+    }
   },
   "NotFound": {
     "title": "পৃষ্ঠা পাওয়া যায়নি",

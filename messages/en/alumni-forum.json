@@ -1,0 +1,112 @@
+{
+  "AlumniForumPage": {
+    "meta": {
+      "title": "Alumni Forum | DCMSXF",
+      "description": "Join the official DCMS alumni forum for announcements, events, job opportunities, and alumni stories."
+    },
+    "hero": {
+      "badge": "Alumni Forum",
+      "title": "Dhanbari Collegiate Model School",
+      "titleHighlight": "Alumni Forum",
+      "description": "DCMSXF is a trusted alumni community hub that brings together former students for announcements, events, mentoring, and meaningful connection.",
+      "primaryCTA": "Join Forum",
+      "secondaryCTA": "Explore Categories",
+      "stats": {
+        "alumniCount": "2,400+",
+        "alumniCountLabel": "Connected DCMS alumni",
+        "eventsCount": "18+",
+        "eventsCountLabel": "Annual reunions & events",
+        "discussionsCount": "Active",
+        "discussionsCountLabel": "Stories, jobs, updates & highlights"
+      }
+    },
+    "about": {
+      "badge": "About the Forum",
+      "title": "A welcoming space for DCMS alumni",
+      "titleHighlight": "to stay connected.",
+      "paragraph1": "The DCMSXF forum is a trusted community platform for former students. It is built to celebrate achievements, share important news, and keep the alumni network strong across batches and careers.",
+      "paragraph2": "From reunion planning to professional introductions, this page brings the spirit of our alma mater into a modern, easy-to-navigate digital space.",
+      "trustTitle": "Community Trust",
+      "trustText": "Moderated discussions, verified event posts, and alumni-only networking keep the forum safe and meaningful.",
+      "heritageTitle": "Shared Heritage",
+      "heritageText": "Celebrate school traditions, memories, and achievements while making new connections that last beyond graduation."
+    },
+    "categories": {
+      "badge": "Forum Categories",
+      "title": "Explore What Keeps Our Community Active",
+      "subtitle": "A well-organized forum makes it easy for alumni to discover news, events, career opportunities, and personal stories in one trusted place.",
+      "items": {
+        "announcements": {
+          "title": "Announcements",
+          "description": "Stay updated with school news, forum guidelines, and milestone alerts."
+        },
+        "events": {
+          "title": "Events",
+          "description": "Find upcoming reunions, workshops, and alumni-led gatherings."
+        },
+        "jobs": {
+          "title": "Job Opportunities",
+          "description": "Share career openings, mentorship offers, and professional pathways."
+        },
+        "stories": {
+          "title": "Alumni Stories",
+          "description": "Read success journeys, memories, and community spotlights."
+        }
+      }
+    },
+    "posts": {
+      "badge": "Recent Posts",
+      "title": "What Alumni Are Talking About",
+      "subtitle": "Explore the latest posts from our community, featuring updates, event plans, and success stories from DCMS graduates.",
+      "readMore": "Read more",
+      "items": [
+        {
+          "title": "DCMS Alumni Mentorship Circle is now open",
+          "date": "April 5, 2026",
+          "author": "Shuvro Rahman",
+          "category": "Announcements",
+          "preview": "Join mentors and mentees from different batches for guided career conversations and student support."
+        },
+        {
+          "title": "Annual Reunion 2026: Registration is live",
+          "date": "March 28, 2026",
+          "author": "Sumi Akter",
+          "category": "Events",
+          "preview": "Reserve your seat for the reunion at DCMS grounds and share your ideas for the alumni program."
+        },
+        {
+          "title": "New job board for DCMS professionals",
+          "date": "March 12, 2026",
+          "author": "Riazul Islam",
+          "category": "Jobs",
+          "preview": "Browse current opportunities from alumni-owned businesses and trusted partners."
+        }
+      ]
+    },
+    "events": {
+      "badge": "Upcoming Events",
+      "title": "Reunions & Alumni Gatherings",
+      "subtitle": "Plan your next opportunity to reconnect with classmates and participate in alumni-led events that enrich both personal and professional growth.",
+      "items": [
+        {
+          "date": "May 24, 2026",
+          "title": "Campus Reunion & Networking Night",
+          "description": "A warm evening of memories, updates from school leadership, and networking with alumni from every batch."
+        },
+        {
+          "date": "June 12, 2026",
+          "title": "Career Roundtable: DCMS in Industry",
+          "description": "Hear from alumni professionals sharing career pathways, hiring tips, and mentorship opportunities."
+        }
+      ]
+    },
+    "cta": {
+      "badge": "Join the Community",
+      "title": "Become Part of the DCMS Alumni Network",
+      "titleHighlight": "Today.",
+      "description": "Connect with classmates, discover opportunities, and build lasting professional relationships through the DCMS alumni forum.",
+      "button": "Join Now",
+      "secondaryButton": "Learn More"
+    }
+  }
+}

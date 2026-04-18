@@ -4,5 +4,7 @@ export const navMenuItems = [
   { href: "/admissions", labelKey: "admissions" },
   { href: "/gallery", labelKey: "gallery" },
   { href: "/contact", labelKey: "contact" },
+  { href: "/teacher", labelKey: "teacher" },
   { href: "/notice", labelKey: "notice" },
+  { href: "/alumni-forum", labelKey: "alumniForum" },
 ];

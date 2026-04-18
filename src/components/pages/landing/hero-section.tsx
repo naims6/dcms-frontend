@@ -3,11 +3,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, GraduationCap, Trophy } from "lucide-react";
-import {
-  HERO_STATS,
-  HERO_PASS_RATE_CARD,
-  HERO_FOUNDED_YEAR,
-} from "@/constants/heroStats";
+import { HERO_FOUNDED_YEAR } from "@/constants/heroStats";
+import { HeroStats } from "./hero-stats";
 
 export function HeroSection() {
   const t = useTranslations("Hero");
@@ -31,14 +28,14 @@ export function HeroSection() {
             className="absolute inset-0 z-0 dark:opacity-5 opacity-55"
             style={{
               backgroundImage: `
-        linear-linear(to right, #e2e8f0 1px, transparent 1px),
-        linear-linear(to bottom, #e2e8f0 1px, transparent 1px)
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
       `,
               backgroundSize: "20px 30px",
               WebkitMaskImage:
-                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
               maskImage:
-                "radial-linear(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
+                "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
             }}
           />
         </div>
@@ -71,7 +68,6 @@ export function HeroSection() {
                   {t("headlineLine2")}
                 </span>
               </h1>
-
               <p className="max-w-135 text-muted-foreground text-base md:text-lg leading-relaxed">
                 {t("subheading")}
               </p>
@@ -84,7 +80,7 @@ export function HeroSection() {
                 className="h-12 px-8 rounded-xl gap-2 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300"
                 asChild
               >
-                <Link href="#">
+                <Link href="/admissions">
                   {t("applyNow")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -100,21 +96,7 @@ export function HeroSection() {
             </div>
 
             {/* Stats Row — values from constants, labels from i18n */}
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-border/40">
-              {HERO_STATS.map(({ icon: Icon, value, labelKey }) => (
-                <div key={labelKey} className="flex flex-col gap-1">
-                  <div className="flex items-center gap-1.5">
-                    <Icon className="h-3.5 w-3.5 text-primary/70" />
-                    <span className="text-2xl font-extrabold text-primary leading-none">
-                      {value}
-                    </span>
-                  </div>
-                  <span className="text-xs text-muted-foreground font-medium">
-                    {t(labelKey)}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <HeroStats />
           </div>
 
           {/* ── Right: Rectangular Image Block ── */}
@@ -166,10 +148,10 @@ export function HeroSection() {
                 </div>
                 <div>
                   <p className="text-2xl font-extrabold text-foreground leading-none">
-                    {HERO_PASS_RATE_CARD.value}
+                    98%
                   </p>
                   <p className="text-[11px] uppercase tracking-widest text-muted-foreground font-semibold mt-0.5">
-                    {t(HERO_PASS_RATE_CARD.labelKey)}
+                    {t("passRate")}
                   </p>
                 </div>
               </div>

@@ -6,101 +6,7 @@ import { useState, useMemo } from "react";
 import { X, ZoomIn, Search, Filter, Calendar, LayoutGrid } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-// --- Mock Data ---
-interface GalleryItem {
-  id: number;
-  src: string;
-  title: string;
-  category: string;
-  batch: string;
-  year: string;
-  width: "normal" | "wide" | "tall";
-}
-
-const galleryData: GalleryItem[] = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=2071&auto=format&fit=crop",
-    title: "Science Fair 2024",
-    category: "Events",
-    batch: "SSC 2024",
-    year: "2024",
-    width: "wide",
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2132&auto=format&fit=crop",
-    title: "Classroom Activities",
-    category: "Academic",
-    batch: "Class 10",
-    year: "2024",
-    width: "normal",
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop",
-    title: "Library Study Session",
-    category: "Campus",
-    batch: "HSC 2025",
-    year: "2023",
-    width: "normal",
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop",
-    title: "Coding Workshop",
-    category: "Workshop",
-    batch: "Science Group",
-    year: "2023",
-    width: "wide",
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop",
-    title: "Annual Sports Meet",
-    category: "Sports",
-    batch: "All Batches",
-    year: "2024",
-    width: "normal",
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=2070&auto=format&fit=crop",
-    title: "Campus Aerial View",
-    category: "Campus",
-    batch: "N/A",
-    year: "2022",
-    width: "tall",
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1523050335102-c3251d428fa6?q=80&w=2070&auto=format&fit=crop",
-    title: "Graduation Party",
-    category: "Events",
-    batch: "SSC 2023",
-    year: "2023",
-    width: "normal",
-  },
-  {
-    id: 8,
-    src: "https://images.unsplash.com/photo-1510070112810-d4e9a46d9e91?q=80&w=2069&auto=format&fit=crop",
-    title: "Prize Giving Ceremony",
-    category: "Events",
-    batch: "All Batches",
-    year: "2024",
-    width: "wide",
-  },
-  {
-    id: 9,
-    src: "https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=2072&auto=format&fit=crop",
-    title: "Football Tournament",
-    category: "Sports",
-    batch: "Batch 2024",
-    year: "2024",
-    width: "normal",
-  },
-];
+import { galleryData, type GalleryItem } from "@/constants/galleryData";
 
 const GalleryGridMain = () => {
   const t = useTranslations("GalleryPage");
@@ -265,7 +171,7 @@ const GalleryGridMain = () => {
         {/* --- Lightbox --- */}
         {selectedImg && (
           <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 animate-in fade-in duration-300"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 animate-in fade-in duration-300"
             onClick={() => setSelectedImg(null)}
           >
             <button className="absolute top-6 right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors">

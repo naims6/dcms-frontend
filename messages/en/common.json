@@ -5,13 +5,39 @@
     "admissions": "Admissions",
     "gallery": "Gallery",
     "contact": "Contact",
+    "teacher": "Teacher",
     "notice": "Notice",
+    "alumniForum": "Alumni Forum",
     "toggleTheme": "Toggle theme",
     "light": "Light",
     "dark": "Dark",
     "system": "System",
     "login": "Login",
-    "register": "Register"
+    "admissionPortal": "Admission Portal"
+  },
+  "Login": {
+    "title": "Login",
+    "subtitle": "Student & Admin Access",
+    "registeredId": "Registered ID",
+    "registeredIdPlaceholder": "Enter your ID",
+    "pin": "PIN",
+    "pinPlaceholder": "Enter your PIN",
+    "forgotPin": "Forgot PIN?",
+    "showPin": "Show PIN",
+    "hidePin": "Hide PIN",
+    "rememberMe": "Remember me",
+    "loginButton": "Login",
+    "loggingIn": "Logging in...",
+    "admissionNote": "Don't have credentials?",
+    "admissionLink": "Get Admission",
+    "error": "An error occurred. Please try again.",
+    "errors": {
+      "registeredIdRequired": "Registered ID is required",
+      "registeredIdMinLength": "Registered ID must be at least 3 characters",
+      "pinRequired": "PIN is required",
+      "pinMinLength": "PIN must be at least 4 digits",
+      "pinNumeric": "PIN must contain only numbers"
+    }
   },
   "NotFound": {
     "title": "Page Not Found",
