@@ -6,4 +6,5 @@ export const navMenuItems = [
   { href: "/contact", labelKey: "contact" },
   { href: "/teacher", labelKey: "teacher" },
   { href: "/notice", labelKey: "notice" },
+  { href: "/alumni-forum", labelKey: "alumniForum" },
 ];
