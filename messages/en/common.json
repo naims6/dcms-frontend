@@ -13,7 +13,24 @@
     "dark": "Dark",
     "system": "System",
     "login": "Login",
-    "register": "Register"
+    "admissionPortal": "Admission Portal"
+  },
+  "Login": {
+    "title": "Login",
+    "subtitle": "Student & Admin Access",
+    "registeredId": "Registered ID",
+    "registeredIdPlaceholder": "Enter your ID",
+    "pin": "PIN",
+    "pinPlaceholder": "Enter your PIN",
+    "forgotPin": "Forgot PIN?",
+    "showPin": "Show PIN",
+    "hidePin": "Hide PIN",
+    "rememberMe": "Remember me",
+    "loginButton": "Login",
+    "loggingIn": "Logging in...",
+    "admissionNote": "Don't have credentials?",
+    "admissionLink": "Get Admission",
+    "error": "An error occurred. Please try again."
   },
   "NotFound": {
     "title": "Page Not Found",

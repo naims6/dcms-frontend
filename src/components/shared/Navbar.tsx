@@ -69,7 +69,7 @@ const Navbar = () => {
                 className="font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5 rounded-full"
                 asChild
               >
-                <Link href="/register">{t("register")}</Link>
+                <Link href="/admissions">{t("admissionPortal")}</Link>
               </Button>
             </div>
           </div>

@@ -96,8 +96,8 @@ export function MobileMenu() {
                 className="w-full justify-center h-12 rounded-xl text-base font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
                 asChild
               >
-                <Link href="/register" onClick={() => setOpen(false)}>
-                  {t("register")}
+                <Link href="/admissions" onClick={() => setOpen(false)}>
+                  {t("admissionPortal")}
                 </Link>
               </Button>
             </div>
