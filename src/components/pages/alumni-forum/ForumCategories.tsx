@@ -1,6 +1,7 @@
 import { Megaphone, CalendarDays, Briefcase, BookOpen } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 
 interface CategoryItem {
@@ -17,17 +18,21 @@ function CategoryCard({
   accent,
 }: CategoryItem) {
   return (
-    <article className="group rounded-2xl border border-border bg-card/95 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md">
-      <div
-        className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${accent} transition-transform duration-300 group-hover:scale-110`}
-      >
-        <Icon className="h-5 w-5" />
-      </div>
-      <h3 className="mt-5 text-lg font-semibold text-foreground">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-        {description}
-      </p>
-    </article>
+    <Card>
+      <CardHeader className="pb-3">
+        <div
+          className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${accent} transition-transform duration-300 group-hover:scale-110`}
+        >
+          <Icon className="h-5 w-5" />
+        </div>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          {description}
+        </p>
+      </CardContent>
+    </Card>
   );
 }
 

@@ -2,6 +2,7 @@ import { GraduationCap, Users, Sparkles, MessageSquare } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import PageIntro from "@/components/shared/PageIntro";
 
 interface StatItem {
@@ -13,19 +14,19 @@ interface StatItem {
 
 function StatCard({ value, label, icon: Icon, accent }: StatItem) {
   return (
-    <article
-      className={`flex items-center gap-4 rounded-2xl border border-border bg-card/90 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md`}
-    >
-      <div
-        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${accent}`}
-      >
-        <Icon className="h-5 w-5" />
-      </div>
-      <div>
-        <p className="text-2xl font-bold text-foreground">{value}</p>
-        <p className="text-sm text-muted-foreground">{label}</p>
-      </div>
-    </article>
+    <Card className="transition hover:-translate-y-1 hover:shadow-md">
+      <CardContent className="flex items-center gap-4 p-5">
+        <div
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${accent}`}
+        >
+          <Icon className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-2xl font-bold text-foreground">{value}</p>
+          <p className="text-sm text-muted-foreground">{label}</p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

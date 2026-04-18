@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { CalendarDays } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 
 interface EventItem {
@@ -10,20 +11,24 @@ interface EventItem {
 
 function EventCard({ date, title, description }: EventItem) {
   return (
-    <article className="group flex gap-5 rounded-2xl border border-border bg-card/95 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-md">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
-        <CalendarDays className="h-5 w-5" />
-      </div>
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          {date}
-        </p>
-        <h3 className="mt-2 text-lg font-semibold text-foreground">{title}</h3>
-        <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          {description}
-        </p>
-      </div>
-    </article>
+    <Card className="group flex gap-5">
+      <CardContent className="flex gap-5 p-6">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
+          <CalendarDays className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+            {date}
+          </p>
+          <h3 className="mt-2 text-lg font-semibold text-foreground">
+            {title}
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            {description}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { ArrowRight, User } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Badge } from "@/components/ui/badge";
 
@@ -52,39 +53,44 @@ export default function ForumPosts() {
 
         <div className="space-y-4">
           {POST_KEYS.map((post) => (
-            <article
+            <Card
               key={post.titleKey}
-              className="group rounded-2xl border border-border bg-card/95 p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+              className="group transition-all duration-300 hover:-translate-y-0.5"
             >
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="flex-1 space-y-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary" className="text-xs font-medium">
-                      {t(post.categoryKey)}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {t(post.dateKey)}
-                    </span>
+              <CardContent className="p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex-1 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs font-medium"
+                      >
+                        {t(post.categoryKey)}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {t(post.dateKey)}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {t(post.titleKey)}
+                    </h3>
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      {t(post.previewKey)}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                    {t(post.titleKey)}
-                  </h3>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {t(post.previewKey)}
-                  </p>
+                  <ArrowRight className="hidden sm:block h-5 w-5 shrink-0 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300 mt-1" />
                 </div>
-                <ArrowRight className="hidden sm:block h-5 w-5 shrink-0 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300 mt-1" />
-              </div>
 
-              <div className="mt-4 flex items-center gap-2 border-t border-border/50 pt-4">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <User className="h-3.5 w-3.5" />
+                <div className="mt-4 flex items-center gap-2 border-t border-border/50 pt-4">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {t(post.authorKey)}
+                  </span>
                 </div>
-                <span className="text-sm font-medium text-foreground">
-                  {t(post.authorKey)}
-                </span>
-              </div>
-            </article>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
