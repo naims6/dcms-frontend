@@ -24,16 +24,16 @@ export const admissionFormSchema = z.object({
         values: { max: 100 },
       }),
     }),
-  dateOfBirth: z.string().min(1, "errors.required"),
+  dateOfBirth: z.date().min(1, "errors.required"),
   gender: z.string().min(1, "errors.required"),
   bloodGroup: z.string().optional(),
-  religion: z.string().optional(),
-  studentPhoto: z.any().optional(),
+  religion: z.string(),
+  studentPhoto: z.url().optional(),
 
   // Academic Information
   classApplying: z.string().min(1, "errors.required"),
-  previousSchool: z.string().optional(),
-  previousClass: z.string().optional(),
+  previousSchool: z.string(),
+  previousClass: z.string(),
   previousGrade: z.string().optional(),
 
   // Parent Information - Father
@@ -51,7 +51,7 @@ export const admissionFormSchema = z.object({
         values: { max: 100 },
       }),
     }),
-  fatherOccupation: z.string().optional(),
+  fatherOccupation: z.string(),
   fatherPhone: z
     .string()
     .min(MIN_PHONE_LENGTH, "errors.minPhoneLength")
@@ -72,7 +72,7 @@ export const admissionFormSchema = z.object({
         values: { max: 100 },
       }),
     }),
-  motherOccupation: z.string().optional(),
+  motherOccupation: z.string(),
   motherPhone: z
     .string()
     .min(MIN_PHONE_LENGTH, "errors.minPhoneLength")
@@ -115,7 +115,7 @@ export const admissionFormSchema = z.object({
     .max(20, {
       message: JSON.stringify({ key: "errors.maxLength", values: { max: 20 } }),
     }),
-  email: z.string().email("errors.invalidEmail"),
+  email: z.email("errors.invalidEmail"),
   emergencyContact: z
     .string()
     .min(MIN_PHONE_LENGTH, "errors.minPhoneLength")
@@ -135,11 +135,11 @@ export type AdmissionFormValues = z.infer<typeof admissionFormSchema>;
 // default values
 export const admissionFormDefaultValues: AdmissionFormValues = {
   fullName: "",
-  dateOfBirth: "",
+  dateOfBirth: new Date(),
   gender: "",
   bloodGroup: "",
   religion: "",
-  studentPhoto: undefined,
+  studentPhoto: "",
   classApplying: "",
   previousSchool: "",
   previousClass: "",
