@@ -16,7 +16,7 @@ export function ContactInformation({ control }: ContactInformationProps) {
   const t = useTranslations("admissions");
 
   return (
-    <Card className="relative overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow duration-300 bg-linear-to-br from-background via-background to-primary/5">
+    <Card className="hover:translate-y-0 relative overflow-hidden border-0 shadow-md bg-linear-to-br from-background via-background to-primary/5">
       <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-linear-to-br from-primary/10 to-transparent blur-2xl -mr-16 -mt-16" />
 
       <div className="relative p-6 sm:p-8 z-10">
@@ -40,6 +40,7 @@ export function ContactInformation({ control }: ContactInformationProps) {
                   placeholder={t("placeholders.address")}
                   className="resize-none"
                   {...field}
+                  value={(field.value as string) || ""}
                 />
               )}
             </FormField>
@@ -56,6 +57,7 @@ export function ContactInformation({ control }: ContactInformationProps) {
                 id="city"
                 placeholder={t("placeholders.city")}
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>
@@ -71,6 +73,7 @@ export function ContactInformation({ control }: ContactInformationProps) {
                 id="postalCode"
                 placeholder={t("placeholders.postalCode")}
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>
@@ -87,6 +90,7 @@ export function ContactInformation({ control }: ContactInformationProps) {
                 type="email"
                 placeholder={t("placeholders.email")}
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>
@@ -102,6 +106,7 @@ export function ContactInformation({ control }: ContactInformationProps) {
                 id="emergencyContact"
                 placeholder={t("placeholders.phone")}
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>

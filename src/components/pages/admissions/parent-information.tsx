@@ -15,7 +15,7 @@ export function ParentInformation({ control }: ParentInformationProps) {
   const t = useTranslations("admissions");
 
   return (
-    <Card className="relative overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow duration-300 bg-linear-to-br from-background via-background to-secondary/5">
+    <Card className="hover:translate-y-0 relative overflow-hidden border-0 shadow-md bg-linear-to-br from-background via-background to-secondary/5">
       <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-linear-to-br from-secondary/10 to-transparent blur-2xl -mr-16 -mt-16" />
 
       <div className="relative p-6 sm:p-8 z-10">
@@ -43,6 +43,7 @@ export function ParentInformation({ control }: ParentInformationProps) {
                     id="fatherName"
                     placeholder={t("placeholders.fatherName")}
                     {...field}
+                    value={(field.value as string) || ""}
                   />
                 )}
               </FormField>
@@ -57,6 +58,7 @@ export function ParentInformation({ control }: ParentInformationProps) {
                     id="fatherOccupation"
                     placeholder={t("placeholders.occupation")}
                     {...field}
+                    value={(field.value as string) || ""}
                   />
                 )}
               </FormField>
@@ -72,6 +74,7 @@ export function ParentInformation({ control }: ParentInformationProps) {
                     id="fatherPhone"
                     placeholder={t("placeholders.phone")}
                     {...field}
+                    value={(field.value as string) || ""}
                   />
                 )}
               </FormField>
@@ -95,6 +98,7 @@ export function ParentInformation({ control }: ParentInformationProps) {
                     id="motherName"
                     placeholder={t("placeholders.motherName")}
                     {...field}
+                    value={(field.value as string) || ""}
                   />
                 )}
               </FormField>
@@ -109,6 +113,7 @@ export function ParentInformation({ control }: ParentInformationProps) {
                     id="motherOccupation"
                     placeholder={t("placeholders.occupation")}
                     {...field}
+                    value={(field.value as string) || ""}
                   />
                 )}
               </FormField>
@@ -124,6 +129,7 @@ export function ParentInformation({ control }: ParentInformationProps) {
                     id="motherPhone"
                     placeholder={t("placeholders.phone")}
                     {...field}
+                    value={(field.value as string) || ""}
                   />
                 )}
               </FormField>

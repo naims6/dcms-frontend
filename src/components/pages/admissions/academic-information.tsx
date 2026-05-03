@@ -31,7 +31,7 @@ export function AcademicInformation({ control }: AcademicInformationProps) {
   const t = useTranslations("admissions");
 
   return (
-    <Card className="relative overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow duration-300 bg-linear-to-br from-background via-background to-accent/5">
+    <Card className="hover:translate-y-0 relative overflow-hidden border-0 shadow-md bg-linear-to-br from-background via-background to-accent/5">
       <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-linear-to-br from-accent/10 to-transparent blur-2xl -mr-16 -mt-16" />
 
       <div className="relative p-6 sm:p-8 z-10">
@@ -49,7 +49,7 @@ export function AcademicInformation({ control }: AcademicInformationProps) {
             required
           >
             {(field) => (
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select onValueChange={field.onChange} value={field.value as string}>
                 <SelectTrigger>
                   <SelectValue placeholder={t("placeholders.selectClass")} />
                 </SelectTrigger>
@@ -74,6 +74,7 @@ export function AcademicInformation({ control }: AcademicInformationProps) {
                 id="previousSchool"
                 placeholder={t("placeholders.previousSchool")}
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>
@@ -84,7 +85,7 @@ export function AcademicInformation({ control }: AcademicInformationProps) {
             label={t("fields.previousClass")}
           >
             {(field) => (
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select onValueChange={field.onChange} value={field.value as string}>
                 <SelectTrigger>
                   <SelectValue placeholder={t("placeholders.selectClass")} />
                 </SelectTrigger>
@@ -109,6 +110,7 @@ export function AcademicInformation({ control }: AcademicInformationProps) {
                 id="previousGrade"
                 placeholder={t("placeholders.previousGrade")}
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>

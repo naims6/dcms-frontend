@@ -20,7 +20,7 @@ export function AdditionalInformation({ control }: AdditionalInformationProps) {
   const getErrorMessage = useFormError();
 
   return (
-    <Card className="relative overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow duration-300 bg-linear-to-br from-background via-background to-accent/5">
+    <Card className="hover:translate-y-0 relative overflow-hidden border-0 shadow-md bg-linear-to-br from-background via-background to-accent/5">
       <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-linear-to-br from-accent/10 to-transparent blur-2xl -mr-16 -mt-16" />
 
       <div className="relative p-6 sm:p-8 z-10">
@@ -31,31 +31,37 @@ export function AdditionalInformation({ control }: AdditionalInformationProps) {
         />
 
         <div className="space-y-6">
+
           <FormField
             control={control}
-            name="guardianName"
-            label={t("fields.guardianName")}
+            name="password"
+            label={t("fields.password")}
+            required
           >
             {(field) => (
               <Input
-                id="guardianName"
-                placeholder={t("placeholders.guardianName")}
+                id="password"
+                type="password"
+                placeholder="********"
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>
 
           <FormField
             control={control}
-            name="specialNotes"
-            label={t("fields.specialNotes")}
+            name="confirmPassword"
+            label={t("fields.confirmPassword")}
+            required
           >
             {(field) => (
-              <Textarea
-                id="specialNotes"
-                placeholder={t("placeholders.specialNotes")}
-                className="resize-none min-h-[100px]"
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="********"
                 {...field}
+                value={(field.value as string) || ""}
               />
             )}
           </FormField>

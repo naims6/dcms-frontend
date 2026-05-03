@@ -24,8 +24,8 @@
         "description": "ঠিকানা এবং যোগাযোগের বিবরণ"
       },
       "additional": {
-        "title": "অতিরিক্ত তথ্য",
-        "description": "অভিভাবকের বিবরণ এবং বিশেষ নোট"
+        "title": "অ্যাকাউন্টের তথ্য",
+        "description": "নিরাপত্তা এবং অ্যাকাউন্টের বিবরণ"
       }
     },
     "fields": {
@@ -53,9 +53,9 @@
       "postalCode": "পোস্টাল কোড",
       "email": "ইমেইল",
       "emergencyContact": "জরুরি যোগাযোগ",
-      "guardianName": "অভিভাবকের নাম (প্রযোজনীয় হলে)",
-      "specialNotes": "বিশেষ নোট",
-      "agreeTerms": "আমি শর্তাবলীতে সম্মত"
+      "agreeTerms": "আমি শর্তাবলীতে সম্মত",
+      "password": "পাসওয়ার্ড",
+      "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন"
     },
     "placeholders": {
       "fullName": "পূর্ণ নাম লিখুন",
@@ -75,9 +75,7 @@
       "address": "সম্পূর্ণ ঠিকানা লিখুন",
       "city": "শহর লিখুন",
       "postalCode": "পোস্টাল কোড লিখুন",
-      "email": "email@example.com",
-      "guardianName": "অভিভাবকের নাম লিখুন",
-      "specialNotes": "কোনো বিশেষ প্রয়োজনীয়তা, চিকিৎসা অবস্থা বা অতিরিক্ত তথ্য..."
+      "email": "email@example.com"
     },
     "options": {
       "male": "পুরুষ",
@@ -111,7 +109,9 @@
       "minPhoneLength": "ফোন নম্বর কমপক্ষে ১০ সংখ্যা হতে হবে",
       "fileTooLarge": "ফাইলের আকার ৫ এমবির কম হতে হবে",
       "invalidFileType": "অনুগ্রহ করে একটি বৈধ ইমেজ ফাইল আপলোড করুন",
-      "agreeTerms": "আপনাকে শর্তাবলী সম্মত করতে হবে"
+      "agreeTerms": "আপনাকে শর্তাবলী সম্মত করতে হবে",
+      "passwordMatch": "পাসওয়ার্ড মিলছে না",
+      "invalidUrl": "অবৈধ ইউআরএল"
     }
   }
 }

@@ -28,7 +28,7 @@ export const admissionFormSchema = z.object({
   gender: z.string().min(1, "errors.required"),
   bloodGroup: z.string().optional(),
   religion: z.string(),
-  studentPhoto: z.url().optional(),
+  studentPhoto: z.string().url("errors.invalidUrl").optional().or(z.literal("")),
 
   // Academic Information
   classApplying: z.string().min(1, "errors.required"),
@@ -122,11 +122,19 @@ export const admissionFormSchema = z.object({
     .regex(PHONE_REGEX, "errors.invalidPhone"),
 
   // Additional Information
-  guardianName: z.string().optional(),
-  specialNotes: z.string().optional(),
   agreeTerms: z.boolean().refine((val) => val === true, {
     message: "errors.agreeTerms",
   }),
+  password: z.string().min(6, {
+    message: JSON.stringify({
+      key: "errors.minLength",
+      values: { min: 6 },
+    }),
+  }),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "errors.passwordMatch",
+  path: ["confirmPassword"],
 });
 
 // typescript type
@@ -155,9 +163,9 @@ export const admissionFormDefaultValues: AdmissionFormValues = {
   postalCode: "",
   email: "",
   emergencyContact: "",
-  guardianName: "",
-  specialNotes: "",
   agreeTerms: false,
+  password: "",
+  confirmPassword: "",
 };
 
 export const admissionFormResolver: Resolver<AdmissionFormValues> = async (
