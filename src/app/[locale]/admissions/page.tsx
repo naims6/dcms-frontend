@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { Loader2, GraduationCap } from "lucide-react";
 
@@ -16,7 +16,7 @@ import {
 import {
   admissionFormDefaultValues,
   admissionFormResolver,
-  AdmissionFormValues,
+  type AdmissionFormValues,
 } from "@/schemas/admissions";
 import { useAdmissionForm } from "@/hooks/use-admission-form";
 
@@ -31,8 +31,7 @@ export default function AdmissionsPage() {
 
   const form = useForm<AdmissionFormValues>({
     resolver: admissionFormResolver,
-    mode: "onBlur",
-    reValidateMode: "onChange",
+    mode: "onTouched",
     defaultValues: admissionFormDefaultValues,
   });
 
@@ -67,45 +66,46 @@ export default function AdmissionsPage() {
         </div>
 
         <div className="container mx-auto max-w-4xl px-4 md:px-6 py-6 md:py-20 relative z-10">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* Section 1: Student Information */}
-            <StudentInformation
-              control={form.control}
-              photoFileName={photoFileName}
-              onPhotoChange={setPhotoFileName}
-            />
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {/* Section 1: Student Information */}
+              <StudentInformation
+                photoFileName={photoFileName}
+                onPhotoChange={setPhotoFileName}
+              />
 
-            {/* Section 2: Academic Information */}
-            <AcademicInformation control={form.control} />
+              {/* Section 2: Academic Information */}
+              <AcademicInformation />
 
-            {/* Section 3: Parent Information */}
-            <ParentInformation control={form.control} />
+              {/* Section 3: Parent Information */}
+              <ParentInformation />
 
-            {/* Section 4: Contact Information */}
-            <ContactInformation control={form.control} />
+              {/* Section 4: Contact Information */}
+              <ContactInformation />
 
-            {/* Section 5: Additional Information */}
-            <AdditionalInformation control={form.control} />
+              {/* Section 5: Additional Information */}
+              <AdditionalInformation />
 
-            {/* Submit Button */}
-            <div className="flex justify-center pt-8">
-              <Button
-                type="submit"
-                size="lg"
-                disabled={isSubmitting}
-                className="min-w-60 bg-linear-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t("buttons.submitting")}
-                  </>
-                ) : (
-                  t("buttons.submit")
-                )}
-              </Button>
-            </div>
-          </form>
+              {/* Submit Button */}
+              <div className="flex justify-center pt-8">
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="min-w-60 bg-linear-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {t("buttons.submitting")}
+                    </>
+                  ) : (
+                    t("buttons.submit")
+                  )}
+                </Button>
+              </div>
+            </form>
+          </FormProvider>
         </div>
       </div>
     </>

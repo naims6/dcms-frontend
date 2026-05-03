@@ -24,8 +24,8 @@
         "description": "Address and contact details"
       },
       "additional": {
-        "title": "Additional Information",
-        "description": "Guardian details and special notes"
+        "title": "Account Information",
+        "description": "Security and account details"
       }
     },
     "fields": {
@@ -53,9 +53,9 @@
       "postalCode": "Postal Code",
       "email": "Email",
       "emergencyContact": "Emergency Contact",
-      "guardianName": "Guardian Name (if applicable)",
-      "specialNotes": "Special Notes",
-      "agreeTerms": "I agree to the terms and conditions"
+      "agreeTerms": "I agree to the terms and conditions",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
     },
     "placeholders": {
       "fullName": "Enter full name",
@@ -75,9 +75,7 @@
       "address": "Enter full address",
       "city": "Enter city",
       "postalCode": "Enter postal code",
-      "email": "email@example.com",
-      "guardianName": "Enter guardian name",
-      "specialNotes": "Any special requirements, medical conditions, or additional information..."
+      "email": "email@example.com"
     },
     "options": {
       "male": "Male",
@@ -111,7 +109,9 @@
       "minPhoneLength": "Phone number must be at least 10 digits",
       "fileTooLarge": "File size must be less than 5MB",
       "invalidFileType": "Please upload a valid image file",
-      "agreeTerms": "You must agree to the terms and conditions"
+      "agreeTerms": "You must agree to the terms and conditions",
+      "passwordMatch": "Passwords do not match",
+      "invalidUrl": "Invalid URL"
     }
   }
 }
