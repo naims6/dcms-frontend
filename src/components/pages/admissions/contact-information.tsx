@@ -48,8 +48,8 @@ export function ContactInformation() {
         />
 
         <FormInput
-          name="emergencyContact"
-          label={t("fields.emergencyContact")}
+          name="studentPhone"
+          label={t("fields.studentPhone")}
           placeholder={t("placeholders.phone")}
           required
         />

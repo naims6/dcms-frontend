@@ -42,6 +42,7 @@ export function AcademicInformation() {
           name="previousSchool"
           label={t("fields.previousSchool")}
           placeholder={t("placeholders.previousSchool")}
+          required
         />
 
         <FormSelect
@@ -49,12 +50,14 @@ export function AcademicInformation() {
           label={t("fields.previousClass")}
           placeholder={t("placeholders.selectClass")}
           options={prevClassOptions}
+          required
         />
 
         <FormInput
           name="previousGrade"
           label={t("fields.previousGrade")}
           placeholder={t("placeholders.previousGrade")}
+          required
         />
       </div>
     </FormSection>

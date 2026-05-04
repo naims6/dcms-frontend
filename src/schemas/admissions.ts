@@ -25,21 +25,17 @@ export const admissionFormSchema = z
           values: { max: 100 },
         }),
       }),
+
     dateOfBirth: z.string().min(1, { message: "errors.required" }),
     gender: z.string().min(1, { message: "errors.required" }),
-    bloodGroup: z.string().optional(),
-    religion: z.string(),
-    studentPhoto: z
-      .string()
-      .url("errors.invalidUrl")
-      .optional()
-      .or(z.literal("")),
-
+    bloodGroup: z.string().min(1, { message: "errors.required" }),
+    religion: z.string().min(1, { message: "errors.required" }),
+    studentPhoto: z.string().min(1, { message: "errors.required" }),
     // Academic Information
     classApplying: z.string().min(1, { message: "errors.required" }),
-    previousSchool: z.string(),
-    previousClass: z.string(),
-    previousGrade: z.string().optional(),
+    previousSchool: z.string().min(1, { message: "errors.required" }),
+    previousClass: z.string().min(1, { message: "errors.required" }),
+    previousGrade: z.string().min(1, { message: "errors.required" }),
 
     // Parent Information — Father
     fatherName: z
@@ -56,7 +52,7 @@ export const admissionFormSchema = z
           values: { max: 100 },
         }),
       }),
-    fatherOccupation: z.string(),
+    fatherOccupation: z.string().min(1, { message: "errors.required" }),
     fatherPhone: z
       .string()
       .min(MIN_PHONE_LENGTH, { message: "errors.minPhoneLength" })
@@ -77,7 +73,7 @@ export const admissionFormSchema = z
           values: { max: 100 },
         }),
       }),
-    motherOccupation: z.string(),
+    motherOccupation: z.string().min(1, { message: "errors.required" }),
     motherPhone: z
       .string()
       .min(MIN_PHONE_LENGTH, { message: "errors.minPhoneLength" })
@@ -127,7 +123,7 @@ export const admissionFormSchema = z
         }),
       }),
     email: z.email({ message: "errors.invalidEmail" }),
-    emergencyContact: z
+    studentPhone: z
       .string()
       .min(MIN_PHONE_LENGTH, { message: "errors.minPhoneLength" })
       .regex(PHONE_REGEX, { message: "errors.invalidPhone" }),
@@ -142,7 +138,7 @@ export const admissionFormSchema = z
         values: { min: 6 },
       }),
     }),
-    confirmPassword: z.string(),
+    confirmPassword: z.string().min(1, { message: "errors.required" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "errors.passwordMatch",
@@ -157,6 +153,7 @@ export const admissionFormDefaultValues: AdmissionFormValues = {
   fullName: "",
   dateOfBirth: "",
   gender: "",
+
   bloodGroup: "",
   religion: "",
   studentPhoto: "",
@@ -164,6 +161,7 @@ export const admissionFormDefaultValues: AdmissionFormValues = {
   previousSchool: "",
   previousClass: "",
   previousGrade: "",
+
   fatherName: "",
   fatherOccupation: "",
   fatherPhone: "",
@@ -174,7 +172,7 @@ export const admissionFormDefaultValues: AdmissionFormValues = {
   city: "",
   postalCode: "",
   email: "",
-  emergencyContact: "",
+  studentPhone: "",
   agreeTerms: false,
   password: "",
   confirmPassword: "",
