@@ -32,6 +32,7 @@ export function ParentInformation() {
               name="fatherOccupation"
               label={t("fields.occupation")}
               placeholder={t("placeholders.occupation")}
+              required
             />
             <FormInput
               name="fatherPhone"
@@ -58,6 +59,7 @@ export function ParentInformation() {
               name="motherOccupation"
               label={t("fields.occupation")}
               placeholder={t("placeholders.occupation")}
+              required
             />
             <FormInput
               name="motherPhone"

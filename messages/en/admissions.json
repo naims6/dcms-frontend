@@ -52,7 +52,7 @@
       "city": "City",
       "postalCode": "Postal Code",
       "email": "Email",
-      "emergencyContact": "Emergency Contact",
+      "studentPhone": "Student Phone",
       "agreeTerms": "I agree to the terms and conditions",
       "password": "Password",
       "confirmPassword": "Confirm Password"

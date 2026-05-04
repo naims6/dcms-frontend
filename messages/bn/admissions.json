@@ -52,7 +52,7 @@
       "city": "শহর",
       "postalCode": "পোস্টাল কোড",
       "email": "ইমেইল",
-      "emergencyContact": "জরুরি যোগাযোগ",
+      "studentPhone": "শিক্ষার্থীর ফোন",
       "agreeTerms": "আমি শর্তাবলীতে সম্মত",
       "password": "পাসওয়ার্ড",
       "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন"
