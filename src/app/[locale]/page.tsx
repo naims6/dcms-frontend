@@ -8,11 +8,12 @@ import { NoticeBoardSection } from "@/components/pages/landing/notice-board-sect
 import { GallerySection } from "@/components/pages/landing/gallery-section";
 import { ContactSection } from "@/components/pages/landing/contact-section";
 
-export default function Home({
-  params: { locale },
+export default async function Home({
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   setRequestLocale(locale);
 
   return (

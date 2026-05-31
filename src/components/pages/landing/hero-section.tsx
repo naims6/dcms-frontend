@@ -123,6 +123,7 @@ export function HeroSection() {
                 height={600}
                 className="w-full h-auto object-cover aspect-3/2 transition-transform duration-700 hover:scale-[1.03]"
                 priority
+                sizes="400px"
               />
 
               {/* Bottom linear caption bar */}

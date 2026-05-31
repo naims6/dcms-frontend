@@ -24,6 +24,7 @@ const AboutIntro = () => {
             alt="Dhanbari Collegiate Model School"
             width={1200}
             height={800}
+            sizes="400px"
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/55 via-black/20 to-transparent" />

@@ -24,6 +24,7 @@ export function AboutSection() {
                   src="/images/school.jpg"
                   alt={t("imageAlt")}
                   fill
+                  sizes="400px"
                   className="object-cover object-center w-full h-full transition-transform duration-700 hover:scale-105"
                 />
 

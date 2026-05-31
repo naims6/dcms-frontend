@@ -1,4 +1,4 @@
-# Dhanbari Collegiate Model School – Frontend
+# 🏫 Dhanbari Collegiate Model School – Frontend
 
 <div align="center">
 
@@ -15,7 +15,7 @@
 ---
 
 **🔗 Repositories:**
-[🖥️ Frontend](https://github.com/naims6/dcms-frontend) &nbsp;•&nbsp; [⚙️ Backend](https://github.com/naims6/dcms-backend)
+[🖥️ Frontend](https://github.com/naims6/dcms-frontend) &nbsp;•&nbsp; [⚙️ Backend](https://github.com/naims6/dcms-backend) &nbsp;•&nbsp; [🌐 Live Link](https://dcms-frontend-woad.vercel.app/en)
 
 </div>
 

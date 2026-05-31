@@ -60,6 +60,7 @@ export function TeacherProfile({ teacher }: TeacherProfileProps) {
                   fill
                   className="object-cover"
                   priority
+                  sizes="400px"
                 />
               </div>
               <div className="absolute -bottom-3 -right-3 z-20 flex flex-col items-center justify-center h-16 w-16 rounded-2xl bg-primary text-primary-foreground shadow-md border-4 border-background">
