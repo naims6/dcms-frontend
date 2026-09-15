@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AdmissionFormValues } from "@/schemas/admissions";
+import { apiClient } from "@/lib/apiClient";
 
 export function useAdmissionForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -8,26 +9,20 @@ export function useAdmissionForm() {
   const onSubmit = async (data: AdmissionFormValues) => {
     setIsSubmitting(true);
     try {
-      // TODO: Replace with actual API call
-      // Example: const response = await fetch('/api/admissions', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data)
-      // });
+      const response = await apiClient.post<{ message?: string }>("/admissions", data);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      console.log("Form submitted:", data);
+      console.log("Form submitted successfully:", response);
       return {
         success: true,
-        message: "Application submitted successfully!",
+        message: response?.message || "Application submitted successfully!",
       };
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Submission error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Submission failed. Please try again.";
       return {
         success: false,
-        message: "Submission failed. Please try again.",
+        message: errorMessage,
       };
     } finally {
       setIsSubmitting(false);

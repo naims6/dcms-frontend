@@ -21,7 +21,6 @@ import { cn } from "@/lib/utils";
 import { LoginInput, loginSchema } from "@/schemas/auth.schema";
 import { useAuth } from "@/hooks/use-auth";
 import { useFormError } from "@/hooks/use-form-error";
-import { ApiError } from "@/lib/api/custom-fetch";
 
 export function LoginForm() {
   const t = useTranslations("Login");
@@ -59,9 +58,7 @@ export function LoginForm() {
     try {
       await login(data);
     } catch (err: unknown) {
-      if (err instanceof ApiError) {
-        setApiError(err.message);
-      } else if (err instanceof Error) {
+      if (err instanceof Error) {
         setApiError(err.message);
       } else {
         setApiError(t("error") || "An error occurred during login.");

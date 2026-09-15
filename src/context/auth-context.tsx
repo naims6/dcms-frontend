@@ -4,7 +4,7 @@ import React, { createContext, useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { AuthState, LoginCredentials, User } from "@/types/auth.types";
 import { getMeApi, loginApi, logoutApi } from "@/services/auth.service";
-import { getAccessToken, setAccessToken } from "@/lib/api/custom-fetch";
+
 
 export const AuthContext = createContext<AuthState | undefined>(undefined);
 
@@ -17,20 +17,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const extractLocale = useCallback(() => {
     if (!pathname) return "en";
     const segments = pathname.split("/");
-    return segments[1] && (segments[1] === "en" || segments[1] === "bn") ? segments[1] : "en";
+    return segments[1] && (segments[1] === "en" || segments[1] === "bn")
+      ? segments[1]
+      : "en";
   }, [pathname]);
 
   useEffect(() => {
     let isMounted = true;
     const initAuth = async () => {
-      const token = getAccessToken();
-      if (!token) {
-        if (isMounted) {
-          setUser(null);
-          setIsLoading(false);
-        }
-        return;
-      }
       try {
         const currentUser = await getMeApi();
         if (isMounted) {
@@ -39,7 +33,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch {
         if (isMounted) {
           setUser(null);
-          setAccessToken(null);
         }
       } finally {
         if (isMounted) {
@@ -50,19 +43,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initAuth();
 
-    const handleUnauthorized = () => {
-      setUser(null);
-      setAccessToken(null);
-      const locale = extractLocale();
-      router.push(`/${locale}/login`);
-    };
-
-    window.addEventListener("auth:unauthorized", handleUnauthorized);
     return () => {
       isMounted = false;
-      window.removeEventListener("auth:unauthorized", handleUnauthorized);
     };
-  }, [router, extractLocale]);
+  }, []);
 
   const login = async (credentials: LoginCredentials) => {
     setIsLoading(true);
@@ -81,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await logoutApi();
     } catch {
-      // Ignore logout errors
+      // ignore logout errors
     } finally {
       setUser(null);
       setIsLoading(false);
@@ -93,27 +77,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const hasPermission = useCallback(
     (permission: string): boolean => {
       if (!user) return false;
-      if (user.roles?.includes("ADMIN") || user.permissions?.includes("*")) {
-        return true;
-      }
       return user.permissions?.includes(permission) ?? false;
     },
-    [user]
+    [user],
   );
 
   const hasAnyPermission = useCallback(
     (permissions: string[]): boolean => {
       if (!user) return false;
-      if (user.roles?.includes("ADMIN") || user.permissions?.includes("*")) {
-        return true;
-      }
       return permissions.some((p) => user.permissions?.includes(p));
     },
-    [user]
+    [user],
   );
 
   return (
-    <AuthContext.Provider
+    <AuthContext
       value={{
         user,
         isAuthenticated: !!user,
@@ -125,6 +103,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </AuthContext.Provider>
+    </AuthContext>
   );
 }
