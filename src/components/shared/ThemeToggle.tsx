@@ -6,13 +6,13 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const { setTheme, resolvedTheme } = useTheme();
+  const mounted = React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const t = useTranslations("Navbar");
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const isDark = resolvedTheme === "dark";
 

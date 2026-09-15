@@ -36,7 +36,7 @@ export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean 
     .filter((n) => n.category === activeTab)
     .filter((n) => n.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  const tabs: { id: TabId; labelKey: "general" | "scholarship" | "jobs" | "tender"; icon: any }[] = [
+  const tabs: { id: TabId; labelKey: "general" | "scholarship" | "jobs" | "tender"; icon: React.ElementType }[] = [
     { id: "general", labelKey: "general", icon: Megaphone },
     { id: "scholarship", labelKey: "scholarship", icon: GraduationCap },
     { id: "jobs", labelKey: "jobs", icon: Briefcase },

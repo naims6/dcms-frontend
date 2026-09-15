@@ -18,6 +18,10 @@
   "Login": {
     "title": "Login",
     "subtitle": "Student & Admin Access",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
     "registeredId": "Registered ID",
     "registeredIdPlaceholder": "Enter your ID",
     "pin": "PIN",
@@ -32,6 +36,10 @@
     "admissionLink": "Get Admission",
     "error": "An error occurred. Please try again.",
     "errors": {
+      "emailRequired": "Email is required",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
       "registeredIdRequired": "Registered ID is required",
       "registeredIdMinLength": "Registered ID must be at least 3 characters",
       "pinRequired": "PIN is required",

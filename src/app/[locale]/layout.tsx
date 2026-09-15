@@ -92,6 +92,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { AuthProvider } from "@/context/auth-context";
+
 export default async function RootLayout({
   children,
   params,
@@ -126,10 +128,12 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
-            {children}
-            <Footer />
-            <ScrollToTop />
+            <AuthProvider>
+              <Navbar />
+              {children}
+              <Footer />
+              <ScrollToTop />
+            </AuthProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

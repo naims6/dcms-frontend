@@ -18,6 +18,10 @@
   "Login": {
     "title": "লগইন",
     "subtitle": "শিক্ষার্থী এবং প্রশাসক প্রবেশাধিকার",
+    "email": "ইমেইল ঠিকানা",
+    "emailPlaceholder": "আপনার ইমেইল প্রবেশ করুন",
+    "password": "পাসওয়ার্ড",
+    "passwordPlaceholder": "আপনার পাসওয়ার্ড প্রবেশ করুন",
     "registeredId": "নিবন্ধিত আইডি",
     "registeredIdPlaceholder": "আপনার আইডি প্রবেশ করুন",
     "pin": "পিন",
@@ -32,6 +36,10 @@
     "admissionLink": "ভর্তি নিন",
     "error": "একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন।",
     "errors": {
+      "emailRequired": "ইমেইল প্রয়োজন",
+      "invalidEmail": "সঠিক ইমেইল ঠিকানা প্রদান করুন",
+      "passwordRequired": "পাসওয়ার্ড প্রয়োজন",
+      "passwordMinLength": "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে",
       "registeredIdRequired": "নিবন্ধিত আইডি প্রয়োজন",
       "registeredIdMinLength": "নিবন্ধিত আইডি কমপক্ষে ৩ অক্ষরের হতে হবে",
       "pinRequired": "পিন প্রয়োজন",
