@@ -1,4 +1,4 @@
-import { apiClient, setAccessToken } from "@/lib/apiClient";
+import { apiClient } from "@/lib/apiClient";
 import {
   AuthData,
   ChangePasswordCredentials,
@@ -15,10 +15,6 @@ export async function loginApi(credentials: LoginCredentials): Promise<AuthData>
     email: credentials.email,
     password: credentials.password,
   });
-
-  if (data?.accessToken) {
-    setAccessToken(data.accessToken);
-  }
 
   return data;
 }
@@ -41,10 +37,6 @@ export async function refreshApi(refreshToken?: string): Promise<{ accessToken: 
     refreshToken ? { refreshToken } : undefined
   );
 
-  if (res?.accessToken) {
-    setAccessToken(res.accessToken);
-  }
-
   return res;
 }
 
@@ -65,7 +57,5 @@ export async function logoutApi(): Promise<void> {
     await apiClient.post("/auth/logout");
   } catch {
     // Silent catch for logout transport teardown
-  } finally {
-    setAccessToken(null);
   }
 }

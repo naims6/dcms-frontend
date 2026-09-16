@@ -3,27 +3,6 @@ const BASE_URL =
   process.env.API_URL ||
   "http://localhost:5000/api/v1";
 
-let memoryToken: string | null = null;
-
-export const setAccessToken = (token: string | null) => {
-  memoryToken = token;
-  if (typeof window !== "undefined") {
-    if (token) {
-      localStorage.setItem("access_token", token);
-    } else {
-      localStorage.removeItem("access_token");
-    }
-  }
-};
-
-export const getAccessToken = (): string | null => {
-  if (memoryToken) return memoryToken;
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("access_token");
-  }
-  return null;
-};
-
 export interface FetchOptions extends RequestInit {
   params?: Record<string, string>;
   next?: NextFetchRequestConfig;
@@ -60,18 +39,11 @@ async function request<T>(
     url += `?${new URLSearchParams(params).toString()}`;
   }
 
-  const token = getAccessToken();
-  const authHeaders: Record<string, string> = {};
-  if (token) {
-    authHeaders["Authorization"] = `Bearer ${token}`;
-  }
-
   const res = await fetch(url, {
     credentials: "include",
     ...config,
     headers: {
       "Content-Type": "application/json",
-      ...authHeaders,
       ...headers,
     },
   });
@@ -90,18 +62,11 @@ async function request<T>(
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            ...authHeaders,
           },
         });
 
         if (refreshRes.ok) {
-          const refreshJson = await refreshRes.json();
-          const newAccessToken =
-            refreshJson?.data?.accessToken || refreshJson?.accessToken;
-          if (newAccessToken) {
-            setAccessToken(newAccessToken);
-          }
-          // Retry original request with updated token
+          // Retry original request with updated cookie
           return request<T>(endpoint, { ...options, _retry: true });
         }
       } catch {
