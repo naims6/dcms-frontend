@@ -5,7 +5,6 @@ import { useRouter, usePathname } from "next/navigation";
 import { AuthState, LoginCredentials, User } from "@/types/auth.types";
 import { getMeApi, loginApi, logoutApi } from "@/services/auth.service";
 
-
 export const AuthContext = createContext<AuthState | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -21,6 +20,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ? segments[1]
       : "en";
   }, [pathname]);
+
+  const fetchCurrentUser = useCallback(async () => {
+    try {
+      const currentUser = await getMeApi();
+      setUser(currentUser);
+    } catch {
+      setUser(null);
+    }
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -74,18 +82,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  /**
+   * Section 6 Step 2:
+   * If user is ADMIN or has wildcard '*', grant full access
+   */
   const hasPermission = useCallback(
     (permission: string): boolean => {
-      if (!user) return false;
-      return user.permissions?.includes(permission) ?? false;
+      if (!user || !user.permissions) return false;
+      if (user.roles?.includes("ADMIN") || user.permissions.includes("*")) {
+        return true;
+      }
+      return user.permissions.includes(permission);
     },
     [user],
   );
 
   const hasAnyPermission = useCallback(
     (permissions: string[]): boolean => {
-      if (!user) return false;
-      return permissions.some((p) => user.permissions?.includes(p));
+      if (!user || !user.permissions) return false;
+      if (user.roles?.includes("ADMIN") || user.permissions.includes("*")) {
+        return true;
+      }
+      return permissions.some((p) => user.permissions.includes(p));
     },
     [user],
   );
@@ -98,6 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         logout,
+        fetchCurrentUser,
         hasPermission,
         hasAnyPermission,
       }}

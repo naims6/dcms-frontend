@@ -7,8 +7,6 @@ import {
   LayoutDashboard,
   Users,
   ShieldCheck,
-  Key,
-  User,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -36,8 +34,6 @@ export function DashboardSidebar() {
     { title: "Overview", path: `/${locale}/dashboard`, icon: LayoutDashboard },
     { title: "Users", path: `/${locale}/dashboard/users`, icon: Users, permission: "users:read" },
     { title: "Roles & RBAC", path: `/${locale}/dashboard/rbac/roles`, icon: ShieldCheck, permission: "roles:read" },
-    { title: "Permissions", path: `/${locale}/dashboard/rbac/permissions`, icon: Key, permission: "permissions:read" },
-    { title: "Profile", path: `/${locale}/dashboard/profile`, icon: User },
   ];
 
   const visibleNavItems = navItems.filter(

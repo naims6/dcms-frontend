@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Can } from "@/components/auth/can";
-import { ShieldCheck, UserPlus, FileText, Settings, ArrowRight } from "lucide-react";
+import { ShieldCheck, UserPlus, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -85,28 +85,6 @@ export default function DashboardOverviewPage() {
                 </Button>
               </Link>
             </Can>
-
-            <Can perform="permissions:read">
-              <Link href={`/${locale}/dashboard/rbac/permissions`} className="block">
-                <Button variant="outline" className="w-full justify-between h-11 border-border/70 hover:border-primary">
-                  <span className="flex items-center gap-2.5 text-xs font-semibold">
-                    <FileText className="h-4 w-4 text-indigo-500" />
-                    View Permissions Catalog
-                  </span>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </Link>
-            </Can>
-
-            <Link href={`/${locale}/dashboard/profile`} className="block">
-              <Button variant="outline" className="w-full justify-between h-11 border-border/70 hover:border-primary">
-                <span className="flex items-center gap-2.5 text-xs font-semibold">
-                  <Settings className="h-4 w-4 text-slate-500" />
-                  Account Security
-                </span>
-                <ArrowRight className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </Link>
           </CardContent>
         </Card>
 

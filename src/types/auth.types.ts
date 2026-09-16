@@ -14,6 +14,11 @@ export interface LoginCredentials {
   rememberMe?: boolean;
 }
 
+export interface ChangePasswordCredentials {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken?: string;
@@ -49,6 +54,7 @@ export interface AuthState {
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
+  fetchCurrentUser: () => Promise<void>;
   hasPermission: (permission: string) => boolean;
   hasAnyPermission: (permissions: string[]) => boolean;
 }
