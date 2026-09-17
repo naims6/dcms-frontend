@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { changePasswordApi } from "@/services/auth.service";
+import { useChangePasswordMutation } from "@/hooks/queries/use-auth-queries";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,12 +22,12 @@ import {
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const changePasswordMutation = useChangePasswordMutation();
 
   // Change Password Form State
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const handleChangePassword = async (e: React.FormEvent) => {
@@ -49,9 +49,8 @@ export default function ProfilePage() {
       return;
     }
 
-    setIsSubmitting(true);
     try {
-      const res = await changePasswordApi({
+      const res = await changePasswordMutation.mutateAsync({
         currentPassword,
         newPassword,
       });
@@ -62,8 +61,6 @@ export default function ProfilePage() {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to change password.";
       setFeedback({ type: "error", text: msg });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -200,8 +197,8 @@ export default function ProfilePage() {
               </div>
 
               <div className="pt-2 flex justify-end">
-                <Button type="submit" disabled={isSubmitting} className="gap-2">
-                  {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+                <Button type="submit" disabled={changePasswordMutation.isPending} className="gap-2">
+                  {changePasswordMutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                   Update Password
                 </Button>
               </div>

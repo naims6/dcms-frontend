@@ -1,17 +1,18 @@
 "use client";
 
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, { createContext, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthState, LoginCredentials, User } from "@/types/auth.types";
 import { getMeApi, loginApi, logoutApi } from "@/services/auth.service";
+import { queryKeys } from "@/lib/query-keys";
 
 export const AuthContext = createContext<AuthState | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
 
   const extractLocale = useCallback(() => {
     if (!pathname) return "en";
@@ -21,70 +22,61 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       : "en";
   }, [pathname]);
 
-  const fetchCurrentUser = useCallback(async () => {
-    try {
-      const currentUser = await getMeApi();
-      setUser(currentUser);
-    } catch {
-      setUser(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-    const initAuth = async () => {
+  // Auth User Query powered by TanStack Query
+  const {
+    data: user = null,
+    isLoading,
+    refetch: fetchCurrentUserRefetch,
+  } = useQuery<User | null>({
+    queryKey: queryKeys.auth.me(),
+    queryFn: async () => {
       try {
-        const currentUser = await getMeApi();
-        if (isMounted) {
-          setUser(currentUser);
-        }
+        return await getMeApi();
       } catch {
-        if (isMounted) {
-          setUser(null);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        return null;
       }
-    };
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000,
+    retry: false,
+  });
 
-    initAuth();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const login = async (credentials: LoginCredentials) => {
-    setIsLoading(true);
-    try {
-      const data = await loginApi(credentials);
-      setUser(data.user);
+  // Login Mutation
+  const loginMutation = useMutation({
+    mutationFn: (credentials: LoginCredentials) => loginApi(credentials),
+    onSuccess: (data) => {
+      queryClient.setQueryData(queryKeys.auth.me(), data.user);
       const locale = extractLocale();
       router.push(`/${locale}/dashboard`);
-    } finally {
-      setIsLoading(false);
-    }
+    },
+  });
+
+  // Logout Mutation
+  const logoutMutation = useMutation({
+    mutationFn: () => logoutApi(),
+    onSettled: () => {
+      queryClient.setQueryData(queryKeys.auth.me(), null);
+      queryClient.removeQueries({ queryKey: queryKeys.auth.all });
+      const locale = extractLocale();
+      router.push(`/${locale}/login`);
+    },
+  });
+
+  const login = async (credentials: LoginCredentials) => {
+    await loginMutation.mutateAsync(credentials);
   };
 
   const logout = async () => {
-    setIsLoading(true);
-    try {
-      await logoutApi();
-    } catch {
-      // ignore logout errors
-    } finally {
-      setUser(null);
-      setIsLoading(false);
-      const locale = extractLocale();
-      router.push(`/${locale}/login`);
-    }
+    await logoutMutation.mutateAsync();
   };
 
+  const fetchCurrentUser = useCallback(async () => {
+    await fetchCurrentUserRefetch();
+  }, [fetchCurrentUserRefetch]);
+
   /**
-   * Section 6 Step 2:
-   * If user is ADMIN or has wildcard '*', grant full access
+   * Permission Helper:
+   * Grant access if user is ADMIN or has wildcard '*' permission
    */
   const hasPermission = useCallback(
     (permission: string): boolean => {
@@ -109,11 +101,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <AuthContext
+    <AuthContext.Provider
       value={{
         user,
         isAuthenticated: !!user,
-        isLoading,
+        isLoading: isLoading || loginMutation.isPending || logoutMutation.isPending,
         login,
         logout,
         fetchCurrentUser,
@@ -122,6 +114,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </AuthContext>
+    </AuthContext.Provider>
   );
 }

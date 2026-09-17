@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PermissionGuard } from "@/components/auth/permission-guard";
 import { Can } from "@/components/auth/can";
-import { UserWithRoles, Role, SimpleRole } from "@/types/rbac.types";
+import { UserWithRoles, SimpleRole } from "@/types/rbac.types";
 import {
-  getUsersApi,
-  getUserByIdApi,
-  assignUserRoleApi,
-  revokeUserRoleApi,
-  changeUserStatusApi,
-} from "@/services/user.service";
-import { getRolesApi } from "@/services/rbac.service";
+  useUsersQuery,
+  useUserDetailQuery,
+  useAssignUserRoleMutation,
+  useRevokeUserRoleMutation,
+  useChangeUserStatusMutation,
+} from "@/hooks/queries/use-users-queries";
+import { useRolesQuery } from "@/hooks/queries/use-rbac-queries";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,74 +58,35 @@ function getRoleId(role: string | SimpleRole): string {
 }
 
 export default function UsersManagementPage() {
-  const [users, setUsers] = useState<UserWithRoles[]>([]);
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // TanStack Queries & Mutations
+  const { data: users = [], isLoading: isUsersLoading } = useUsersQuery();
+  const { data: roles = [], isLoading: isRolesLoading } = useRolesQuery();
+
+  const assignRoleMutation = useAssignUserRoleMutation();
+  const revokeRoleMutation = useRevokeUserRoleMutation();
+  const changeStatusMutation = useChangeUserStatusMutation();
 
   // Assign Role Modal state
   const [selectedUser, setSelectedUser] = useState<UserWithRoles | null>(null);
   const [selectedRoleId, setSelectedRoleId] = useState("");
-  const [isAssigning, setIsAssigning] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // User Details Modal state
-  const [inspectUser, setInspectUser] = useState<UserWithRoles | null>(null);
-  const [isInspectLoading, setIsInspectLoading] = useState(false);
+  const [inspectUserId, setInspectUserId] = useState<string | null>(null);
+  const { data: inspectUser = null, isLoading: isInspectLoading } = useUserDetailQuery(inspectUserId);
 
-  const loadData = async () => {
-    try {
-      const [usersRes, roleList] = await Promise.all([getUsersApi(), getRolesApi()]);
-      const userList = Array.isArray(usersRes) ? usersRes : usersRes.data || [];
-      setUsers(userList);
-      setRoles(roleList);
-    } catch (error) {
-      console.error("Failed to load users/roles data from API:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const loading = isUsersLoading || isRolesLoading;
 
-  useEffect(() => {
-    let active = true;
-    Promise.all([getUsersApi(), getRolesApi()])
-      .then(([usersRes, roleList]) => {
-        if (active) {
-          const userList = Array.isArray(usersRes) ? usersRes : usersRes.data || [];
-          setUsers(userList);
-          setRoles(roleList);
-        }
-      })
-      .catch((err) => console.error("Failed to fetch backend data:", err))
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const handleInspectUser = async (userId: string) => {
-    setIsInspectLoading(true);
-    try {
-      const detailedUser = await getUserByIdApi(userId);
-      setInspectUser(detailedUser);
-    } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Failed to load user details");
-    } finally {
-      setIsInspectLoading(false);
-    }
+  const handleInspectUser = (userId: string) => {
+    setInspectUserId(userId);
   };
 
   const handleToggleStatus = async (user: UserWithRoles) => {
     const nextStatus = user.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
     try {
-      await changeUserStatusApi(user.id, nextStatus as "ACTIVE" | "INACTIVE");
-      await loadData();
-      if (inspectUser && inspectUser.id === user.id) {
-        setInspectUser({ ...inspectUser, status: nextStatus });
-      }
+      await changeStatusMutation.mutateAsync({ id: user.id, status: nextStatus });
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : "Failed to change user status");
     }
@@ -133,12 +94,13 @@ export default function UsersManagementPage() {
 
   const handleAssignRole = async () => {
     if (!selectedUser || !selectedRoleId) return;
-    setIsAssigning(true);
     setFeedbackMsg(null);
     try {
-      await assignUserRoleApi(selectedUser.id, selectedRoleId);
+      await assignRoleMutation.mutateAsync({
+        userId: selectedUser.id,
+        roleId: selectedRoleId,
+      });
       setFeedbackMsg({ type: "success", text: "Role assigned successfully!" });
-      await loadData();
       setTimeout(() => {
         setSelectedUser(null);
         setSelectedRoleId("");
@@ -147,8 +109,6 @@ export default function UsersManagementPage() {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to assign role";
       setFeedbackMsg({ type: "error", text: msg });
-    } finally {
-      setIsAssigning(false);
     }
   };
 
@@ -157,8 +117,7 @@ export default function UsersManagementPage() {
     const rName = getRoleName(roleItem);
     if (!confirm(`Are you sure you want to revoke role "${rName}" from ${user.firstName}?`)) return;
     try {
-      await revokeUserRoleApi(user.id, rId);
-      await loadData();
+      await revokeRoleMutation.mutateAsync({ userId: user.id, roleId: rId });
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : "Failed to revoke role");
     }
@@ -185,7 +144,7 @@ export default function UsersManagementPage() {
               User Accounts & Role Management
             </h1>
             <p className="text-xs md:text-sm text-muted-foreground mt-1">
-              Live Backend Connection: View registered profiles, user details, and assign RBAC roles
+              Live Backend Connection (TanStack Query Cache): View registered profiles, user details, and assign RBAC roles
             </p>
           </div>
 
@@ -269,6 +228,7 @@ export default function UsersManagementPage() {
                                   <Can perform="users:revoke_role">
                                     <button
                                       onClick={() => handleRevokeRole(user, role)}
+                                      disabled={revokeRoleMutation.isPending}
                                       title={`Revoke ${rName}`}
                                       className="ml-1 text-muted-foreground hover:text-destructive"
                                     >
@@ -317,8 +277,8 @@ export default function UsersManagementPage() {
           </CardContent>
         </Card>
 
-        {/* User Details Modal (GET /users/:id) */}
-        <Dialog open={!!inspectUser} onOpenChange={(open) => !open && setInspectUser(null)}>
+        {/* User Details Modal */}
+        <Dialog open={!!inspectUserId} onOpenChange={(open) => !open && setInspectUserId(null)}>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-lg">
@@ -366,9 +326,14 @@ export default function UsersManagementPage() {
                         variant="outline"
                         size="xs"
                         onClick={() => handleToggleStatus(inspectUser)}
+                        disabled={changeStatusMutation.isPending}
                         className="h-6 text-[10px] mt-1 gap-1 block ml-auto"
                       >
-                        <ToggleLeft className="h-3 w-3" />
+                        {changeStatusMutation.isPending ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <ToggleLeft className="h-3 w-3" />
+                        )}
                         Toggle Status
                       </Button>
                     </Can>
@@ -422,14 +387,14 @@ export default function UsersManagementPage() {
             )}
 
             <DialogFooter>
-              <Button variant="outline" size="sm" onClick={() => setInspectUser(null)}>
+              <Button variant="outline" size="sm" onClick={() => setInspectUserId(null)}>
                 Close
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
-        {/* Assign Role Dialog (POST /users/:id/roles) */}
+        {/* Assign Role Dialog */}
         <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
@@ -487,10 +452,10 @@ export default function UsersManagementPage() {
               <Button
                 size="sm"
                 onClick={handleAssignRole}
-                disabled={!selectedRoleId || isAssigning}
+                disabled={!selectedRoleId || assignRoleMutation.isPending}
                 className="gap-1.5"
               >
-                {isAssigning && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                {assignRoleMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                 Confirm Assignment
               </Button>
             </DialogFooter>

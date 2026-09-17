@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PermissionGuard } from "@/components/auth/permission-guard";
 import { Can } from "@/components/auth/can";
-import { Permission, Role } from "@/types/rbac.types";
+import { Role } from "@/types/rbac.types";
 import {
-  createRoleApi,
-  deleteRoleApi,
-  getPermissionsApi,
-  getRolesApi,
-  updateRoleApi,
-} from "@/services/rbac.service";
+  useRolesQuery,
+  usePermissionsQuery,
+  useCreateRoleMutation,
+  useUpdateRoleMutation,
+  useDeleteRoleMutation,
+} from "@/hooks/queries/use-rbac-queries";
 import {
   Card,
   CardContent,
@@ -45,16 +45,20 @@ import {
 } from "lucide-react";
 
 export default function RolesManagementPage() {
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: roles = [], isLoading: isRolesLoading } = useRolesQuery();
+  const { data: permissions = [], isLoading: isPermissionsLoading } = usePermissionsQuery();
+
+  const createRoleMutation = useCreateRoleMutation();
+  const updateRoleMutation = useUpdateRoleMutation();
+  const deleteRoleMutation = useDeleteRoleMutation();
+
+  const loading = isRolesLoading || isPermissionsLoading;
 
   // Create Modal State
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newRoleName, setNewRoleName] = useState("");
   const [newRoleDesc, setNewRoleDesc] = useState("");
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Edit Modal State
   const [editingRole, setEditingRole] = useState<Role | null>(null);
@@ -65,55 +69,16 @@ export default function RolesManagementPage() {
     text: string;
   } | null>(null);
 
-  const loadData = async () => {
-    try {
-      const [roleList, permList] = await Promise.all([
-        getRolesApi(),
-        getPermissionsApi(),
-      ]);
-      console.log({ roleList, permList });
-      setRoles(roleList);
-      setPermissions(permList);
-    } catch (error) {
-      console.error("Failed to load roles/permissions:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    let active = true;
-    Promise.all([getRolesApi(), getPermissionsApi()])
-      .then(([roleList, permList]) => {
-        if (active) {
-          setRoles(roleList);
-          setPermissions(permList);
-        }
-      })
-      .catch((err) =>
-        console.error("Failed to fetch initial roles/permissions:", err),
-      )
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
   const handleCreateRole = async () => {
     if (!newRoleName.trim()) return;
-    setIsSubmitting(true);
     setFeedback(null);
     try {
-      await createRoleApi({
+      await createRoleMutation.mutateAsync({
         name: newRoleName.trim().toUpperCase(),
         description: newRoleDesc.trim(),
         permissionNames: selectedPermissions,
       });
       setFeedback({ type: "success", text: "Role created successfully!" });
-      await loadData();
       setTimeout(() => {
         setIsCreateOpen(false);
         setNewRoleName("");
@@ -126,22 +91,21 @@ export default function RolesManagementPage() {
         type: "error",
         text: err instanceof Error ? err.message : "Failed to create role",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   const handleUpdateRole = async () => {
     if (!editingRole) return;
-    setIsSubmitting(true);
     setFeedback(null);
     try {
-      await updateRoleApi(editingRole.id, {
-        description: newRoleDesc,
-        permissionNames: selectedPermissions,
+      await updateRoleMutation.mutateAsync({
+        id: editingRole.id,
+        dto: {
+          description: newRoleDesc,
+          permissionNames: selectedPermissions,
+        },
       });
       setFeedback({ type: "success", text: "Role updated successfully!" });
-      await loadData();
       setTimeout(() => {
         setEditingRole(null);
         setFeedback(null);
@@ -151,8 +115,6 @@ export default function RolesManagementPage() {
         type: "error",
         text: err instanceof Error ? err.message : "Failed to update role",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -160,8 +122,7 @@ export default function RolesManagementPage() {
     if (!confirm(`Are you sure you want to delete role "${role.name}"?`))
       return;
     try {
-      await deleteRoleApi(role.id);
-      await loadData();
+      await deleteRoleMutation.mutateAsync(role.id);
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : "Failed to delete role");
     }
@@ -195,7 +156,7 @@ export default function RolesManagementPage() {
             </h1>
             <p className="text-xs md:text-sm text-muted-foreground mt-1">
               Create, configure, and assign access level privileges across
-              system roles
+              system roles (TanStack Query Managed)
             </p>
           </div>
 
@@ -294,9 +255,14 @@ export default function RolesManagementPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteRole(role)}
+                        disabled={deleteRoleMutation.isPending}
                         className="h-8 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive gap-1"
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        {deleteRoleMutation.isPending ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-3.5 w-3.5" />
+                        )}
                         Delete
                       </Button>
                     </Can>
@@ -399,10 +365,10 @@ export default function RolesManagementPage() {
               <Button
                 size="sm"
                 onClick={handleCreateRole}
-                disabled={!newRoleName.trim() || isSubmitting}
+                disabled={!newRoleName.trim() || createRoleMutation.isPending}
                 className="gap-1.5"
               >
-                {isSubmitting && (
+                {createRoleMutation.isPending && (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 )}
                 Create Role
@@ -494,10 +460,10 @@ export default function RolesManagementPage() {
               <Button
                 size="sm"
                 onClick={handleUpdateRole}
-                disabled={isSubmitting}
+                disabled={updateRoleMutation.isPending}
                 className="gap-1.5"
               >
-                {isSubmitting && (
+                {updateRoleMutation.isPending && (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 )}
                 Save Changes

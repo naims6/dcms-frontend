@@ -93,6 +93,7 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/context/auth-context";
+import QueryProvider from "@/providers/query-provider";
 
 export default async function RootLayout({
   children,
@@ -128,12 +129,14 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <AuthProvider>
-              <Navbar />
-              {children}
-              <Footer />
-              <ScrollToTop />
-            </AuthProvider>
+            <QueryProvider>
+              <AuthProvider>
+                <Navbar />
+                {children}
+                <Footer />
+                <ScrollToTop />
+              </AuthProvider>
+            </QueryProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
