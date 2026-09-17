@@ -54,8 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logoutMutation = useMutation({
     mutationFn: () => logoutApi(),
     onSettled: () => {
-      queryClient.setQueryData(queryKeys.auth.me(), null);
-      queryClient.removeQueries({ queryKey: queryKeys.auth.all });
+      queryClient.clear();
       const locale = extractLocale();
       router.push(`/${locale}/login`);
     },
@@ -104,7 +103,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         isAuthenticated: !!user,
-        isLoading: isLoading || loginMutation.isPending || logoutMutation.isPending,
+        isLoading:
+          isLoading || loginMutation.isPending || logoutMutation.isPending,
         login,
         logout,
         fetchCurrentUser,

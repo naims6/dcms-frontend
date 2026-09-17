@@ -28,6 +28,36 @@ export class ApiError extends Error {
   }
 }
 
+let isRefreshing = false;
+let refreshPromise: Promise<boolean> | null = null;
+
+async function handleTokenRefresh(): Promise<boolean> {
+  if (isRefreshing && refreshPromise) {
+    return refreshPromise;
+  }
+
+  isRefreshing = true;
+  refreshPromise = (async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return res.ok;
+    } catch {
+      return false;
+    } finally {
+      isRefreshing = false;
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
+}
+
 async function request<T>(
   endpoint: string,
   options: FetchOptions = {},
@@ -52,28 +82,17 @@ async function request<T>(
   });
 
   if (!res.ok) {
-    // Automatic 401 token refresh retry logic (skip if already refreshing or logging in)
+    // Automatic 401 token refresh retry logic with Mutex deduplication
     if (
       res.status === 401 &&
       !_retry &&
       !endpoint.includes("/auth/refresh") &&
       !endpoint.includes("/auth/login")
     ) {
-      try {
-        const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (refreshRes.ok) {
-          // Retry original request with updated cookie
-          return request<T>(endpoint, { ...options, _retry: true });
-        }
-      } catch {
-        // Refresh failed, fall through to throw error
+      const refreshSuccess = await handleTokenRefresh();
+      if (refreshSuccess) {
+        // Retry original request with updated cookie
+        return request<T>(endpoint, { ...options, _retry: true });
       }
     }
 
