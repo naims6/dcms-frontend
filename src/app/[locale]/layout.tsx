@@ -3,12 +3,9 @@ import { Geist, Geist_Mono, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import Navbar from "@/components/shared/Navbar";
-import Footer from "@/components/shared/Footer";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/theme-provider";
-import ScrollToTop from "@/components/shared/ScrollToTop";
 
 const hindSiliguri = Hind_Siliguri({ 
   subsets: ["bengali", "latin"], 
@@ -131,10 +128,7 @@ export default async function RootLayout({
           >
             <QueryProvider>
               <AuthProvider>
-                <Navbar />
                 {children}
-                <Footer />
-                <ScrollToTop />
               </AuthProvider>
             </QueryProvider>
           </ThemeProvider>

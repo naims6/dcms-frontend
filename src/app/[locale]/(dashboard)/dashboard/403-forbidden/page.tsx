@@ -1,3 +1,3 @@
-import ForbiddenPage from "../../403-forbidden/page";
+import ForbiddenPage from "@/app/[locale]/(public)/403-forbidden/page";
 
 export default ForbiddenPage;
