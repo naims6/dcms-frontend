@@ -69,6 +69,13 @@ export default function RolesManagementPage() {
     text: string;
   } | null>(null);
 
+  const resetCreateForm = () => {
+    setNewRoleName("");
+    setNewRoleDesc("");
+    setSelectedPermissions([]);
+    setFeedback(null);
+  };
+
   const handleCreateRole = async () => {
     if (!newRoleName.trim()) return;
     setFeedback(null);
@@ -78,14 +85,8 @@ export default function RolesManagementPage() {
         description: newRoleDesc.trim(),
         permissionNames: selectedPermissions,
       });
-      setFeedback({ type: "success", text: "Role created successfully!" });
-      setTimeout(() => {
-        setIsCreateOpen(false);
-        setNewRoleName("");
-        setNewRoleDesc("");
-        setSelectedPermissions([]);
-        setFeedback(null);
-      }, 1000);
+      resetCreateForm();
+      setIsCreateOpen(false);
     } catch (err: unknown) {
       setFeedback({
         type: "error",
@@ -105,11 +106,8 @@ export default function RolesManagementPage() {
           permissionNames: selectedPermissions,
         },
       });
-      setFeedback({ type: "success", text: "Role updated successfully!" });
-      setTimeout(() => {
-        setEditingRole(null);
-        setFeedback(null);
-      }, 1000);
+      setEditingRole(null);
+      setFeedback(null);
     } catch (err: unknown) {
       setFeedback({
         type: "error",

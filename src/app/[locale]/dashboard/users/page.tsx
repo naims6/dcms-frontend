@@ -100,12 +100,9 @@ export default function UsersManagementPage() {
         userId: selectedUser.id,
         roleId: selectedRoleId,
       });
-      setFeedbackMsg({ type: "success", text: "Role assigned successfully!" });
-      setTimeout(() => {
-        setSelectedUser(null);
-        setSelectedRoleId("");
-        setFeedbackMsg(null);
-      }, 1200);
+      setSelectedUser(null);
+      setSelectedRoleId("");
+      setFeedbackMsg(null);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to assign role";
       setFeedbackMsg({ type: "error", text: msg });
