@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { LoginFormValues, loginSchema } from "@/schemas/login";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useFormError } from "@/hooks/use-form-error";
 
 export function LoginForm() {

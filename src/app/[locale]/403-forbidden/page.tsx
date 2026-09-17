@@ -1,15 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/i18n/navigation";
 import { ShieldX, ArrowLeft, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function ForbiddenPage() {
-  const pathname = usePathname();
-  const segments = pathname.split("/");
-  const locale = segments[1] && (segments[1] === "en" || segments[1] === "bn") ? segments[1] : "en";
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 text-center animate-in fade-in-0 duration-300">
@@ -34,7 +29,7 @@ export default function ForbiddenPage() {
             <ArrowLeft className="h-4 w-4" />
             Go Back
           </Button>
-          <Link href={`/${locale}/dashboard`} className="w-full sm:w-auto">
+          <Link href="/dashboard" className="w-full sm:w-auto">
             <Button className="w-full sm:w-auto gap-2">
               <Home className="h-4 w-4" />
               Return to Dashboard
