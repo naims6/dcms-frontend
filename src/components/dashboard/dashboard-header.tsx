@@ -13,23 +13,20 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Bell, LogOut, Moon, Sun, User as UserIcon, Search } from "lucide-react";
 import { useTheme } from "next-themes";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useLocale } from "next-intl";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { Input } from "@/components/ui/input";
 
 export function DashboardHeader() {
   const { user, logout } = useAuth();
   const { theme, setTheme } = useTheme();
+  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
 
-  const segments = pathname.split("/");
-  const locale = segments[1] && (segments[1] === "en" || segments[1] === "bn") ? segments[1] : "en";
-
   const toggleLanguage = () => {
-    const newLocale = locale === "en" ? "bn" : "en";
-    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
-    router.push(newPath);
+    const nextLocale = locale === "en" ? "bn" : "en";
+    router.replace(pathname, { locale: nextLocale });
   };
 
   const getInitials = (firstName?: string, lastName?: string | null) => {
@@ -134,7 +131,7 @@ export function DashboardHeader() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild>
-              <Link href={`/${locale}/dashboard/profile`} className="cursor-pointer flex items-center gap-2 text-xs">
+              <Link href="/dashboard/profile" className="cursor-pointer flex items-center gap-2 text-xs">
                 <UserIcon className="h-4 w-4 text-muted-foreground" />
                 <span>Profile Settings</span>
               </Link>

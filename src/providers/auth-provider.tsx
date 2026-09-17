@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from "@/context/auth-context";
 import { LoginCredentials, User } from "@/types/auth.types";
@@ -10,16 +10,7 @@ import { queryKeys } from "@/lib/query-keys";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
   const queryClient = useQueryClient();
-
-  const extractLocale = useCallback(() => {
-    if (!pathname) return "en";
-    const segments = pathname.split("/");
-    return segments[1] && (segments[1] === "en" || segments[1] === "bn")
-      ? segments[1]
-      : "en";
-  }, [pathname]);
 
   // Current Auth User Query managed by TanStack Query
   const {
@@ -45,8 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     mutationFn: (credentials: LoginCredentials) => loginApi(credentials),
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.auth.me(), data.user);
-      const locale = extractLocale();
-      router.push(`/${locale}/dashboard`);
+      router.push("/dashboard");
     },
   });
 
@@ -55,8 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     mutationFn: () => logoutApi(),
     onSettled: () => {
       queryClient.clear();
-      const locale = extractLocale();
-      router.push(`/${locale}/login`);
+      router.push("/login");
     },
   });
 

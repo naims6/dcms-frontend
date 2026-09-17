@@ -4,8 +4,7 @@ import React from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { ShieldAlert, ArrowLeft, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/i18n/navigation";
 
 interface PermissionGuardProps {
   requiredPermission: string;
@@ -14,10 +13,6 @@ interface PermissionGuardProps {
 
 export function PermissionGuard({ requiredPermission, children }: PermissionGuardProps) {
   const { hasPermission, isLoading } = useAuth();
-  const pathname = usePathname();
-
-  const segments = pathname.split("/");
-  const locale = segments[1] && (segments[1] === "en" || segments[1] === "bn") ? segments[1] : "en";
 
   if (isLoading) {
     return (
@@ -46,7 +41,7 @@ export function PermissionGuard({ requiredPermission, children }: PermissionGuar
             <ArrowLeft className="h-4 w-4" />
             Go Back
           </Button>
-          <Link href={`/${locale}/dashboard`}>
+          <Link href="/dashboard">
             <Button className="gap-2">
               <Home className="h-4 w-4" />
               Return Overview
