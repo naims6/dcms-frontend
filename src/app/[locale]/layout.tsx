@@ -92,7 +92,7 @@ export const metadata: Metadata = {
   },
 };
 
-import { AuthProvider } from "@/context/auth-context";
+import { AuthProvider } from "@/providers/auth-provider";
 import QueryProvider from "@/providers/query-provider";
 
 export default async function RootLayout({

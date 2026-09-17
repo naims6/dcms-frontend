@@ -1,13 +1,12 @@
 "use client";
 
-import React, { createContext, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AuthState, LoginCredentials, User } from "@/types/auth.types";
+import { AuthContext } from "@/context/auth-context";
+import { LoginCredentials, User } from "@/types/auth.types";
 import { getMeApi, loginApi, logoutApi } from "@/services/auth.service";
 import { queryKeys } from "@/lib/query-keys";
-
-export const AuthContext = createContext<AuthState | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -22,7 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       : "en";
   }, [pathname]);
 
-  // Auth User Query powered by TanStack Query
+  // Current Auth User Query managed by TanStack Query
   const {
     data: user = null,
     isLoading,
@@ -76,7 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   /**
    * Permission Helper:
-   * Grant access if user is ADMIN or has wildcard '*' permission
+   * Returns true if user is ADMIN, has wildcard '*', or possesses specific permission string
    */
   const hasPermission = useCallback(
     (permission: string): boolean => {

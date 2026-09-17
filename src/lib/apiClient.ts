@@ -36,7 +36,10 @@ async function request<T>(
 
   let url = endpoint.startsWith("http") ? endpoint : `${BASE_URL}${endpoint}`;
   if (params) {
-    url += `?${new URLSearchParams(params).toString()}`;
+    const queryString = new URLSearchParams(params).toString();
+    if (queryString) {
+      url += url.includes("?") ? `&${queryString}` : `?${queryString}`;
+    }
   }
 
   const res = await fetch(url, {
