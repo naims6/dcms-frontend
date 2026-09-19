@@ -7,16 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Can } from "@/components/auth/can";
-import { ShieldCheck, UserPlus, FileText, Settings, ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { ShieldCheck, UserPlus, ArrowRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 
 export default function DashboardOverviewPage() {
   const { user } = useAuth();
-  const pathname = usePathname();
-
-  const segments = pathname.split("/");
-  const locale = segments[1] && (segments[1] === "en" || segments[1] === "bn") ? segments[1] : "en";
 
   return (
     <div className="space-y-6 animate-in fade-in-0 duration-300">
@@ -63,7 +58,7 @@ export default function DashboardOverviewPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <Can perform="users:create">
-              <Link href={`/${locale}/dashboard/users`} className="block">
+              <Link href="/dashboard/users" className="block">
                 <Button variant="outline" className="w-full justify-between h-11 border-border/70 hover:border-primary">
                   <span className="flex items-center gap-2.5 text-xs font-semibold">
                     <UserPlus className="h-4 w-4 text-primary" />
@@ -75,7 +70,7 @@ export default function DashboardOverviewPage() {
             </Can>
 
             <Can perform="roles:read">
-              <Link href={`/${locale}/dashboard/rbac/roles`} className="block">
+              <Link href="/dashboard/rbac/roles" className="block">
                 <Button variant="outline" className="w-full justify-between h-11 border-border/70 hover:border-primary">
                   <span className="flex items-center gap-2.5 text-xs font-semibold">
                     <ShieldCheck className="h-4 w-4 text-emerald-500" />
@@ -85,28 +80,6 @@ export default function DashboardOverviewPage() {
                 </Button>
               </Link>
             </Can>
-
-            <Can perform="permissions:read">
-              <Link href={`/${locale}/dashboard/rbac/permissions`} className="block">
-                <Button variant="outline" className="w-full justify-between h-11 border-border/70 hover:border-primary">
-                  <span className="flex items-center gap-2.5 text-xs font-semibold">
-                    <FileText className="h-4 w-4 text-indigo-500" />
-                    View Permissions Catalog
-                  </span>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </Link>
-            </Can>
-
-            <Link href={`/${locale}/dashboard/profile`} className="block">
-              <Button variant="outline" className="w-full justify-between h-11 border-border/70 hover:border-primary">
-                <span className="flex items-center gap-2.5 text-xs font-semibold">
-                  <Settings className="h-4 w-4 text-slate-500" />
-                  Account Security
-                </span>
-                <ArrowRight className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </Link>
           </CardContent>
         </Card>
 

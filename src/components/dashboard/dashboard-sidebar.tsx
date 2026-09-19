@@ -1,16 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import {
   GraduationCap,
   LayoutDashboard,
   Users,
   ShieldCheck,
-  Key,
-  User,
   ChevronLeft,
   ChevronRight,
+  Megaphone,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -29,15 +27,11 @@ export function DashboardSidebar() {
   const pathname = usePathname();
   const { hasPermission } = useAuth();
 
-  const segments = pathname.split("/");
-  const locale = segments[1] && (segments[1] === "en" || segments[1] === "bn") ? segments[1] : "en";
-
   const navItems: NavItem[] = [
-    { title: "Overview", path: `/${locale}/dashboard`, icon: LayoutDashboard },
-    { title: "Users", path: `/${locale}/dashboard/users`, icon: Users, permission: "users:read" },
-    { title: "Roles & RBAC", path: `/${locale}/dashboard/rbac/roles`, icon: ShieldCheck, permission: "roles:read" },
-    { title: "Permissions", path: `/${locale}/dashboard/rbac/permissions`, icon: Key, permission: "permissions:read" },
-    { title: "Profile", path: `/${locale}/dashboard/profile`, icon: User },
+    { title: "Overview", path: "/dashboard", icon: LayoutDashboard },
+    { title: "Users", path: "/dashboard/users", icon: Users, permission: "users:read" },
+    { title: "Roles & RBAC", path: "/dashboard/rbac/roles", icon: ShieldCheck, permission: "roles:read" },
+    { title: "Notices", path: "/dashboard/notices", icon: Megaphone },
   ];
 
   const visibleNavItems = navItems.filter(
@@ -54,7 +48,7 @@ export function DashboardSidebar() {
       {/* Sidebar Header */}
       <div className="flex h-16 items-center justify-between px-4 border-b border-sidebar-border">
         {!collapsed && (
-          <Link href={`/${locale}/dashboard`} className="flex items-center gap-2.5 overflow-hidden">
+          <Link href="/dashboard" className="flex items-center gap-2.5 overflow-hidden">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-sm">
               <GraduationCap className="h-5 w-5" />
             </div>
@@ -84,7 +78,7 @@ export function DashboardSidebar() {
       {/* Navigation Links */}
       <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
         {visibleNavItems.map((item) => {
-          const isActive = pathname === item.path || (item.path !== `/${locale}/dashboard` && pathname.startsWith(item.path));
+          const isActive = pathname === item.path || (item.path !== "/dashboard" && pathname.startsWith(item.path));
           const Icon = item.icon;
 
           return (

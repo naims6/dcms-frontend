@@ -4,5 +4,57 @@
     "title": "Notice ",
     "titleHighlight": "Board",
     "subtitle": "Stay up-to-date with the latest announcements, events, academic schedules, and important notifications from Dhanbari Collegiate Model School."
+  },
+  "Dashboard": {
+    "title": "Notice Management",
+    "subtitle": "Create, publish, and manage all school notices",
+    "addNotice": "Add Notice",
+    "editNotice": "Edit Notice",
+    "deleteNotice": "Delete Notice",
+    "publishNotice": "Publish",
+    "unpublishNotice": "Unpublish",
+    "downloadPdf": "Download PDF",
+    "confirmDelete": "Are you sure you want to delete this notice? This action cannot be undone.",
+    "deleteSuccess": "Notice deleted successfully.",
+    "publishSuccess": "Notice published successfully.",
+    "unpublishSuccess": "Notice unpublished (reverted to Draft).",
+    "noNotices": "No notices found. Create your first notice.",
+    "search": "Search notices...",
+    "filterCategory": "Filter by Category",
+    "filterStatus": "Filter by Status",
+    "allCategories": "All Categories",
+    "allStatuses": "All Statuses",
+    "table": {
+      "subject": "Subject",
+      "category": "Category",
+      "date": "Notice Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "PUBLISHED": "Published",
+      "DRAFT": "Draft",
+      "ARCHIVED": "Archived"
+    },
+    "category": {
+      "GENERAL": "General",
+      "SCHOLARSHIP": "Scholarship",
+      "JOB": "Job",
+      "RESULT": "Result"
+    },
+    "form": {
+      "subject": "Subject",
+      "subjectPlaceholder": "Enter notice subject",
+      "body": "Body",
+      "bodyPlaceholder": "Enter notice content (HTML supported)",
+      "category": "Category",
+      "noticeDate": "Notice Date",
+      "status": "Status",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "createTitle": "Create New Notice",
+      "editTitle": "Edit Notice"
+    }
   }
 }

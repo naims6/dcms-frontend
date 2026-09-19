@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { navMenuItems } from "@/constants/navMenuItems";
 import { FaFacebook, FaTwitter, FaYoutube } from "react-icons/fa";
 
@@ -12,12 +12,7 @@ import Logo from "./Logo";
 const Footer = () => {
   const t = useTranslations("Footer");
   const navT = useTranslations("Navbar");
-  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
-
-  if (pathname?.includes("/dashboard")) {
-    return null;
-  }
 
   return (
     <footer className="w-full bg-background/70 backdrop-blur-2xl border-t border-primary/10 dark:border-primary/20 mt-auto">

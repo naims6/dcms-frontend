@@ -28,10 +28,6 @@ const Navbar = () => {
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuth();
 
-  if (pathname?.includes("/dashboard")) {
-    return null;
-  }
-
   const getInitials = (firstName?: string, lastName?: string | null) => {
     const f = firstName?.[0] || "U";
     const l = lastName?.[0] || "";

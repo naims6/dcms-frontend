@@ -83,9 +83,9 @@
     "sectionTitle": "NOTICE BOARD",
     "tabs": {
       "general": "General Notice",
-      "scholarship": "Scholarship and Fellowship",
-      "jobs": "Job Circulars",
-      "tender": "Tender & Procurement"
+      "scholarship": "Scholarship & Fellowship",
+      "job": "Job Circulars",
+      "result": "Results & Tenders"
     },
     "table": {
       "date": "Date",
