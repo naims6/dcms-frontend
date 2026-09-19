@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
+  Megaphone,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ export function DashboardSidebar() {
     { title: "Overview", path: "/dashboard", icon: LayoutDashboard },
     { title: "Users", path: "/dashboard/users", icon: Users, permission: "users:read" },
     { title: "Roles & RBAC", path: "/dashboard/rbac/roles", icon: ShieldCheck, permission: "roles:read" },
+    { title: "Notices", path: "/dashboard/notices", icon: Megaphone },
   ];
 
   const visibleNavItems = navItems.filter(

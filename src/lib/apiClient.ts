@@ -7,6 +7,8 @@ export interface FetchOptions extends RequestInit {
   params?: Record<string, string>;
   next?: NextFetchRequestConfig;
   _retry?: boolean;
+  /** When true, return the full JSON body instead of unwrapping `.data`. */
+  _raw?: boolean;
 }
 
 export class ApiError extends Error {
@@ -62,7 +64,7 @@ async function request<T>(
   endpoint: string,
   options: FetchOptions = {},
 ): Promise<T> {
-  const { params, headers, _retry, ...config } = options;
+  const { params, headers, _retry, _raw, ...config } = options;
 
   let url = endpoint.startsWith("http") ? endpoint : `${BASE_URL}${endpoint}`;
   if (params) {
@@ -108,12 +110,35 @@ async function request<T>(
   if (res.status === 204) return {} as T;
 
   const json = await res.json();
+  if (_raw) return json as T;
   return json?.data !== undefined ? json.data : json;
 }
 
 export const apiClient = {
   get: <T>(url: string, options?: FetchOptions) =>
     request<T>(url, { ...options, method: "GET" }),
+
+  /** Like get() but returns the full JSON body (no .data unwrapping). Use for paginated responses that need `meta`. */
+  getRaw: <T>(url: string, options?: FetchOptions) =>
+    request<T>(url, { ...options, method: "GET", _raw: true } as FetchOptions),
+
+  /** Download a binary file from the API. Returns a Blob. */
+  getBlob: (url: string, options?: Omit<FetchOptions, "params"> & { params?: Record<string, string> }): Promise<Blob> => {
+    const { params, ...rest } = options ?? {};
+    const fullUrl = url.startsWith("http") ? url : `${BASE_URL}${url}`;
+    const finalUrl = params
+      ? `${fullUrl}?${new URLSearchParams(params).toString()}`
+      : fullUrl;
+
+    return fetch(finalUrl, {
+      credentials: "include",
+      method: "GET",
+      ...rest,
+    }).then((res) => {
+      if (!res.ok) throw new ApiError(`Download failed`, res.status);
+      return res.blob();
+    });
+  },
 
   post: <T>(url: string, data?: unknown, options?: FetchOptions) =>
     request<T>(url, {

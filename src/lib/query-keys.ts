@@ -14,4 +14,11 @@ export const queryKeys = {
     roleDetail: (id: string) => ["rbac", "roles", id] as const,
     permissions: () => ["rbac", "permissions"] as const,
   },
+  notices: {
+    all: ["notices"] as const,
+    list: (params?: Record<string, unknown>) => ["notices", "list", params || {}] as const,
+    detail: (id: string) => ["notices", "detail", id] as const,
+    feed: (params?: Record<string, unknown>) => ["notices", "feed", params || {}] as const,
+    feedDetail: (id: string) => ["notices", "feed", id] as const,
+  },
 };
