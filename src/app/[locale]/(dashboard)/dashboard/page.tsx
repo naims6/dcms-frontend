@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
-import { OverviewStats } from "@/components/dashboard/overview-stats";
-import { RecentActivity } from "@/components/dashboard/recent-activity";
+import { OverviewStats } from "@/components/dashboard/overview/overview-stats";
+import { RecentActivity } from "@/components/dashboard/overview/recent-activity";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

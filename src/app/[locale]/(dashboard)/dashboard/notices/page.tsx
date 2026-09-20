@@ -1,5 +1,5 @@
-import DashboardNoticesPage from "@/components/dashboard/notices-management";
+import { NoticesManagement } from "@/components/dashboard/notices/notices-management";
 
 export default function NoticesPage() {
-  return <DashboardNoticesPage />;
+  return <NoticesManagement />;
 }

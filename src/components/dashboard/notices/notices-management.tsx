@@ -36,10 +36,11 @@ import {
   Megaphone, Plus, Pencil, Trash2, Download, Loader2,
   Search, Globe, EyeOff, ChevronLeft, ChevronRight, FileText,
 } from "lucide-react";
+import { DashboardPageHeader } from "@/components/dashboard/shared/DashboardPageHeader";
 
 // ── Constants ─────────────────────────────────────────────────────────────
 const CATEGORIES: NoticeCategory[] = ["GENERAL", "SCHOLARSHIP", "JOB", "RESULT"];
-const STATUSES: NoticeStatus[]     = ["DRAFT", "PUBLISHED", "ARCHIVED"];
+const STATUSES: NoticeStatus[] = ["DRAFT", "PUBLISHED", "ARCHIVED"];
 const LIMIT = 10;
 
 const defaultForm: CreateNoticeDto = {
@@ -53,19 +54,19 @@ const defaultForm: CreateNoticeDto = {
 // ── Status badge styles ───────────────────────────────────────────────────
 const STATUS_STYLES: Record<NoticeStatus, string> = {
   PUBLISHED: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
-  DRAFT:     "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800",
-  ARCHIVED:  "bg-zinc-100 text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400 border-zinc-300 dark:border-zinc-700",
+  DRAFT: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800",
+  ARCHIVED: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400 border-zinc-300 dark:border-zinc-700",
 };
 
-export default function DashboardNoticesPage() {
+export function NoticesManagement() {
   const t = useTranslations("Dashboard");
   const { toast, toastState, dismiss } = useToast();
 
   // ── Filters & pagination ──────────────────────────────────────────
-  const [searchInput,     setSearchInput]     = useState("");
-  const [categoryFilter,  setCategoryFilter]  = useState<NoticeCategory | "ALL">("ALL");
-  const [statusFilter,    setStatusFilter]    = useState<NoticeStatus | "ALL">("ALL");
-  const [page,            setPage]            = useState(1);
+  const [searchInput, setSearchInput] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<NoticeCategory | "ALL">("ALL");
+  const [statusFilter, setStatusFilter] = useState<NoticeStatus | "ALL">("ALL");
+  const [page, setPage] = useState(1);
 
   const debouncedSearch = useDebounce(searchInput);
 
@@ -73,19 +74,19 @@ export default function DashboardNoticesPage() {
     page,
     limit: LIMIT,
     category: categoryFilter !== "ALL" ? categoryFilter : undefined,
-    status:   statusFilter   !== "ALL" ? statusFilter   : undefined,
-    search:   debouncedSearch || undefined,
+    status: statusFilter !== "ALL" ? statusFilter : undefined,
+    search: debouncedSearch || undefined,
   });
 
-  const notices    = data?.data ?? [];
-  const meta       = data?.meta ?? { page: 1, limit: LIMIT, total: 0, totalPages: 1 };
+  const notices = data?.data ?? [];
+  const meta = data?.meta ?? { page: 1, limit: LIMIT, total: 0, totalPages: 1 };
   const totalPages = meta.totalPages || 1;
 
   // ── Mutations ─────────────────────────────────────────────────────
-  const createMutation    = useCreateNoticeMutation();
-  const updateMutation    = useUpdateNoticeMutation();
-  const deleteMutation    = useDeleteNoticeMutation();
-  const publishMutation   = usePublishNoticeMutation();
+  const createMutation = useCreateNoticeMutation();
+  const updateMutation = useUpdateNoticeMutation();
+  const deleteMutation = useDeleteNoticeMutation();
+  const publishMutation = usePublishNoticeMutation();
   const unpublishMutation = useUnpublishNoticeMutation();
 
   const isMutating =
@@ -94,10 +95,10 @@ export default function DashboardNoticesPage() {
     unpublishMutation.isPending;
 
   // ── Form dialog ───────────────────────────────────────────────────
-  const [formOpen,       setFormOpen]       = useState(false);
-  const [editingNotice,  setEditingNotice]  = useState<Notice | null>(null);
-  const [form,           setForm]           = useState<CreateNoticeDto>(defaultForm);
-  const [formError,      setFormError]      = useState<string | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingNotice, setEditingNotice] = useState<Notice | null>(null);
+  const [form, setForm] = useState<CreateNoticeDto>(defaultForm);
+  const [formError, setFormError] = useState<string | null>(null);
 
   // ── Delete dialog ─────────────────────────────────────────────────
   const [deleteTarget, setDeleteTarget] = useState<Notice | null>(null);
@@ -124,7 +125,7 @@ export default function DashboardNoticesPage() {
 
   const handleFormSubmit = async () => {
     if (!form.subject.trim()) { setFormError("Subject is required."); return; }
-    if (!form.body.trim())    { setFormError("Body is required.");    return; }
+    if (!form.body.trim()) { setFormError("Body is required."); return; }
     setFormError(null);
 
     try {
@@ -172,9 +173,9 @@ export default function DashboardNoticesPage() {
     try {
       setDownloadingId(n.id);
       const blob = await downloadNoticePdfApi(n.id);
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement("a");
-      a.href     = url;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
       a.download = `${n.subject.slice(0, 40).replace(/\s+/g, "_")}.pdf`;
       document.body.appendChild(a);
       a.click();
@@ -203,19 +204,17 @@ export default function DashboardNoticesPage() {
       {toastState && <Toast state={toastState} onDismiss={dismiss} />}
 
       {/* ── Header ───────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            <Megaphone className="h-6 w-6 text-primary" />
-            {t("title")}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">{t("subtitle")}</p>
-        </div>
-        <Button onClick={openCreate} className="gap-2 w-full sm:w-auto">
-          <Plus className="h-4 w-4" />
-          {t("addNotice")}
-        </Button>
-      </div>
+      <DashboardPageHeader
+        title={t("title")}
+        description={t("subtitle")}
+        icon={Megaphone}
+        actions={
+          <Button onClick={openCreate} className="gap-2 w-full sm:w-auto">
+            <Plus className="h-4 w-4" />
+            {t("addNotice")}
+          </Button>
+        }
+      />
 
       {/* ── Filters ──────────────────────────────────────────────── */}
       <Card className="border border-border/70 shadow-xs">
