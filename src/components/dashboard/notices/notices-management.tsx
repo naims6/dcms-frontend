@@ -79,7 +79,8 @@ export function NoticesManagement() {
   // ── Delete confirm state ─────────────────────────────────────────
   const [deleteTarget, setDeleteTarget] = useState<Notice | null>(null);
 
-  // ── PDF state ─────────────────────────────────────────────────────
+  // ── Toggle & PDF state ────────────────────────────────────────────
+  const [publishTargetId, setPublishTargetId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const handleDelete = async () => {
@@ -95,6 +96,7 @@ export function NoticesManagement() {
 
   const handleTogglePublish = async (n: Notice) => {
     try {
+      setPublishTargetId(n.id);
       if (n.status === "PUBLISHED") {
         await unpublishMutation.mutateAsync(n.id);
         toast("success", t("unpublishSuccess"));
@@ -104,6 +106,8 @@ export function NoticesManagement() {
       }
     } catch (err: unknown) {
       toast("error", err instanceof Error ? err.message : "Operation failed.");
+    } finally {
+      setPublishTargetId(null);
     }
   };
 
@@ -265,9 +269,9 @@ export function NoticesManagement() {
                                   : "text-emerald-600 hover:text-emerald-700 border-emerald-200 hover:border-emerald-300"
                               }`}
                               onClick={() => handleTogglePublish(notice)}
-                              disabled={isMutating}
+                              disabled={publishTargetId === notice.id}
                             >
-                              {publishMutation.isPending || unpublishMutation.isPending
+                              {publishTargetId === notice.id
                                 ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                 : notice.status === "PUBLISHED"
                                   ? <EyeOff className="h-3.5 w-3.5" />

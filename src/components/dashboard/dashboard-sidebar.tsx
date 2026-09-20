@@ -53,11 +53,15 @@ export function DashboardSidebar() {
     },
   ];
 
-  const isPathActive = (path: string) =>
-    pathname === path || (path !== "/dashboard" && pathname.startsWith(path));
+  const isPathActive = (path: string) => pathname === path;
 
   const isItemActive = (item: NavItem) => {
-    if (item.children?.length) return item.children.some((c) => isPathActive(c.path));
+    if (item.children?.length) {
+      return (
+        item.children.some((c) => isPathActive(c.path)) ||
+        pathname.startsWith(`${item.path}/`)
+      );
+    }
     return isPathActive(item.path);
   };
 
