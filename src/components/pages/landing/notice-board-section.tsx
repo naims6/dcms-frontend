@@ -3,51 +3,114 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Megaphone, GraduationCap, Briefcase, FileText, Download, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import {
+  Megaphone,
+  GraduationCap,
+  Briefcase,
+  BarChart2,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  Loader2,
+} from "lucide-react";
+import { useNoticeFeedQuery } from "@/hooks/queries/use-notice-queries";
+import { downloadNoticePdfApi } from "@/services/notice.service";
+import { NoticeCategory, PaginatedNoticesResponse } from "@/types/notice.types";
+import { useDebounce } from "@/hooks/use-debounce";
+import { useToast } from "@/hooks/use-toast";
+import { Toast } from "@/components/shared/Toast";
 
-type TabId = "general" | "scholarship" | "jobs" | "tender";
+type TabId = NoticeCategory; // "GENERAL" | "SCHOLARSHIP" | "JOB" | "RESULT"
 
-interface Notice {
-  id: string;
-  date: string;
-  title: string;
-  category: TabId;
-}
-
-// Sample dummy data. In actual app, fetch from API.
-const mockNotices: Notice[] = [
-  { id: "1", date: "13-04-2026", title: "এতদ্বারা সকলের অবগতির জন্য জানানো যাচ্ছে যে, আগামী ১৪.০৪.২০২৬ ইং পহেলা বৈশাখ ১৪৩৩ উদযাপন উপলক্ষে আয়োজিত কেন্দ্রীয় সমন্বয় সভার সিদ্ধান্ত মোতাবেক বাস চলাচল করবে।", category: "general" },
-  { id: "2", date: "09-04-2026", title: "ক্লাস ও অফিস ছুটির বিজ্ঞপ্তি (পহেলা বৈশাখ ১৪৩৩)", category: "general" },
-  { id: "3", date: "08-04-2026", title: "বার্ষিক ক্রীড়া প্রতিযোগিতার ফলাফল প্রকাশ প্রসঙ্গে", category: "general" },
-  { id: "4", date: "08-04-2026", title: "পহেলা বৈশাখ ১৪৩৩ উদযাপন উপলক্ষে স্টল বরাদ্দের বিজ্ঞপ্তি", category: "general" },
-  { id: "5", date: "02-04-2026", title: "২০২৫-২০২৬ শিক্ষাবর্ষে ১ম বর্ষ ক্লাস ও ওরিয়েন্টেশন প্রোগ্রাম শুরুর বিজ্ঞপ্তি", category: "general" },
-  { id: "6", date: "01-04-2026", title: "প্রাইম ব্যাংক স্কলারশিপ ২০২৬-এর জন্য মেধাবী শিক্ষার্থীদের আবেদন আহ্বান", category: "scholarship" },
-  { id: "7", date: "25-03-2026", title: "সহকারী শিক্ষক (গণিত) পদে নিয়োগ বিজ্ঞপ্তি", category: "jobs" },
-  { id: "8", date: "15-03-2026", title: "স্কুলের নতুন একাডেমিক ভবন নির্মাণের জন্য উন্মুক্ত ই-টেন্ডার আহ্বান", category: "tender" },
+const TABS: { id: TabId; labelKey: "general" | "scholarship" | "job" | "result"; icon: React.ElementType }[] = [
+  { id: "GENERAL",    labelKey: "general",    icon: Megaphone     },
+  { id: "SCHOLARSHIP",labelKey: "scholarship", icon: GraduationCap },
+  { id: "JOB",        labelKey: "job",         icon: Briefcase     },
+  { id: "RESULT",     labelKey: "result",      icon: BarChart2     },
 ];
 
-export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean }) {
+const ENTRIES_OPTIONS = [5, 10, 25];
+
+interface NoticeBoardSectionProps {
+  hideTitle?: boolean;
+  /** ISR snapshot of the default feed, rendered by the page server-side. */
+  initialFeed?: PaginatedNoticesResponse;
+}
+
+export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoardSectionProps) {
   const t = useTranslations("NoticeBoard");
-  const [activeTab, setActiveTab] = useState<TabId>("general");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [entriesPerPage, setEntriesPerPage] = useState("5");
+  const { toast, toastState, dismiss } = useToast();
 
-  const filteredNotices = mockNotices
-    .filter((n) => n.category === activeTab)
-    .filter((n) => n.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  const [activeTab, setActiveTab]         = useState<TabId>("GENERAL");
+  const [searchInput, setSearchInput]     = useState("");
+  const [entriesPerPage, setEntriesPerPage] = useState(5);
+  const [page, setPage]                   = useState(1);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
-  const tabs: { id: TabId; labelKey: "general" | "scholarship" | "jobs" | "tender"; icon: React.ElementType }[] = [
-    { id: "general", labelKey: "general", icon: Megaphone },
-    { id: "scholarship", labelKey: "scholarship", icon: GraduationCap },
-    { id: "jobs", labelKey: "jobs", icon: Briefcase },
-    { id: "tender", labelKey: "tender", icon: FileText },
-  ];
+  const debouncedSearch = useDebounce(searchInput);
+
+  // Public feed — no auth, published-only.
+  const { data, isLoading, isError } = useNoticeFeedQuery(
+    {
+      page,
+      limit: entriesPerPage,
+      category: activeTab,
+      ...(debouncedSearch ? { search: debouncedSearch } : {}),
+    },
+    initialFeed,
+  );
+
+  const notices    = data?.data ?? [];
+  const meta       = data?.meta ?? { page: 1, limit: entriesPerPage, total: 0, totalPages: 1 };
+  const totalPages = meta.totalPages || 1;
+
+  const handleTabChange = (tab: TabId) => {
+    setActiveTab(tab);
+    setSearchInput("");
+    setPage(1);
+  };
+
+  const handleDownload = async (noticeId: string, subject: string) => {
+    try {
+      setDownloadingId(noticeId);
+      const blob = await downloadNoticePdfApi(noticeId);
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement("a");
+      a.href     = url;
+      a.download = `${subject.slice(0, 40).replace(/\s+/g, "_")}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      toast("error", "Failed to download PDF. Please try again.");
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
+  const formatDate = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString("en-GB", {
+      day: "2-digit", month: "2-digit", year: "numeric",
+    });
+
+  const getPageNumbers = (): (number | "...")[] => {
+    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const pages: (number | "...")[] = [1];
+    if (page > 3) pages.push("...");
+    for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) pages.push(i);
+    if (page < totalPages - 2) pages.push("...");
+    pages.push(totalPages);
+    return pages;
+  };
 
   return (
-    <section className={`w-full ${hideTitle ? 'pb-16 pt-8 md:pb-24 md:pt-12' : 'py-16 md:py-24'} bg-background`}>
+    <section className={`w-full ${hideTitle ? "pb-16 pt-8 md:pb-24 md:pt-12" : "py-16 md:py-24"} bg-background`}>
+      {toastState && <Toast state={toastState} onDismiss={dismiss} />}
+
       <div className="container mx-auto px-4">
-        
-        {/* Title */}
+
         {!hideTitle && (
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
@@ -57,92 +120,97 @@ export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean 
           </div>
         )}
 
-        {/* Notices Board Container */}
         <div className="border border-border/60 bg-card rounded-xl shadow-md overflow-hidden flex flex-col">
-          
-          {/* Tabs */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-1 p-2 bg-muted/60">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    setSearchQuery("");
-                  }}
-                  className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300
-                    ${isActive 
-                      ? "bg-primary text-primary-foreground shadow-sm scale-[1.02]" 
-                      : "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }
-                  `}
-                >
-                  <Icon className="h-5 w-5 shrink-0" />
-                  <span className="truncate">{t(`tabs.${tab.labelKey}`)}</span>
-                </button>
-              );
-            })}
+
+          {/* ── Tabs ────────────────────────────────────────────── */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-1 p-2 bg-muted/60">
+            {TABS.map(({ id, labelKey, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => handleTabChange(id)}
+                className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 ${
+                  activeTab === id
+                    ? "bg-primary text-primary-foreground shadow-sm scale-[1.02]"
+                    : "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                <Icon className="h-5 w-5 shrink-0" />
+                <span className="truncate">{t(`tabs.${labelKey}`)}</span>
+              </button>
+            ))}
           </div>
 
-          {/* Controls: entries per page & search */}
+          {/* ── Controls ─────────────────────────────────────────── */}
           <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-background border-b border-border/50 gap-4">
-            
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <select
                 className="bg-transparent border border-border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary"
                 value={entriesPerPage}
-                onChange={(e) => setEntriesPerPage(e.target.value)}
+                onChange={(e) => { setEntriesPerPage(Number(e.target.value)); setPage(1); }}
               >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="25">25</option>
+                {ENTRIES_OPTIONS.map((n) => <option key={n} value={n}>{n}</option>)}
               </select>
               <span>{t("entriesPerPage")}</span>
             </div>
 
             <div className="relative w-full sm:w-auto">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <Input 
-                type="text" 
-                placeholder={t("search")} 
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <Input
+                type="text"
+                placeholder={t("search")}
                 className="pl-9 w-full sm:w-64 h-9"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchInput}
+                onChange={(e) => { setSearchInput(e.target.value); setPage(1); }}
               />
             </div>
-
           </div>
 
-          {/* Table */}
+          {/* ── Table ────────────────────────────────────────────── */}
           <div className="w-full">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-primary text-primary-foreground">
-                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[20%] sm:w-[15%]">{t("table.date")}</th>
-                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[55%] sm:w-[70%] border-l border-white/20">{t("table.title")}</th>
-                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[25%] sm:w-[15%] text-center border-l border-white/20">{t("table.attachment")}</th>
+                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[18%] sm:w-[15%]">{t("table.date")}</th>
+                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm border-l border-white/20">{t("table.title")}</th>
+                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[22%] sm:w-[15%] text-center border-l border-white/20">{t("table.attachment")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border text-foreground">
-                {filteredNotices.length > 0 ? (
-                  filteredNotices.map((notice) => (
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={3} className="py-12 text-center text-muted-foreground">
+                      <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
+                      <span className="text-sm">Loading notices...</span>
+                    </td>
+                  </tr>
+                ) : isError ? (
+                  <tr>
+                    <td colSpan={3} className="py-8 text-center text-destructive text-sm">
+                      Failed to load notices. Please try again later.
+                    </td>
+                  </tr>
+                ) : notices.length > 0 ? (
+                  notices.map((notice) => (
                     <tr key={notice.id} className="hover:bg-muted/50 transition-colors">
-                      <td className="py-4 px-2 sm:px-4 text-xs sm:text-sm font-medium align-top">
-                        {notice.date}
+                      <td className="py-4 px-2 sm:px-4 text-xs sm:text-sm font-medium align-top whitespace-nowrap">
+                        {formatDate(notice.noticeDate)}
                       </td>
                       <td className="py-4 px-2 sm:px-4 text-xs sm:text-sm leading-relaxed border-l border-border/40 align-top">
-                        {notice.title}
+                        {notice.subject}
                       </td>
-                      <td className="py-2 px-1 sm:px-4 text-center border-l border-border/40 align-top">
-                        <button className="inline-flex flex-col items-center justify-center text-primary hover:text-primary/70 transition-colors group mt-1 sm:mt-2">
-                           <span className="text-[10px] sm:text-xs font-semibold uppercase text-center leading-tight">{t("table.viewDetails")}</span>
-                          <div className="bg-primary/10 p-1 sm:p-1.5 rounded-full mt-1 sm:mt-1 group-hover:bg-primary/20">
-                            <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <td className="py-2 px-1 sm:px-4 text-center border-l border-border/40 align-middle">
+                        <button
+                          onClick={() => handleDownload(notice.id, notice.subject)}
+                          disabled={downloadingId === notice.id}
+                          className="inline-flex flex-col items-center justify-center text-primary hover:text-primary/70 transition-colors group mt-1 sm:mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                          <span className="text-[10px] sm:text-xs font-semibold uppercase leading-tight">
+                            {t("table.viewDetails")}
+                          </span>
+                          <div className="bg-primary/10 p-1 sm:p-1.5 rounded-full mt-1 group-hover:bg-primary/20">
+                            {downloadingId === notice.id
+                              ? <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin" />
+                              : <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
                           </div>
                         </button>
                       </td>
@@ -150,7 +218,7 @@ export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean 
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={3} className="py-8 text-center text-muted-foreground">
+                    <td colSpan={3} className="py-8 text-center text-muted-foreground text-sm">
                       No notices found.
                     </td>
                   </tr>
@@ -159,18 +227,43 @@ export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean 
             </table>
           </div>
 
-          {/* Pagination */}
+          {/* ── Pagination ───────────────────────────────────────── */}
           <div className="flex flex-col md:flex-row items-center justify-between p-4 bg-muted/20 border-t border-border/50 gap-4">
             <p className="text-sm text-muted-foreground">
-              {t("pagination.showing")} 1 {t("pagination.to")} {filteredNotices.length} {t("pagination.of")} {mockNotices.filter((n) => n.category === activeTab).length} {t("pagination.entries")}
+              {t("pagination.showing")}{" "}
+              {meta.total === 0 ? 0 : (page - 1) * entriesPerPage + 1}{" "}
+              {t("pagination.to")}{" "}
+              {Math.min(page * entriesPerPage, meta.total)}{" "}
+              {t("pagination.of")} {meta.total} {t("pagination.entries")}
             </p>
             <div className="flex bg-background border border-border rounded-md overflow-hidden">
-              <button className="px-3 py-1 border-r border-border hover:bg-muted text-muted-foreground">
+              <button
+                className="px-3 py-1 border-r border-border hover:bg-muted text-muted-foreground disabled:opacity-40"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page <= 1}
+              >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <button className="px-3 py-1 border-r border-border bg-primary/10 text-primary font-semibold">1</button>
-              <button className="px-3 py-1 border-r border-border hover:bg-muted text-foreground">2</button>
-              <button className="px-3 py-1 hover:bg-muted text-muted-foreground">
+              {getPageNumbers().map((p, idx) =>
+                p === "..." ? (
+                  <span key={`e-${idx}`} className="px-3 py-1 border-r border-border text-muted-foreground flex items-center text-sm">…</span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => setPage(p as number)}
+                    className={`px-3 py-1 border-r border-border transition-colors text-sm ${
+                      page === p ? "bg-primary/10 text-primary font-semibold" : "hover:bg-muted text-foreground"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ),
+              )}
+              <button
+                className="px-3 py-1 hover:bg-muted text-muted-foreground disabled:opacity-40"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page >= totalPages}
+              >
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>

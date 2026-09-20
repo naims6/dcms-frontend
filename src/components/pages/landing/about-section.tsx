@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export function AboutSection() {
   const t = useTranslations("About");

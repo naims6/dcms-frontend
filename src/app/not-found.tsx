@@ -1,6 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/i18n/routing';
-import NotFoundPage from '@/app/[locale]/not-found';
+import NotFoundPage from '@/app/[locale]/(public)/not-found';
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/app/[locale]/globals.css";
 import { Geist, Geist_Mono, Inter } from "next/font/google";

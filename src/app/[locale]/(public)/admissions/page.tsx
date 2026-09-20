@@ -19,9 +19,12 @@ import {
   type AdmissionFormValues,
 } from "@/schemas/admissions";
 import { useAdmissionForm } from "@/hooks/use-admission-form";
+import { useToast } from "@/hooks/use-toast";
+import { Toast } from "@/components/shared/Toast";
 
 export default function AdmissionsPage() {
   const t = useTranslations("admissions");
+  const { toast, toastState, dismiss } = useToast();
   const {
     isSubmitting,
     photoFileName,
@@ -38,16 +41,18 @@ export default function AdmissionsPage() {
   async function onSubmit(data: AdmissionFormValues) {
     const result = await handleSubmit(data);
     if (result.success) {
-      alert(t("messages.success"));
+      toast("success", t("messages.success"));
       form.reset();
       setPhotoFileName("");
     } else {
-      alert(t("messages.error"));
+      toast("error", t("messages.error"));
     }
   }
 
   return (
     <>
+      {toastState && <Toast state={toastState} onDismiss={dismiss} />}
+
       {/* Page Intro Section */}
       <PageIntro
         badgeIcon={<GraduationCap className="h-4 w-4" />}

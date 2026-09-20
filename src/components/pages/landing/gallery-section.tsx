@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { X, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { landingGalleryItems } from "@/constants/galleryData";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export function GallerySection() {
   const t = useTranslations("Gallery");

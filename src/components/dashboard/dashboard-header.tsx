@@ -11,25 +11,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Bell, LogOut, Moon, Sun, User as UserIcon, Search } from "lucide-react";
+import { Bell, LogOut, Moon, Sun, User as UserIcon, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
+import { useLocale } from "next-intl";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
-export function DashboardHeader() {
+export function DashboardHeader({ onOpenSidebar }: { onOpenSidebar?: () => void }) {
   const { user, logout } = useAuth();
   const { theme, setTheme } = useTheme();
+  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
 
-  const segments = pathname.split("/");
-  const locale = segments[1] && (segments[1] === "en" || segments[1] === "bn") ? segments[1] : "en";
-
   const toggleLanguage = () => {
-    const newLocale = locale === "en" ? "bn" : "en";
-    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
-    router.push(newPath);
+    const nextLocale = locale === "en" ? "bn" : "en";
+    router.replace(pathname, { locale: nextLocale });
   };
 
   const getInitials = (firstName?: string, lastName?: string | null) => {
@@ -40,17 +36,16 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-card/80 px-4 md:px-6 backdrop-blur-md">
-      {/* Search Input */}
-      <div className="flex items-center gap-4 flex-1 max-w-md">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search records, users, roles..."
-            className="pl-9 h-9 text-sm bg-muted/40 border-border/80 focus-visible:bg-background"
-          />
-        </div>
-      </div>
+      {/* Mobile Menu Toggle */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onOpenSidebar}
+        className="h-11 w-11 text-muted-foreground hover:text-foreground lg:hidden"
+        aria-label="Open menu"
+      >
+        <Menu className="h-6 w-6" />
+      </Button>
 
       {/* Header Actions */}
       <div className="flex items-center gap-2 md:gap-3">
@@ -134,7 +129,7 @@ export function DashboardHeader() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild>
-              <Link href={`/${locale}/dashboard/profile`} className="cursor-pointer flex items-center gap-2 text-xs">
+              <Link href="/dashboard/profile" className="cursor-pointer flex items-center gap-2 text-xs">
                 <UserIcon className="h-4 w-4 text-muted-foreground" />
                 <span>Profile Settings</span>
               </Link>
