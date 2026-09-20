@@ -9,12 +9,14 @@ import {
   publishNoticeApi,
   unpublishNoticeApi,
   deleteNoticeApi,
+  PUBLIC_FEED_DEFAULTS,
 } from "@/services/notice.service";
 import { queryKeys } from "@/lib/query-keys";
 import {
   CreateNoticeDto,
   GetFeedQueryParams,
   GetNoticesQueryParams,
+  PaginatedNoticesResponse,
   UpdateNoticeDto,
 } from "@/types/notice.types";
 
@@ -39,11 +41,32 @@ export function useNoticeDetailQuery(id: string | null) {
 
 // ── Public feed queries (no auth, PUBLISHED only) ─────────────────────────
 
-/** Paginated list of published notices — for the homepage / public notice board. */
-export function useNoticeFeedQuery(params?: GetFeedQueryParams) {
+// How long the feed stays "fresh" so the ISR snapshot isn't immediately
+// re-fetched by every visitor's browser.
+const FEED_STALE_TIME_MS = 60 * 1000;
+
+/**
+ * Paginated list of published notices — for the homepage / public notice board.
+ *
+ * `initialData` is the ISR snapshot passed down from the page. It's only used
+ * while the board is in its default view (the exact params the server
+ * pre-rendered); switching tabs/search/page still fetches fresh data.
+ */
+export function useNoticeFeedQuery(
+  params?: GetFeedQueryParams,
+  initialData?: PaginatedNoticesResponse,
+) {
+  const isDefaultView =
+    (params?.page ?? PUBLIC_FEED_DEFAULTS.page) === PUBLIC_FEED_DEFAULTS.page &&
+    (params?.limit ?? PUBLIC_FEED_DEFAULTS.limit) === PUBLIC_FEED_DEFAULTS.limit &&
+    (params?.category ?? PUBLIC_FEED_DEFAULTS.category) === PUBLIC_FEED_DEFAULTS.category &&
+    !params?.search;
+
   return useQuery({
     queryKey: queryKeys.notices.feed(params as Record<string, unknown>),
     queryFn: () => getNoticeFeedApi(params),
+    initialData: isDefaultView ? initialData : undefined,
+    staleTime: FEED_STALE_TIME_MS,
   });
 }
 

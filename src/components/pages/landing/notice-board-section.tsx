@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useNoticeFeedQuery } from "@/hooks/queries/use-notice-queries";
 import { downloadNoticePdfApi } from "@/services/notice.service";
-import { NoticeCategory } from "@/types/notice.types";
+import { NoticeCategory, PaginatedNoticesResponse } from "@/types/notice.types";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useToast } from "@/hooks/use-toast";
 import { Toast } from "@/components/shared/Toast";
@@ -32,7 +32,13 @@ const TABS: { id: TabId; labelKey: "general" | "scholarship" | "job" | "result";
 
 const ENTRIES_OPTIONS = [5, 10, 25];
 
-export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean }) {
+interface NoticeBoardSectionProps {
+  hideTitle?: boolean;
+  /** ISR snapshot of the default feed, rendered by the page server-side. */
+  initialFeed?: PaginatedNoticesResponse;
+}
+
+export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoardSectionProps) {
   const t = useTranslations("NoticeBoard");
   const { toast, toastState, dismiss } = useToast();
 
@@ -44,13 +50,16 @@ export function NoticeBoardSection({ hideTitle = false }: { hideTitle?: boolean 
 
   const debouncedSearch = useDebounce(searchInput);
 
-  // Public feed — no auth, published-only
-  const { data, isLoading, isError } = useNoticeFeedQuery({
-    page,
-    limit: entriesPerPage,
-    category: activeTab,
-    search: debouncedSearch || undefined,
-  });
+  // Public feed — no auth, published-only.
+  const { data, isLoading, isError } = useNoticeFeedQuery(
+    {
+      page,
+      limit: entriesPerPage,
+      category: activeTab,
+      ...(debouncedSearch ? { search: debouncedSearch } : {}),
+    },
+    initialFeed,
+  );
 
   const notices    = data?.data ?? [];
   const meta       = data?.meta ?? { page: 1, limit: entriesPerPage, total: 0, totalPages: 1 };

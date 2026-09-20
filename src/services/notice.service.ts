@@ -4,9 +4,19 @@ import {
   PaginatedNoticesResponse,
   GetNoticesQueryParams,
   GetFeedQueryParams,
+  NoticeCategory,
   CreateNoticeDto,
   UpdateNoticeDto,
 } from "@/types/notice.types";
+
+// ── Shared config ──────────────────────────────────────────────────────────
+
+/** Default feed view (also the ISR snapshot the homepage pre-renders). */
+export const PUBLIC_FEED_DEFAULTS = {
+  page: 1,
+  limit: 5,
+  category: "GENERAL" as NoticeCategory,
+};
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -82,8 +92,18 @@ export async function downloadNoticePdfApi(id: string): Promise<Blob> {
 
 // ── Public Feed API (/api/v1/notices/feed — no auth, PUBLISHED only) ──────
 
-/** GET /notices/feed — published notices only, paginated. */
-export async function getNoticeFeedApi(params?: GetFeedQueryParams): Promise<PaginatedNoticesResponse> {
+/**
+ * GET /notices/feed — published notices only, paginated.
+ *
+ * Used by BOTH data flows, so it's the single source of truth:
+ *  - server (ISR):  `await getNoticeFeedApi(PUBLIC_FEED_DEFAULTS)` in the page
+ *  - client (query): `useNoticeFeedQuery(params)` → `getNoticeFeedApi(params)`
+ *
+ */
+export async function getNoticeFeedApi(
+  params?: GetFeedQueryParams,
+  revalidate: number = 60,
+): Promise<PaginatedNoticesResponse> {
   const query = toQuery({
     page: params?.page,
     limit: params?.limit,
@@ -92,7 +112,10 @@ export async function getNoticeFeedApi(params?: GetFeedQueryParams): Promise<Pag
   });
   const raw = await apiClient.getRaw<{ data: Notice[]; meta: PaginatedNoticesResponse["meta"] }>(
     "/notices/feed",
-    { params: Object.keys(query).length ? query : undefined },
+    {
+      params: Object.keys(query).length ? query : undefined,
+      next: { revalidate },
+    },
   );
   return toPaginated(raw);
 }
