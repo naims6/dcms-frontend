@@ -140,6 +140,110 @@
   --sidebar-ring: oklch(0.7 0.12 260);
 }
 
+@layer components {
+  /* Rich text content (TipTap editor + notice preview) */
+  .notice-prose {
+    line-height: 1.7;
+    color: var(--foreground);
+  }
+
+  .notice-prose p {
+    margin: 0 0 0.75em;
+  }
+
+  .notice-prose h1 {
+    margin: 1em 0 0.5em;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .notice-prose h2 {
+    margin: 1em 0 0.5em;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .notice-prose h3 {
+    margin: 1em 0 0.5em;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .notice-prose ul {
+    margin: 0 0 0.75em;
+    padding-left: 1.5em;
+    list-style: disc;
+  }
+
+  .notice-prose ol {
+    margin: 0 0 0.75em;
+    padding-left: 1.5em;
+    list-style: decimal;
+  }
+
+  .notice-prose li {
+    margin: 0.25em 0;
+  }
+
+  .notice-prose blockquote {
+    margin: 0 0 0.75em;
+    border-left: 3px solid var(--primary);
+    padding: 0.25em 1em;
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
+
+  .notice-prose pre {
+    margin: 0 0 0.75em;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--muted);
+    padding: 0.75em 1em;
+    font-size: 0.875rem;
+  }
+
+  .notice-prose code {
+    border-radius: 0.25rem;
+    background: var(--muted);
+    padding: 0.15em 0.4em;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+
+  .notice-prose pre code {
+    background: transparent;
+    padding: 0;
+  }
+
+  .notice-prose a {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .notice-prose hr {
+    margin: 1.5em 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .notice-prose strong {
+    font-weight: 700;
+  }
+
+  /* TipTap placeholder */
+  .tiptap p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    color: var(--muted-foreground);
+    pointer-events: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

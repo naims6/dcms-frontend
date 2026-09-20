@@ -8,18 +8,29 @@ import {
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Megaphone,
+  List,
+  FilePlus,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 
+export interface NavSubItem {
+  title: string;
+  path: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  permission?: string;
+}
+
 export interface NavItem {
   title: string;
   path: string;
   icon: React.ComponentType<{ className?: string }>;
   permission?: string;
+  children?: NavSubItem[];
 }
 
 export function DashboardSidebar() {
@@ -31,8 +42,42 @@ export function DashboardSidebar() {
     { title: "Overview", path: "/dashboard", icon: LayoutDashboard },
     { title: "Users", path: "/dashboard/users", icon: Users, permission: "users:read" },
     { title: "Roles & RBAC", path: "/dashboard/rbac/roles", icon: ShieldCheck, permission: "roles:read" },
-    { title: "Notices", path: "/dashboard/notices", icon: Megaphone },
+    {
+      title: "Notices",
+      path: "/dashboard/notices",
+      icon: Megaphone,
+      children: [
+        { title: "All Notices", path: "/dashboard/notices", icon: List },
+        { title: "Create Notice", path: "/dashboard/notices/create", icon: FilePlus },
+      ],
+    },
   ];
+
+  const isPathActive = (path: string) =>
+    pathname === path || (path !== "/dashboard" && pathname.startsWith(path));
+
+  const isItemActive = (item: NavItem) => {
+    if (item.children?.length) return item.children.some((c) => isPathActive(c.path));
+    return isPathActive(item.path);
+  };
+
+  // Auto-expand any section whose child is active
+  const [openSections, setOpenSections] = useState<Set<string>>(() => {
+    const set = new Set<string>();
+    navItems.forEach((item) => {
+      if (item.children?.some((c) => isPathActive(c.path))) set.add(item.path);
+    });
+    return set;
+  });
+
+  const toggleSection = (path: string) => {
+    setOpenSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(path)) next.delete(path);
+      else next.add(path);
+      return next;
+    });
+  };
 
   const visibleNavItems = navItems.filter(
     (item) => !item.permission || hasPermission(item.permission)
@@ -78,25 +123,92 @@ export function DashboardSidebar() {
       {/* Navigation Links */}
       <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
         {visibleNavItems.map((item) => {
-          const isActive = pathname === item.path || (item.path !== "/dashboard" && pathname.startsWith(item.path));
           const Icon = item.icon;
+          const hasChildren = !!item.children?.length;
+          const isActive = isItemActive(item);
+          const isOpen = openSections.has(item.path);
+
+          const base =
+            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors";
+          const activeCls = "bg-sidebar-primary text-sidebar-primary-foreground shadow-xs";
+          const idleCls =
+            "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground";
+
+          const iconCls = cn(
+            "h-5 w-5 shrink-0",
+            isActive ? "text-sidebar-primary-foreground" : "text-sidebar-foreground/70"
+          );
+
+          // Collapsed: render a plain icon link (sub-items hidden)
+          if (collapsed) {
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={cn(base, "justify-center px-2", isActive ? activeCls : idleCls)}
+                title={item.title}
+              >
+                <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-sidebar-primary-foreground" : "text-sidebar-foreground/70")} />
+              </Link>
+            );
+          }
 
           return (
-            <Link
-              key={item.path}
-              href={item.path}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-xs"
-                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                collapsed && "justify-center px-2"
+            <div key={item.path}>
+              {/* Top-level item */}
+              {hasChildren ? (
+                <button
+                  type="button"
+                  onClick={() => toggleSection(item.path)}
+                  aria-expanded={isOpen}
+                  className={cn(base, "w-full text-left", isActive ? activeCls : idleCls)}
+                >
+                  <Icon className={iconCls} />
+                  <span className="flex-1 truncate">{item.title}</span>
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 shrink-0 transition-transform duration-200",
+                      isOpen && "rotate-180",
+                    )}
+                  />
+                </button>
+              ) : (
+                <Link href={item.path} className={cn(base, isActive ? activeCls : idleCls)}>
+                  <Icon className={iconCls} />
+                  <span className="truncate">{item.title}</span>
+                </Link>
               )}
-              title={collapsed ? item.title : undefined}
-            >
-              <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-sidebar-primary-foreground" : "text-sidebar-foreground/70")} />
-              {!collapsed && <span>{item.title}</span>}
-            </Link>
+
+              {/* Sub-items */}
+              {hasChildren && isOpen && (
+                <div className="mt-1 space-y-0.5">
+                  {(item.children ?? []).map((child) => {
+                    if (child.permission && !hasPermission(child.permission)) return null;
+                    const childActive = isPathActive(child.path);
+                    const ChildIcon = child.icon;
+                    return (
+                      <Link
+                        key={child.path}
+                        href={child.path}
+                        className={cn(
+                          "flex items-center gap-2.5 rounded-lg py-2 pl-10 pr-3 text-[13px] font-medium transition-colors",
+                          childActive
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                        )}
+                      >
+                        {ChildIcon ? (
+                          <ChildIcon className="h-4 w-4 shrink-0" />
+                        ) : (
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-current opacity-60" />
+                        )}
+                        <span className="truncate">{child.title}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>

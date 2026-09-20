@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import {
   useNoticesQuery,
-  useCreateNoticeMutation,
-  useUpdateNoticeMutation,
   useDeleteNoticeMutation,
   usePublishNoticeMutation,
   useUnpublishNoticeMutation,
@@ -15,8 +14,6 @@ import {
   Notice,
   NoticeCategory,
   NoticeStatus,
-  CreateNoticeDto,
-  UpdateNoticeDto,
 } from "@/types/notice.types";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useToast } from "@/hooks/use-toast";
@@ -26,10 +23,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
-} from "@/components/ui/dialog";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -43,14 +36,6 @@ import { DashboardPageHeader } from "@/components/dashboard/shared/DashboardPage
 const CATEGORIES: NoticeCategory[] = ["GENERAL", "SCHOLARSHIP", "JOB", "RESULT"];
 const STATUSES: NoticeStatus[] = ["DRAFT", "PUBLISHED", "ARCHIVED"];
 const LIMIT = 10;
-
-const defaultForm: CreateNoticeDto = {
-  category: "GENERAL",
-  subject: "",
-  body: "",
-  noticeDate: "",
-  status: "DRAFT",
-};
 
 // ── Status badge styles ───────────────────────────────────────────────────
 const STATUS_STYLES: Record<NoticeStatus, string> = {
@@ -84,66 +69,18 @@ export function NoticesManagement() {
   const totalPages = meta.totalPages || 1;
 
   // ── Mutations ─────────────────────────────────────────────────────
-  const createMutation = useCreateNoticeMutation();
-  const updateMutation = useUpdateNoticeMutation();
   const deleteMutation = useDeleteNoticeMutation();
   const publishMutation = usePublishNoticeMutation();
   const unpublishMutation = useUnpublishNoticeMutation();
 
   const isMutating =
-    createMutation.isPending || updateMutation.isPending ||
-    deleteMutation.isPending || publishMutation.isPending ||
-    unpublishMutation.isPending;
+    deleteMutation.isPending || publishMutation.isPending || unpublishMutation.isPending;
 
-  // ── Form dialog ───────────────────────────────────────────────────
-  const [formOpen, setFormOpen] = useState(false);
-  const [editingNotice, setEditingNotice] = useState<Notice | null>(null);
-  const [form, setForm] = useState<CreateNoticeDto>(defaultForm);
-  const [formError, setFormError] = useState<string | null>(null);
-
-  // ── Delete dialog ─────────────────────────────────────────────────
+  // ── Delete confirm state ─────────────────────────────────────────
   const [deleteTarget, setDeleteTarget] = useState<Notice | null>(null);
 
   // ── PDF state ─────────────────────────────────────────────────────
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
-
-  // ── Helpers ───────────────────────────────────────────────────────
-  const todayISO = () => new Date().toISOString().split("T")[0];
-
-  const openCreate = () => {
-    setEditingNotice(null);
-    setForm({ ...defaultForm, noticeDate: todayISO() });
-    setFormError(null);
-    setFormOpen(true);
-  };
-
-  const openEdit = (n: Notice) => {
-    setEditingNotice(n);
-    setForm({ category: n.category, subject: n.subject, body: n.body, noticeDate: n.noticeDate.split("T")[0], status: n.status });
-    setFormError(null);
-    setFormOpen(true);
-  };
-
-  const handleFormSubmit = async () => {
-    if (!form.subject.trim()) { setFormError("Subject is required."); return; }
-    if (!form.body.trim()) { setFormError("Body is required."); return; }
-    setFormError(null);
-
-    try {
-      const noticeDate = new Date(form.noticeDate).toISOString();
-      if (editingNotice) {
-        const dto: UpdateNoticeDto = { category: form.category, subject: form.subject, body: form.body, noticeDate };
-        await updateMutation.mutateAsync({ id: editingNotice.id, dto });
-        toast("success", "Notice updated successfully.");
-      } else {
-        await createMutation.mutateAsync({ ...form, noticeDate });
-        toast("success", "Notice created successfully.");
-      }
-      setFormOpen(false);
-    } catch (err: unknown) {
-      setFormError(err instanceof Error ? err.message : "Something went wrong.");
-    }
-  };
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -210,9 +147,11 @@ export function NoticesManagement() {
         description={t("subtitle")}
         icon={Megaphone}
         actions={
-          <Button onClick={openCreate} className="gap-2 w-full sm:w-auto">
-            <Plus className="h-4 w-4" />
-            {t("addNotice")}
+          <Button className="gap-2 w-full sm:w-auto" asChild>
+            <Link href="/dashboard/notices/create">
+              <Plus className="h-4 w-4" />
+              {t("addNotice")}
+            </Link>
           </Button>
         }
       />
@@ -277,8 +216,10 @@ export function NoticesManagement() {
             <div className="flex flex-col items-center justify-center py-16 text-muted-foreground gap-3">
               <Megaphone className="h-10 w-10 opacity-20" />
               <p className="text-sm">{t("noNotices")}</p>
-              <Button variant="outline" size="sm" onClick={openCreate} className="gap-1.5">
-                <Plus className="h-4 w-4" />{t("addNotice")}
+              <Button variant="outline" size="sm" className="gap-1.5" asChild>
+                <Link href="/dashboard/notices/create">
+                  <Plus className="h-4 w-4" />{t("addNotice")}
+                </Link>
               </Button>
             </div>
           ) : (
@@ -336,11 +277,10 @@ export function NoticesManagement() {
                           )}
 
                           {/* Edit */}
-                          <Button
-                            size="sm" variant="outline" className="h-8 px-2.5 gap-1.5 text-xs"
-                            onClick={() => openEdit(notice)} disabled={isMutating}
-                          >
-                            <Pencil className="h-3.5 w-3.5" />{t("editNotice")}
+                          <Button size="sm" variant="outline" className="h-8 px-2.5 gap-1.5 text-xs" asChild>
+                            <Link href={`/dashboard/notices/${notice.id}/edit`}>
+                              <Pencil className="h-3.5 w-3.5" />{t("editNotice")}
+                            </Link>
                           </Button>
 
                           {/* PDF Download */}
@@ -402,90 +342,6 @@ export function NoticesManagement() {
           )}
         </CardContent>
       </Card>
-
-      {/* ── Create / Edit Dialog ────────────────────────────────── */}
-      <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Megaphone className="h-5 w-5 text-primary" />
-              {editingNotice ? t("form.editTitle") : t("form.createTitle")}
-            </DialogTitle>
-            <DialogDescription>
-              {editingNotice ? "Update the notice details below." : "Fill in the details to create a new notice."}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-2">
-            {/* Subject */}
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">
-                {t("form.subject")} <span className="text-destructive">*</span>
-              </label>
-              <Input placeholder={t("form.subjectPlaceholder")} value={form.subject}
-                onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))} />
-            </div>
-
-            {/* Category & Status */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">{t("form.category")}</label>
-                <Select value={form.category} onValueChange={(v) => setForm((f) => ({ ...f, category: v as NoticeCategory }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{t(`category.${c}`)}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">{t("form.status")}</label>
-                <Select value={form.status} onValueChange={(v) => setForm((f) => ({ ...f, status: v as NoticeStatus }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {STATUSES.map((s) => <SelectItem key={s} value={s}>{t(`status.${s}`)}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Notice Date */}
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">{t("form.noticeDate")}</label>
-              <Input type="date" value={form.noticeDate}
-                onChange={(e) => setForm((f) => ({ ...f, noticeDate: e.target.value }))} />
-            </div>
-
-            {/* Body */}
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">
-                {t("form.body")} <span className="text-destructive">*</span>
-              </label>
-              <Textarea placeholder={t("form.bodyPlaceholder")} value={form.body}
-                onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
-                rows={6} className="resize-y" />
-              <p className="text-xs text-muted-foreground">HTML tags are supported in the body.</p>
-            </div>
-
-            {formError && (
-              <p className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">{formError}</p>
-            )}
-          </div>
-
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setFormOpen(false)}
-              disabled={createMutation.isPending || updateMutation.isPending}>
-              {t("form.cancel")}
-            </Button>
-            <Button onClick={handleFormSubmit}
-              disabled={createMutation.isPending || updateMutation.isPending}>
-              {createMutation.isPending || updateMutation.isPending
-                ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />{t("form.saving")}</>
-                : t("form.save")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* ── Delete Confirm Dialog ─────────────────────────────────── */}
       <ConfirmDialog
