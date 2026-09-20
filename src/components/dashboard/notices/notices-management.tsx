@@ -21,6 +21,7 @@ import {
 import { useDebounce } from "@/hooks/use-debounce";
 import { useToast } from "@/hooks/use-toast";
 import { Toast } from "@/components/shared/Toast";
+import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -487,31 +488,25 @@ export function NoticesManagement() {
       </Dialog>
 
       {/* ── Delete Confirm Dialog ─────────────────────────────────── */}
-      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-destructive">
-              <Trash2 className="h-5 w-5" />{t("deleteNotice")}
-            </DialogTitle>
-            <DialogDescription className="pt-2">
-              {t("confirmDelete")}
-              {deleteTarget && (
-                <span className="block mt-2 font-medium text-foreground">&ldquo;{deleteTarget.subject}&rdquo;</span>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)} disabled={deleteMutation.isPending}>
-              {t("form.cancel")}
-            </Button>
-            <Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
-              {deleteMutation.isPending
-                ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Deleting...</>
-                : t("deleteNotice")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title={t("deleteNotice")}
+        description={
+          <>
+            {t("confirmDelete")}
+            {deleteTarget && (
+              <span className="mt-2 block font-medium text-foreground">
+                &ldquo;{deleteTarget.subject}&rdquo;
+              </span>
+            )}
+          </>
+        }
+        confirmLabel={t("deleteNotice")}
+        cancelLabel={t("form.cancel")}
+        isPending={deleteMutation.isPending}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }
