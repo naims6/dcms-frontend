@@ -21,4 +21,13 @@ export const queryKeys = {
     feed: (params?: Record<string, unknown>) => ["notices", "feed", params || {}] as const,
     feedDetail: (id: string) => ["notices", "feed", id] as const,
   },
+  students: {
+    all: ["students"] as const,
+    list: (params?: Record<string, unknown>) => ["students", "list", params || {}] as const,
+    detail: (id: string) => ["students", "detail", id] as const,
+  },
+  classes: {
+    all: ["classes"] as const,
+    list: () => ["classes", "list"] as const,
+  },
 };

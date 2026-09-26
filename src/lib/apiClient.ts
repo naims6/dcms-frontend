@@ -9,6 +9,8 @@ export interface FetchOptions extends RequestInit {
   _retry?: boolean;
   /** When true, return the full JSON body instead of unwrapping `.data`. */
   _raw?: boolean;
+  /** When true, omit the default `Content-Type` so fetch can add the multipart boundary. */
+  multipart?: boolean;
 }
 
 export class ApiError extends Error {
@@ -64,7 +66,7 @@ async function request<T>(
   endpoint: string,
   options: FetchOptions = {},
 ): Promise<T> {
-  const { params, headers, _retry, _raw, ...config } = options;
+  const { params, headers, _retry, _raw, multipart, ...config } = options;
 
   let url = endpoint.startsWith("http") ? endpoint : `${BASE_URL}${endpoint}`;
   if (params) {
@@ -74,11 +76,14 @@ async function request<T>(
     }
   }
 
+  const defaultHeaders: Record<string, string> = { "Content-Type": "application/json" };
+  if (multipart) delete defaultHeaders["Content-Type"];
+
   const res = await fetch(url, {
     credentials: "include",
     ...config,
     headers: {
-      "Content-Type": "application/json",
+      ...defaultHeaders,
       ...headers,
     },
   });
@@ -159,6 +164,24 @@ export const apiClient = {
       ...options,
       method: "PATCH",
       body: data ? JSON.stringify(data) : undefined,
+    }),
+
+  /** POST a `FormData` body (auth included, Content-Type left to the browser). */
+  postForm: <T>(url: string, formData: FormData, options?: FetchOptions) =>
+    request<T>(url, {
+      ...options,
+      method: "POST",
+      body: formData,
+      multipart: true,
+    }),
+
+  /** PATCH a `FormData` body (auth included, Content-Type left to the browser). */
+  patchForm: <T>(url: string, formData: FormData, options?: FetchOptions) =>
+    request<T>(url, {
+      ...options,
+      method: "PATCH",
+      body: formData,
+      multipart: true,
     }),
 
   delete: <T>(url: string, options?: FetchOptions) =>
