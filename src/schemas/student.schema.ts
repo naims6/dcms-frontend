@@ -23,6 +23,8 @@ const optionalEmail = z.string().email("Enter a valid email address.").or(z.lite
 
 // ── Guardian row ──────────────────────────────────────────────────────────
 export const guardianFormSchema = z.object({
+  /** Existing guardian id when editing — sent back so the server updates in place. */
+  id: z.string().optional(),
   name: z.string().trim(),
   relationship: z.enum(RELATIONSHIP_OPTIONS),
   phone: z.string(),
@@ -112,6 +114,7 @@ export function studentToFormDefaults(student?: Student | null): StudentFormValu
     admissionDate: student?.admissionDate?.split("T")[0] ?? "",
     emergencyContact: student?.emergencyContact ?? "",
     guardians: (student?.guardians ?? []).map((g) => ({
+      id: g.id,
       name: g.name,
       relationship: g.relationship,
       phone: g.phone ?? "",

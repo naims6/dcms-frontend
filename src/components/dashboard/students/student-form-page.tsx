@@ -3,9 +3,9 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { Link, useRouter } from "@/i18n/navigation";
 import {
-  type GuardianDto,
   type Student,
   type UpdateStudentDto,
+  type UpdateGuardianDto,
   type CreateStudentDto,
 } from "@/types/student.types";
 import { useCreateStudentMutation, useUpdateStudentMutation } from "@/hooks/queries/use-student-queries";
@@ -107,9 +107,11 @@ export function StudentFormPage({ mode, student }: StudentFormPageProps) {
       emergencyContact: values.emergencyContact.trim() || undefined,
     };
 
-    const guardians: GuardianDto[] = values.guardians
+    // Rows without a name are discarded; the rest are the full desired set
+    const guardians: UpdateGuardianDto[] = values.guardians
       .filter((g) => g.name.trim())
       .map((g) => ({
+        ...(g.id && { id: g.id }),
         name: g.name.trim(),
         relationship: g.relationship,
         phone: g.phone.trim() || undefined,
@@ -124,6 +126,7 @@ export function StudentFormPage({ mode, student }: StudentFormPageProps) {
           firstName: values.firstName.trim(),
           email: values.email.trim(),
           ...base,
+          guardians,
         };
         await updateMutation.mutateAsync({ id: student.id, dto });
         toast("success", "Student updated successfully.");
@@ -325,49 +328,49 @@ export function StudentFormPage({ mode, student }: StudentFormPageProps) {
           </CardContent>
         </Card>
 
-        {/* ── Guardians section (create only — PATCH has no guardian field) ── */}
-        {!isEdit && (
-          <Card className="border-border/80 shadow-xs">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2 text-base font-bold">
-                <UserRound className="h-4 w-4 text-primary" />
-                Guardians
-              </CardTitle>
-              <CardDescription className="text-xs text-muted-foreground">
-                Add parents or guardians responsible for the student.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {fields.length === 0 && (
-                <div className="rounded-lg border border-dashed border-border/70 p-6 text-center text-xs text-muted-foreground">
-                  No guardians added yet.
-                </div>
-              )}
+        {/* ── Guardians section ──────────────────────────────────── */}
+        <Card className="border-border/80 shadow-xs">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-base font-bold">
+              <UserRound className="h-4 w-4 text-primary" />
+              Guardians
+            </CardTitle>
+            <CardDescription className="text-xs text-muted-foreground">
+              {isEdit
+                ? "Add, edit or remove the guardians on record. Removed guardians are deleted."
+                : "Add parents or guardians responsible for the student."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {fields.length === 0 && (
+              <div className="rounded-lg border border-dashed border-border/70 p-6 text-center text-xs text-muted-foreground">
+                No guardians added yet.
+              </div>
+            )}
 
-              {fields.map((field, index) => (
-                <GuardianRow
-                  key={field.id}
-                  control={control}
-                  index={index}
-                  isPending={isPending}
-                  onRemove={() => remove(index)}
-                />
-              ))}
+            {fields.map((field, index) => (
+              <GuardianRow
+                key={field.id}
+                control={control}
+                index={index}
+                isPending={isPending}
+                onRemove={() => remove(index)}
+              />
+            ))}
 
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="gap-1.5 text-xs"
-                onClick={() => append(emptyGuardian())}
-                disabled={isPending}
-              >
-                <UserPlus className="h-3.5 w-3.5" />
-                Add Guardian
-              </Button>
-            </CardContent>
-          </Card>
-        )}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="gap-1.5 text-xs"
+              onClick={() => append(emptyGuardian())}
+              disabled={isPending}
+            >
+              <UserPlus className="h-3.5 w-3.5" />
+              Add Guardian
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* ── Actions ───────────────────────────────────────────── */}
         <Card className="sticky bottom-4 border-border/80 shadow-sm">

@@ -69,6 +69,8 @@ export function StudentRow({
               src={imageUrl}
               alt={student.user.firstName}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full object-cover"
+              width={36}
+              height={36}
             />
           ) : (
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs uppercase">

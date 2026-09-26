@@ -120,6 +120,17 @@ export interface UpdateStudentDto {
   religion?: StudentReligion;
   admissionDate?: string;
   emergencyContact?: string;
+  /**
+   * Full replacement of the student's guardian set.
+   * Entries with an `id` are updated in place, entries without one are created,
+   * and existing guardians missing from the array are removed server-side.
+   */
+  guardians?: UpdateGuardianDto[];
+}
+
+/** A guardian row on update — `id` present means "update this existing guardian". */
+export interface UpdateGuardianDto extends GuardianDto {
+  id?: string;
 }
 
 export interface DeleteStudentResponse {

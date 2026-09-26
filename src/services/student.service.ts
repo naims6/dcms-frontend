@@ -62,22 +62,9 @@ export async function getStudentByIdApi(id: string): Promise<Student> {
 
 /**
  * PATCH /students/:id — update a student.
- * Sends JSON unless an `image` file is provided, in which case the request is
- * sent as multipart form-data (matching the backend's dual JSON/form-data support).
+ * JSON only; the avatar is changed via POST /students/:id/avatar.
  */
-export async function updateStudentApi(
-  id: string,
-  dto: UpdateStudentDto,
-  image?: File,
-): Promise<Student> {
-  if (image) {
-    const formData = new FormData();
-    Object.entries(dto).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) formData.append(key, String(value));
-    });
-    formData.append("image", image);
-    return apiClient.patchForm<Student>(`/students/${id}`, formData);
-  }
+export async function updateStudentApi(id: string, dto: UpdateStudentDto): Promise<Student> {
   return apiClient.patch<Student>(`/students/${id}`, dto);
 }
 

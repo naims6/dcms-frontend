@@ -36,12 +36,11 @@ export function useCreateStudentMutation() {
   });
 }
 
-/** PATCH /students/:id — update a student (JSON or multipart when `image` present). */
+/** PATCH /students/:id — update a student. */
 export function useUpdateStudentMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, dto, image }: { id: string; dto: UpdateStudentDto; image?: File }) =>
-      updateStudentApi(id, dto, image),
+    mutationFn: ({ id, dto }: { id: string; dto: UpdateStudentDto }) => updateStudentApi(id, dto),
     onSuccess: (_, { id }) => {
       qc.invalidateQueries({ queryKey: queryKeys.students.all });
       qc.invalidateQueries({ queryKey: queryKeys.students.detail(id) });

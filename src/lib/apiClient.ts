@@ -175,15 +175,6 @@ export const apiClient = {
       multipart: true,
     }),
 
-  /** PATCH a `FormData` body (auth included, Content-Type left to the browser). */
-  patchForm: <T>(url: string, formData: FormData, options?: FetchOptions) =>
-    request<T>(url, {
-      ...options,
-      method: "PATCH",
-      body: formData,
-      multipart: true,
-    }),
-
   delete: <T>(url: string, options?: FetchOptions) =>
     request<T>(url, { ...options, method: "DELETE" }),
 };

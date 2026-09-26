@@ -203,6 +203,8 @@ export function StudentDetailView({ studentId }: StudentDetailViewProps) {
                   src={imageUrl}
                   alt={student.user.firstName}
                   className="h-24 w-24 rounded-full object-cover shadow-inner ring-2 ring-primary/20"
+                  width={96}
+                  height={96}
                 />
               ) : (
                 <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary/10 text-primary font-extrabold text-3xl uppercase shadow-inner">
