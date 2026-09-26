@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Can } from "@/components/auth/can";
-import { ShieldCheck, UserPlus, ArrowRight } from "lucide-react";
+import { ShieldCheck, UserPlus, GraduationCap, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
 export default function DashboardOverviewPage() {
@@ -63,6 +63,18 @@ export default function DashboardOverviewPage() {
                   <span className="flex items-center gap-2.5 text-xs font-semibold">
                     <UserPlus className="h-4 w-4 text-primary" />
                     Create New User
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </Button>
+              </Link>
+            </Can>
+
+            <Can perform="students:read">
+              <Link href="/dashboard/students" className="block">
+                <Button variant="outline" className="w-full justify-between h-11 border-border/70 hover:border-primary">
+                  <span className="flex items-center gap-2.5 text-xs font-semibold">
+                    <GraduationCap className="h-4 w-4 text-emerald-500" />
+                    Manage Students
                   </span>
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </Button>
