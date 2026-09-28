@@ -94,7 +94,8 @@ async function request<T>(
       res.status === 401 &&
       !_retry &&
       !endpoint.includes("/auth/refresh") &&
-      !endpoint.includes("/auth/login")
+      !endpoint.includes("/auth/login") &&
+      !endpoint.includes("/auth/logout")
     ) {
       const refreshSuccess = await handleTokenRefresh();
       if (refreshSuccess) {
