@@ -6,6 +6,26 @@ import {
   User,
 } from "@/types/auth.types";
 
+export interface RegisterCredentials {
+  firstName: string;
+  lastName?: string;
+  email: string;
+  password: string;
+  phone?: string;
+  roleNames?: string[];
+}
+
+/**
+ * User Registration / Admin User Creation
+ * POST /auth/register
+ */
+export async function registerApi(
+  credentials: RegisterCredentials,
+): Promise<AuthData> {
+  return apiClient.post<AuthData>("/auth/register", credentials);
+}
+
+
 /**
  * User Login
  * POST /auth/login

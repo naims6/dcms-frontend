@@ -7,6 +7,7 @@ import {
   changeUserStatusApi,
   GetUsersQueryParams,
 } from "@/services/user.service";
+import { registerApi, RegisterCredentials } from "@/services/auth.service";
 import { queryKeys } from "@/lib/query-keys";
 
 /**
@@ -80,3 +81,19 @@ export function useChangeUserStatusMutation() {
     },
   });
 }
+
+/**
+ * Create a new user account (Admin dynamic user creation)
+ */
+export function useCreateUserMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (dto: RegisterCredentials) => registerApi(dto),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.rbac.all });
+    },
+  });
+}
+
