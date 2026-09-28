@@ -91,7 +91,19 @@
       "date": "Date",
       "title": "Title",
       "attachment": "Attachment",
-      "viewDetails": "View Details"
+      "viewDetails": "View Details",
+      "view": "View",
+      "download": "PDF"
+    },
+    "modal": {
+      "noticeDetails": "Notice Details",
+      "noticeDate": "Notice Date",
+      "publishedOn": "Published On",
+      "refNo": "Reference No",
+      "category": "Category",
+      "print": "Print",
+      "downloadPdf": "Download PDF",
+      "close": "Close"
     },
     "pagination": {
       "showing": "Showing",

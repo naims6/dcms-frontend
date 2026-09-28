@@ -91,7 +91,19 @@
       "date": "তারিখ",
       "title": "শিরোনাম",
       "attachment": "ফাইল",
-      "viewDetails": "বিস্তারিত দেখুন"
+      "viewDetails": "বিস্তারিত দেখুন",
+      "view": "দেখুন",
+      "download": "পিডিএফ"
+    },
+    "modal": {
+      "noticeDetails": "বিজ্ঞপ্তির বিবরণ",
+      "noticeDate": "বিজ্ঞপ্তির তারিখ",
+      "publishedOn": "প্রকাশের তারিখ",
+      "refNo": "স্মারক নং",
+      "category": "বিভাগ",
+      "print": "প্রিন্ট করুন",
+      "downloadPdf": "পিডিএফ ডাউনলোড",
+      "close": "বন্ধ করুন"
     },
     "pagination": {
       "showing": "প্রদর্শন করা হচ্ছে",

@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { Link } from "@/i18n/navigation";
 import { Input } from "@/components/ui/input";
 import {
   Megaphone,
@@ -9,6 +10,7 @@ import {
   Briefcase,
   BarChart2,
   Download,
+  Eye,
   ChevronLeft,
   ChevronRight,
   Search,
@@ -172,7 +174,7 @@ export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoa
                 <tr className="bg-primary text-primary-foreground">
                   <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[18%] sm:w-[15%]">{t("table.date")}</th>
                   <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm border-l border-white/20">{t("table.title")}</th>
-                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[22%] sm:w-[15%] text-center border-l border-white/20">{t("table.attachment")}</th>
+                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[28%] sm:w-[22%] text-center border-l border-white/20">{t("table.attachment")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border text-foreground">
@@ -198,21 +200,31 @@ export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoa
                       <td className="py-4 px-2 sm:px-4 text-xs sm:text-sm leading-relaxed border-l border-border/40 align-top">
                         {notice.subject}
                       </td>
-                      <td className="py-2 px-1 sm:px-4 text-center border-l border-border/40 align-middle">
-                        <button
-                          onClick={() => handleDownload(notice.id, notice.subject)}
-                          disabled={downloadingId === notice.id}
-                          className="inline-flex flex-col items-center justify-center text-primary hover:text-primary/70 transition-colors group mt-1 sm:mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
-                        >
-                          <span className="text-[10px] sm:text-xs font-semibold uppercase leading-tight">
-                            {t("table.viewDetails")}
-                          </span>
-                          <div className="bg-primary/10 p-1 sm:p-1.5 rounded-full mt-1 group-hover:bg-primary/20">
-                            {downloadingId === notice.id
-                              ? <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin" />
-                              : <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
-                          </div>
-                        </button>
+                      <td className="py-3 px-2 sm:px-4 text-center border-l border-border/40 align-middle">
+                        <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                          <Link
+                            href={`/notice/${notice.id}`}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs"
+                            title={t("table.view")}
+                          >
+                            <Eye className="h-3.5 w-3.5" />
+                            <span>{t("table.view")}</span>
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => handleDownload(notice.id, notice.subject)}
+                            disabled={downloadingId === notice.id}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium border border-border bg-card hover:bg-muted text-foreground transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-xs"
+                            title={t("modal.downloadPdf")}
+                          >
+                            {downloadingId === notice.id ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+                            ) : (
+                              <Download className="h-3.5 w-3.5 text-muted-foreground" />
+                            )}
+                            <span className="hidden sm:inline">{t("table.download")}</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
