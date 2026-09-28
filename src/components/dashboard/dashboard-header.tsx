@@ -35,19 +35,22 @@ export function DashboardHeader({ onOpenSidebar }: { onOpenSidebar?: () => void 
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-card/80 px-4 md:px-6 backdrop-blur-md">
-      {/* Mobile Menu Toggle */}
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center border-b border-border bg-card/80 px-4 md:px-6 backdrop-blur-md">
+      {/* Mobile Menu Toggle — visible only on mobile/tablet */}
       <Button
         variant="ghost"
         size="icon"
         onClick={onOpenSidebar}
-        className="h-11 w-11 text-muted-foreground hover:text-foreground lg:hidden"
+        className="h-11 w-11 text-muted-foreground hover:text-foreground lg:hidden shrink-0"
         aria-label="Open menu"
       >
         <Menu className="h-6 w-6" />
       </Button>
 
-      {/* Header Actions */}
+      {/* Spacer — pushes actions to the far right */}
+      <div className="flex-1" />
+
+      {/* Header Actions — always on the RIGHT */}
       <div className="flex items-center gap-2 md:gap-3">
         {/* Language Switcher */}
         <Button

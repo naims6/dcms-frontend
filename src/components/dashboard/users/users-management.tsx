@@ -2,17 +2,28 @@
 
 import { useState } from "react";
 import { PermissionGuard } from "@/components/auth/permission-guard";
+import { Can } from "@/components/auth/can";
 import {
   useUsersQuery,
   useAssignUserRoleMutation,
   useRevokeUserRoleMutation,
 } from "@/hooks/queries/use-users-queries";
 import { useRolesQuery } from "@/hooks/queries/use-rbac-queries";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Users, Search, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, Search, Loader2, UserPlus } from "lucide-react";
 import { DashboardPageHeader } from "@/components/dashboard/shared/DashboardPageHeader";
+import { useToast } from "@/hooks/use-toast";
+import { Toast } from "@/components/shared/Toast";
 import { UserRow } from "./user-row";
+import { CreateUserDialog } from "./create-user-dialog";
 import { SimpleRole } from "@/types/rbac.types";
 
 function getRoleName(role: string | SimpleRole): string {
@@ -21,6 +32,8 @@ function getRoleName(role: string | SimpleRole): string {
 
 export function UsersManagement() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const { toast, toastState, dismiss } = useToast();
 
   const { data: users = [], isLoading: isUsersLoading } = useUsersQuery();
   const { data: allRoles = [], isLoading: isRolesLoading } = useRolesQuery();
@@ -31,11 +44,29 @@ export function UsersManagement() {
   const isRolePending =
     assignRoleMutation.isPending || revokeRoleMutation.isPending;
 
-  const handleAssignRole = (userId: string, roleId: string) =>
-    assignRoleMutation.mutateAsync({ userId, roleId });
+  const handleAssignRole = async (userId: string, roleId: string) => {
+    try {
+      await assignRoleMutation.mutateAsync({ userId, roleId });
+      toast("success", "Role assigned successfully.");
+    } catch (err: unknown) {
+      toast(
+        "error",
+        err instanceof Error ? err.message : "Failed to assign role.",
+      );
+    }
+  };
 
-  const handleRevokeRole = (userId: string, roleId: string) =>
-    revokeRoleMutation.mutateAsync({ userId, roleId });
+  const handleRevokeRole = async (userId: string, roleId: string) => {
+    try {
+      await revokeRoleMutation.mutateAsync({ userId, roleId });
+      toast("success", "Role revoked successfully.");
+    } catch (err: unknown) {
+      toast(
+        "error",
+        err instanceof Error ? err.message : "Failed to revoke role.",
+      );
+    }
+  };
 
   const filteredUsers = users.filter((u) => {
     const term = searchTerm.toLowerCase();
@@ -52,20 +83,33 @@ export function UsersManagement() {
   return (
     <PermissionGuard requiredPermission="users:read">
       <div className="space-y-6 animate-in fade-in-0 duration-300">
+        {toastState && <Toast state={toastState} onDismiss={dismiss} />}
+
         {/* Page Header */}
         <DashboardPageHeader
           title="User Accounts & Role Management"
           description="Manage RBAC roles inline. Click View to open a user's full detail page."
           icon={Users}
           actions={
-            <div className="relative w-full sm:w-72">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by name, email, role…"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 h-10 text-xs sm:text-sm"
-              />
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+              <div className="relative w-full sm:w-72">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name, email, role…"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 h-10 text-xs sm:text-sm"
+                />
+              </div>
+              <Can perform="users:create">
+                <Button
+                  onClick={() => setIsCreateOpen(true)}
+                  className="gap-2 shrink-0"
+                >
+                  <UserPlus className="h-4 w-4" />
+                  Create User
+                </Button>
+              </Can>
             </div>
           }
         />
@@ -80,8 +124,9 @@ export function UsersManagement() {
               </span>
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
-              Use the <strong>Roles</strong> dropdown to assign or revoke roles instantly.
-              Click <strong>View</strong> to open the full user profile.
+              Use the <strong>Roles</strong> dropdown to assign or revoke roles
+              instantly. Click <strong>View</strong> to open the full user
+              profile.
             </CardDescription>
           </CardHeader>
 
@@ -91,8 +136,25 @@ export function UsersManagement() {
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : filteredUsers.length === 0 ? (
-              <div className="p-8 text-center text-sm text-muted-foreground">
-                No accounts match your search.
+              <div className="p-8 text-center text-sm text-muted-foreground flex flex-col items-center gap-3">
+                <p>
+                  {searchTerm
+                    ? "No accounts match your search."
+                    : "No user accounts registered yet."}
+                </p>
+                {!searchTerm && (
+                  <Can perform="users:create">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsCreateOpen(true)}
+                      className="gap-2"
+                    >
+                      <UserPlus className="h-4 w-4" />
+                      Create first user
+                    </Button>
+                  </Can>
+                )}
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -122,6 +184,18 @@ export function UsersManagement() {
             )}
           </CardContent>
         </Card>
+
+        {/* Dynamic Create User Dialog */}
+        <CreateUserDialog
+          open={isCreateOpen}
+          onOpenChange={setIsCreateOpen}
+          onSuccess={(created) => {
+            const fullName = [created.firstName, created.lastName]
+              .filter(Boolean)
+              .join(" ");
+            toast("success", `User "${fullName}" created successfully.`);
+          }}
+        />
       </div>
     </PermissionGuard>
   );

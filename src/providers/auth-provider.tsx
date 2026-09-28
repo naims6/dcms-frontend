@@ -44,7 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logoutMutation = useMutation({
     mutationFn: () => logoutApi(),
     onSettled: () => {
-      queryClient.clear();
+      queryClient.setQueryData(queryKeys.auth.me(), null);
+      queryClient.removeQueries();
       router.push("/login");
     },
   });
@@ -54,7 +55,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    await logoutMutation.mutateAsync();
+    try {
+      await logoutMutation.mutateAsync();
+    } catch {
+      queryClient.setQueryData(queryKeys.auth.me(), null);
+      queryClient.removeQueries();
+      router.push("/login");
+    }
   };
 
   const fetchCurrentUser = useCallback(async () => {
