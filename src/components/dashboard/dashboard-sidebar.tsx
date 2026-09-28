@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
+  Home,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -187,7 +188,7 @@ export function DashboardSidebar({
       {/* Desktop sidebar (hidden on small screens) */}
       <aside
         className={cn(
-          "relative hidden lg:flex flex-col border-r border-border bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out select-none",
+          "relative hidden lg:flex flex-col h-screen sticky top-0 border-r border-border bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out select-none",
           collapsed ? "w-16" : "w-64",
         )}
       >
@@ -233,17 +234,26 @@ export function DashboardSidebar({
           {renderNav({ collapsed })}
         </nav>
 
-        {/* Footer info */}
-        {!collapsed && (
-          <div className="p-4 border-t border-sidebar-border">
-            <div className="rounded-lg bg-sidebar-accent/50 p-3 text-xs text-sidebar-accent-foreground">
-              <p className="font-semibold">DCMS v1.0.0</p>
-              <p className="text-muted-foreground mt-0.5">
-                Role Based Access Control
-              </p>
-            </div>
-          </div>
-        )}
+        {/* Footer: Back to Home */}
+        <div className="p-3 border-t border-sidebar-border">
+          {collapsed ? (
+            <Link
+              href="/"
+              className="flex h-10 w-10 mx-auto items-center justify-center rounded-lg text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+              title="Back to Home"
+            >
+              <Home className="h-5 w-5 text-sidebar-foreground/70" />
+            </Link>
+          ) : (
+            <Link
+              href="/"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+            >
+              <Home className="h-5 w-5 shrink-0 text-sidebar-foreground/70" />
+              <span className="truncate">Back to Home</span>
+            </Link>
+          )}
+        </div>
       </aside>
 
       {/* Mobile drawer sidebar (full size, opened via header menu button) */}
@@ -276,14 +286,16 @@ export function DashboardSidebar({
             {renderNav({ onNavigate: onClose })}
           </nav>
 
-          {/* Footer info */}
-          <div className="p-4 border-t border-sidebar-border">
-            <div className="rounded-lg bg-sidebar-accent/50 p-3 text-xs text-sidebar-accent-foreground">
-              <p className="font-semibold">DCMS v1.0.0</p>
-              <p className="text-muted-foreground mt-0.5">
-                Role Based Access Control
-              </p>
-            </div>
+          {/* Footer: Back to Home */}
+          <div className="p-3 border-t border-sidebar-border">
+            <Link
+              href="/"
+              onClick={onClose}
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+            >
+              <Home className="h-5 w-5 shrink-0 text-sidebar-foreground/70" />
+              <span className="truncate">Back to Home</span>
+            </Link>
           </div>
         </SheetContent>
       </Sheet>
