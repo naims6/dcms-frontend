@@ -1,25 +1,65 @@
 import { useState } from "react";
-import { AdmissionFormValues } from "@/schemas/admissions";
-import { apiClient } from "@/lib/apiClient";
+import { type AdmissionFormValues } from "@/schemas/admissions";
+import { applyAdmissionApi } from "@/services/admission.service";
+import type { ApplyAdmissionResponse } from "@/types/admission";
 
 export function useAdmissionForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [photoFileName, setPhotoFileName] = useState<string>("");
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const onSubmit = async (data: AdmissionFormValues) => {
+  const handlePhotoSelect = (file: File | null) => {
+    setPhotoFile(file);
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPhotoPreview(url);
+    } else {
+      if (photoPreview) URL.revokeObjectURL(photoPreview);
+      setPhotoPreview(null);
+    }
+  };
+
+  const onSubmit = async (
+    data: AdmissionFormValues,
+  ): Promise<{
+    success: boolean;
+    data?: ApplyAdmissionResponse;
+    message?: string;
+  }> => {
     setIsSubmitting(true);
     try {
-      const response = await apiClient.post<{ message?: string }>("/admissions", data);
+      const formData = new FormData();
 
-      console.log("Form submitted successfully:", response);
+      // Append file if selected
+      if (photoFile) {
+        formData.append("photo", photoFile);
+      }
+
+      // Strip frontend-only fields — backend DTO does not accept these
+      const { confirmPassword: _confirmPassword, agreeTerms: _agreeTerms, ...backendData } = data;
+
+      // Append all backend-safe form values
+      Object.entries(backendData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          formData.append(key, String(value));
+        }
+      });
+
+      const response = await applyAdmissionApi(formData);
+
       return {
         success: true,
-        message: response?.message || "Application submitted successfully!",
+        data: response,
+        message:
+          response?.message ||
+          "Application submitted successfully! Please check your email for the verification OTP.",
       };
     } catch (error: unknown) {
-      console.error("Submission error:", error);
+      console.error("Admission submission error:", error);
       const errorMessage =
-        error instanceof Error ? error.message : "Submission failed. Please try again.";
+        error instanceof Error
+          ? error.message
+          : "Submission failed. Please check the fields and try again.";
       return {
         success: false,
         message: errorMessage,
@@ -31,9 +71,9 @@ export function useAdmissionForm() {
 
   return {
     isSubmitting,
-    setIsSubmitting,
-    photoFileName,
-    setPhotoFileName,
+    photoFile,
+    photoPreview,
+    onPhotoSelect: handlePhotoSelect,
     onSubmit,
   };
 }

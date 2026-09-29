@@ -1,44 +1,50 @@
 {
   "admissions": {
     "title": "Student Admission",
-    "titleHightlight": "Form",
+    "titleHightlight": "Portal",
     "badge": "Enroll Now",
-    "subtitle": "Please fill out all required fields to complete your application",
+    "subtitle": "Complete the 4-step admission process to apply, verify email, pay fees, and download your official receipt.",
     "sections": {
       "student": {
         "title": "Student Information",
-        "description": "Basic details about the student"
+        "description": "Basic personal details and student photograph"
       },
       "academic": {
         "title": "Academic Information",
-        "description": "Previous education and class applying for"
+        "description": "Target class and previous academic background"
       },
       "parent": {
-        "title": "Parent Information",
-        "description": "Details about father and mother"
+        "title": "Parent & Guardian Information",
+        "description": "Details about father, mother, and optional guardian"
       },
       "fatherInfo": "Father's Information",
       "motherInfo": "Mother's Information",
       "contact": {
-        "title": "Contact Information",
-        "description": "Address and contact details"
+        "title": "Contact & Address Information",
+        "description": "Email, phone number, and present/permanent address"
       },
       "additional": {
-        "title": "Account Information",
-        "description": "Security and account details"
+        "title": "Account & Security Credentials",
+        "description": "Applicant account password and terms agreement"
       }
     },
     "fields": {
       "fullName": "Full Name",
+      "firstName": "First Name",
+      "lastName": "Last Name",
       "dateOfBirth": "Date of Birth",
       "gender": "Gender",
       "bloodGroup": "Blood Group",
       "religion": "Religion",
+      "nationality": "Nationality",
+      "nationalIdOrBirthReg": "Birth Reg / NID No.",
       "studentPhoto": "Student Photo",
       "classApplying": "Class Applying For",
       "previousSchool": "Previous School Name",
       "previousClass": "Previous Class",
       "previousGrade": "Result/Grade",
+      "previousBoardRoll": "Previous Board Roll",
+      "previousPassingYear": "Previous Passing Year",
       "name": "Name",
       "occupation": "Occupation",
       "phone": "Phone Number",
@@ -51,7 +57,7 @@
       "address": "Address",
       "city": "City",
       "postalCode": "Postal Code",
-      "email": "Email",
+      "email": "Email Address",
       "emergencyContact": "Emergency Contact",
       "agreeTerms": "I agree to the terms and conditions",
       "password": "Password",
@@ -59,23 +65,26 @@
     },
     "placeholders": {
       "fullName": "Enter full name",
+      "firstName": "e.g. Rahim",
+      "lastName": "e.g. Uddin",
+      "birthReg": "e.g. 20081234567890123",
       "selectGender": "Select gender",
       "selectBloodGroup": "Select blood group",
       "selectReligion": "Select religion",
       "religion": "Enter religion",
-      "chooseFile": "Choose File",
-      "selectClass": "Select class",
-      "previousSchool": "Enter previous school",
+      "chooseFile": "Upload Photo",
+      "selectClass": "Select target class",
+      "previousSchool": "Enter previous school name",
       "previousClass": "e.g., Class 5",
-      "previousGrade": "e.g., A+, 85%",
-      "fatherName": "Father's name",
-      "occupation": "Occupation",
+      "previousGrade": "e.g., GPA 5.00 or A+",
+      "fatherName": "Father's full name",
+      "occupation": "Occupation (e.g. Business/Service)",
       "phone": "+880 1700 000000",
-      "motherName": "Mother's name",
-      "address": "Enter full address",
-      "city": "Enter city",
+      "motherName": "Mother's full name",
+      "address": "Enter street address / village / road",
+      "city": "Enter city / district",
       "postalCode": "Enter postal code",
-      "email": "email@example.com"
+      "email": "student@example.com"
     },
     "options": {
       "male": "Male",
@@ -92,13 +101,13 @@
       "class-10": "Class 10"
     },
     "buttons": {
-      "submit": "Submit Application",
-      "submitting": "Submitting..."
+      "submit": "Submit & Proceed to Email Verification",
+      "submitting": "Submitting Application..."
     },
     "messages": {
       "success": "Application submitted successfully!",
-      "error": "Submission failed. Please try again.",
-      "termsDescription": "By checking this box, you confirm that all information provided is accurate and complete."
+      "error": "Submission failed. Please check required fields and try again.",
+      "termsDescription": "By checking this box, you confirm that all information provided is accurate and authentic."
     },
     "errors": {
       "required": "This field is required",

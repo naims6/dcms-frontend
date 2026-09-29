@@ -4,14 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const PHONE_REGEX = /^[0-9+\-\s()]+$/;
 const MIN_PHONE_LENGTH = 10;
 const MIN_NAME_LENGTH = 2;
-const MIN_ADDRESS_LENGTH = 5;
-const MIN_CITY_LENGTH = 2;
-const MIN_POSTAL_CODE_LENGTH = 4;
+const MIN_ADDRESS_LENGTH = 3;
 
 export const admissionFormSchema = z
   .object({
-    // Student Information
-    fullName: z
+    // Student Personal Information
+    firstName: z
       .string()
       .min(MIN_NAME_LENGTH, {
         message: JSON.stringify({
@@ -19,27 +17,42 @@ export const admissionFormSchema = z
           values: { min: MIN_NAME_LENGTH },
         }),
       })
-      .max(100, {
+      .max(50, {
         message: JSON.stringify({
           key: "errors.maxLength",
-          values: { max: 100 },
+          values: { max: 50 },
+        }),
+      }),
+    lastName: z
+      .string()
+      .min(MIN_NAME_LENGTH, {
+        message: JSON.stringify({
+          key: "errors.minLength",
+          values: { min: MIN_NAME_LENGTH },
+        }),
+      })
+      .max(50, {
+        message: JSON.stringify({
+          key: "errors.maxLength",
+          values: { max: 50 },
         }),
       }),
     dateOfBirth: z.string().min(1, { message: "errors.required" }),
-    gender: z.string().min(1, { message: "errors.required" }),
+    gender: z.enum(["MALE", "FEMALE", "OTHER"], {
+      message: "errors.required",
+    }),
     bloodGroup: z.string().optional(),
-    religion: z.string(),
-    studentPhoto: z
-      .string()
-      .url("errors.invalidUrl")
-      .optional()
-      .or(z.literal("")),
+    religion: z.string().optional(),
+    nationality: z.string().default("Bangladeshi"),
+    nationalIdOrBirthReg: z.string().optional(),
 
     // Academic Information
-    classApplying: z.string().min(1, { message: "errors.required" }),
-    previousSchool: z.string(),
-    previousClass: z.string(),
-    previousGrade: z.string().optional(),
+    targetClassId: z.string().min(1, { message: "errors.required" }),
+    previousSchoolName: z.string().optional(),
+    previousClass: z.string().optional(),
+    previousGpa: z.string().optional(),
+    previousBoardRoll: z.string().optional(),
+    previousPassingYear: z.string().optional(),
 
     // Parent Information — Father
     fatherName: z
@@ -50,17 +63,16 @@ export const admissionFormSchema = z
           values: { min: MIN_NAME_LENGTH },
         }),
       })
-      .max(100, {
-        message: JSON.stringify({
-          key: "errors.maxLength",
-          values: { max: 100 },
-        }),
-      }),
-    fatherOccupation: z.string(),
+      .max(100),
     fatherPhone: z
       .string()
-      .min(MIN_PHONE_LENGTH, { message: "errors.minPhoneLength" })
-      .regex(PHONE_REGEX, { message: "errors.invalidPhone" }),
+      .optional()
+      .refine(
+        (val) => !val || (val.length >= MIN_PHONE_LENGTH && PHONE_REGEX.test(val)),
+        { message: "errors.invalidPhone" },
+      ),
+    fatherOccupation: z.string().optional(),
+    fatherNid: z.string().optional(),
 
     // Parent Information — Mother
     motherName: z
@@ -71,113 +83,112 @@ export const admissionFormSchema = z
           values: { min: MIN_NAME_LENGTH },
         }),
       })
-      .max(100, {
-        message: JSON.stringify({
-          key: "errors.maxLength",
-          values: { max: 100 },
-        }),
-      }),
-    motherOccupation: z.string(),
+      .max(100),
     motherPhone: z
+      .string()
+      .optional()
+      .refine(
+        (val) => !val || (val.length >= MIN_PHONE_LENGTH && PHONE_REGEX.test(val)),
+        { message: "errors.invalidPhone" },
+      ),
+    motherOccupation: z.string().optional(),
+    motherNid: z.string().optional(),
+
+    // Local Guardian (Optional)
+    localGuardianName: z.string().optional(),
+    localGuardianPhone: z.string().optional(),
+    localGuardianRelation: z.string().optional(),
+    localGuardianAddress: z.string().optional(),
+
+    // Contact Information & Present Address
+    email: z.string().email({ message: "errors.invalidEmail" }),
+    phone: z
       .string()
       .min(MIN_PHONE_LENGTH, { message: "errors.minPhoneLength" })
       .regex(PHONE_REGEX, { message: "errors.invalidPhone" }),
-
-    // Contact Information
-    address: z
+    presentStreetAddress: z
       .string()
       .min(MIN_ADDRESS_LENGTH, {
         message: JSON.stringify({
           key: "errors.minLength",
           values: { min: MIN_ADDRESS_LENGTH },
         }),
-      })
-      .max(500, {
-        message: JSON.stringify({
-          key: "errors.maxLength",
-          values: { max: 500 },
-        }),
       }),
-    city: z
-      .string()
-      .min(MIN_CITY_LENGTH, {
-        message: JSON.stringify({
-          key: "errors.minLength",
-          values: { min: MIN_CITY_LENGTH },
-        }),
-      })
-      .max(50, {
-        message: JSON.stringify({
-          key: "errors.maxLength",
-          values: { max: 50 },
-        }),
-      }),
-    postalCode: z
-      .string()
-      .min(MIN_POSTAL_CODE_LENGTH, {
-        message: JSON.stringify({
-          key: "errors.minLength",
-          values: { min: MIN_POSTAL_CODE_LENGTH },
-        }),
-      })
-      .max(20, {
-        message: JSON.stringify({
-          key: "errors.maxLength",
-          values: { max: 20 },
-        }),
-      }),
-    email: z.email({ message: "errors.invalidEmail" }),
-    emergencyContact: z
-      .string()
-      .min(MIN_PHONE_LENGTH, { message: "errors.minPhoneLength" })
-      .regex(PHONE_REGEX, { message: "errors.invalidPhone" }),
+    presentUpazila: z.string().min(2, { message: "errors.required" }),
+    presentDistrict: z.string().min(2, { message: "errors.required" }),
+    presentDivision: z.string().min(2, { message: "errors.required" }),
+    presentPostCode: z.string().optional(),
 
-    // Additional Information
-    agreeTerms: z.boolean().refine((val) => val === true, {
-      message: "errors.agreeTerms",
-    }),
+    // Permanent Address
+    sameAsPresentAddress: z.boolean().default(true),
+    permanentStreetAddress: z.string().optional(),
+    permanentUpazila: z.string().optional(),
+    permanentDistrict: z.string().optional(),
+    permanentDivision: z.string().optional(),
+    permanentPostCode: z.string().optional(),
+
+    // Credentials & Agreement
     password: z.string().min(6, {
       message: JSON.stringify({
         key: "errors.minLength",
         values: { min: 6 },
       }),
     }),
-    confirmPassword: z.string(),
+    confirmPassword: z.string().min(6, { message: "errors.required" }),
+    agreeTerms: z.boolean().refine((val) => val === true, {
+      message: "errors.agreeTerms",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "errors.passwordMatch",
     path: ["confirmPassword"],
   });
 
-// TypeScript type inferred from schema
 export type AdmissionFormValues = z.infer<typeof admissionFormSchema>;
 
-// Default values — all strings for register() compatibility
 export const admissionFormDefaultValues: AdmissionFormValues = {
-  fullName: "",
+  firstName: "",
+  lastName: "",
   dateOfBirth: "",
-  gender: "",
+  gender: "MALE",
   bloodGroup: "",
-  religion: "",
-  studentPhoto: "",
-  classApplying: "",
-  previousSchool: "",
+  religion: "ISLAM",
+  nationality: "Bangladeshi",
+  nationalIdOrBirthReg: "",
+  targetClassId: "",
+  previousSchoolName: "",
   previousClass: "",
-  previousGrade: "",
+  previousGpa: "",
+  previousBoardRoll: "",
+  previousPassingYear: "",
   fatherName: "",
-  fatherOccupation: "",
   fatherPhone: "",
+  fatherOccupation: "",
+  fatherNid: "",
   motherName: "",
-  motherOccupation: "",
   motherPhone: "",
-  address: "",
-  city: "",
-  postalCode: "",
+  motherOccupation: "",
+  motherNid: "",
+  localGuardianName: "",
+  localGuardianPhone: "",
+  localGuardianRelation: "",
+  localGuardianAddress: "",
   email: "",
-  emergencyContact: "",
-  agreeTerms: false,
+  phone: "",
+  presentStreetAddress: "",
+  presentUpazila: "",
+  presentDistrict: "Dhaka",
+  presentDivision: "Dhaka",
+  presentPostCode: "",
+  sameAsPresentAddress: true,
+  permanentStreetAddress: "",
+  permanentUpazila: "",
+  permanentDistrict: "",
+  permanentDivision: "",
+  permanentPostCode: "",
   password: "",
   confirmPassword: "",
+  agreeTerms: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
