@@ -62,75 +62,79 @@ function AdmissionsContent() {
 
   // Restore saved state from sessionStorage or handle URL parameters (e.g. from payment callback)
   useEffect(() => {
-    // 1. Check URL query params (e.g. returning from payment callback /admission/complete)
-    const tranIdParam = searchParams.get("tranId");
-    const statusParam = searchParams.get("status");
-    const appNoParam = searchParams.get("applicationNo");
-    const identifierParam = searchParams.get("identifier");
+    const timer = setTimeout(() => {
+      // 1. Check URL query params
+      const tranIdParam = searchParams.get("tranId");
+      const statusParam = searchParams.get("status");
+      const appNoParam = searchParams.get("applicationNo");
+      const identifierParam = searchParams.get("identifier");
 
-    const identifier = appNoParam || identifierParam || tranIdParam;
+      const identifier = appNoParam || identifierParam || tranIdParam;
 
-    if (
-      identifier &&
-      (statusParam === "success" || searchParams.get("step") === "4")
-    ) {
-      void (async () => {
-        try {
-          const receipt = await getAdmissionReceiptApi(identifier);
-          if (receipt) {
-            setReceiptData(receipt);
-            setApplicationNo(receipt.applicationNo);
-            setApplicantEmail(receipt.email);
-            setCurrentStep(4);
-            toast(
-              "success",
-              "Payment confirmed! Here is your official admission receipt.",
-            );
-            return;
+      if (
+        identifier &&
+        (statusParam === "success" || searchParams.get("step") === "4")
+      ) {
+        void (async () => {
+          try {
+            const receipt = await getAdmissionReceiptApi(identifier);
+            if (receipt) {
+              setReceiptData(receipt);
+              setApplicationNo(receipt.applicationNo);
+              setApplicantEmail(receipt.email);
+              setCurrentStep(4);
+              toast(
+                "success",
+                "Payment confirmed! Here is your official admission receipt.",
+              );
+              return;
+            }
+          } catch {
+            // If receipt fetch fails, fallback to session
           }
-        } catch {
-          // If receipt fetch fails, fallback to session
-        }
-      })();
-    }
-
-    if (
-      statusParam === "fail" ||
-      statusParam === "cancel" ||
-      statusParam === "error"
-    ) {
-      const msg =
-        searchParams.get("message") ||
-        (statusParam === "cancel"
-          ? "Payment was cancelled. You can retry payment below."
-          : "Payment failed. Please try again.");
-      toast("error", msg);
-      setCurrentStep(3);
-      return;
-    }
-
-    // 2. Restore saved session state if available
-    try {
-      const saved = sessionStorage.getItem(SESSION_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.applicationNo && parsed.email) {
-          setApplicationNo(parsed.applicationNo);
-          setApplicantEmail(parsed.email);
-          if (parsed.admissionFee) setAdmissionFee(parsed.admissionFee);
-          if (parsed.currency) setCurrency(parsed.currency);
-          if (parsed.step && parsed.step > 1 && !statusParam) {
-            setCurrentStep(parsed.step);
-          }
-          if (parsed.receiptData) {
-            setReceiptData(parsed.receiptData);
-          }
-        }
+        })();
       }
-    } catch {
-      // Ignore sessionStorage parsing errors
-    }
-  }, [searchParams]);
+
+      if (
+        statusParam === "fail" ||
+        statusParam === "cancel" ||
+        statusParam === "error"
+      ) {
+        const msg =
+          searchParams.get("message") ||
+          (statusParam === "cancel"
+            ? "Payment was cancelled. You can retry payment below."
+            : "Payment failed. Please try again.");
+        toast("error", msg);
+        setCurrentStep(3);
+        return;
+      }
+
+      // 2. Restore saved session state if available
+      try {
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.applicationNo && parsed.email) {
+            setApplicationNo(parsed.applicationNo);
+            setApplicantEmail(parsed.email);
+            if (parsed.admissionFee) setAdmissionFee(parsed.admissionFee);
+            if (parsed.currency) setCurrency(parsed.currency);
+            if (parsed.step && parsed.step > 1 && !statusParam) {
+              setCurrentStep(parsed.step);
+            }
+            if (parsed.receiptData) {
+              setReceiptData(parsed.receiptData);
+            }
+          }
+        }
+      } catch {
+        // Ignore sessionStorage parsing errors
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [searchParams, toast]);
 
   // Save state to sessionStorage whenever step or application info updates
   useEffect(() => {

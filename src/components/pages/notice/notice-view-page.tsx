@@ -4,7 +4,7 @@ import { useRouter } from "@/i18n/navigation";
 import { Notice } from "@/types/notice.types";
 import { useState } from "react";
 import { downloadNoticePdfApi } from "@/services/notice.service";
-import { ArrowLeft, Download, Loader2, Printer } from "lucide-react";
+import { ArrowLeft, Download, Loader2 } from "lucide-react";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-GB", {
@@ -54,13 +54,6 @@ export function NoticeViewPage({ notice }: NoticeViewPageProps) {
         </button>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => window.print()}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-md border border-border bg-card text-sm font-medium text-foreground hover:bg-accent transition-colors shadow-xs cursor-pointer"
-          >
-            <Printer className="h-4 w-4" />
-            <span>Print</span>
-          </button>
           <button
             onClick={handleDownload}
             disabled={downloading}
