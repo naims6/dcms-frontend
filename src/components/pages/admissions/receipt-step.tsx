@@ -2,20 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  Printer,
-  CheckCircle2,
-  Copy,
-  Check,
-  RotateCcw,
-  School,
-  Calendar,
-  CreditCard,
-  User,
-  ShieldCheck,
-} from "lucide-react";
+import { CheckCircle2, Download, Loader2, RotateCcw, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { downloadReceiptAsPdf } from "@/lib/pdf-download";
 import type { AdmissionReceipt } from "@/types/admission";
 
 interface ReceiptStepProps {
@@ -23,250 +12,153 @@ interface ReceiptStepProps {
   onReset: () => void;
 }
 
+function formatDate(dateStr?: string) {
+  return new Date(dateStr || Date.now()).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function Row({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div className="flex justify-between py-2 border-b border-gray-100 last:border-0">
+      <span className="text-gray-500 text-sm">{label}</span>
+      <span className="text-gray-900 text-sm font-medium text-right">{value || "—"}</span>
+    </div>
+  );
+}
+
 export function ReceiptStep({ receipt, onReset }: ReceiptStepProps) {
-  const [copied, setCopied] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const handlePrint = () => {
-    window.print();
+  const handleDownload = async () => {
+    if (isDownloading) return;
+    setIsDownloading(true);
+    try {
+      await downloadReceiptAsPdf(receipt);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
-  const handleCopyCode = () => {
-    if (!receipt.verificationCode) return;
-    navigator.clipboard.writeText(receipt.verificationCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const { applicant, payment } = receipt;
+
+  const paymentMethod = payment?.cardType
+    ? `${payment.provider} (${payment.cardType})`
+    : payment?.provider;
 
   return (
-    <div className="max-w-3xl mx-auto py-6 space-y-6">
-      {/* Top Banner & Action Controls (Hidden on print) */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 print:hidden">
+    <div className="max-w-2xl mx-auto py-8 space-y-6">
+
+      {/* Success banner */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
-            <CheckCircle2 className="h-6 w-6" />
+          <div className="h-9 w-9 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
+            <CheckCircle2 className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-foreground">
-              Admission Application & Payment Completed!
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              Your application has been received and verified. Please download or print your official receipt.
-            </p>
+            <p className="font-semibold text-gray-900 text-sm">Application submitted successfully!</p>
+            <p className="text-xs text-gray-500">Download your official receipt below.</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <Button
-            onClick={handlePrint}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md"
-          >
-            <Printer className="h-4 w-4 mr-2" />
-            Print Receipt / PDF
+          <Button onClick={handleDownload} disabled={isDownloading} size="sm">
+            {isDownloading ? (
+              <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</>
+            ) : (
+              <><Download className="h-4 w-4 mr-2" />Download PDF</>
+            )}
           </Button>
-
-          <Button
-            variant="outline"
-            onClick={onReset}
-            className="text-xs border-border"
-          >
-            <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-            New Application
+          <Button variant="outline" size="sm" onClick={onReset}>
+            <RotateCcw className="h-3.5 w-3.5 mr-1.5" />New
           </Button>
         </div>
       </div>
 
-      {/* Official Printable Receipt Voucher */}
-      <Card
-        id="admission-receipt-voucher"
-        className="border-2 border-border/80 shadow-2xl bg-card overflow-hidden print:border-none print:shadow-none print:p-0"
-      >
-        <CardContent className="p-8 md:p-12 space-y-8">
-          {/* Institution Header */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b-2 border-primary/20">
-            <div className="flex items-center gap-4 text-center sm:text-left">
-              <div className="h-16 w-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
-                <School className="h-9 w-9" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-black uppercase tracking-tight text-foreground">
-                  Dhaka Central Model School
-                </h1>
-                <p className="text-xs font-medium text-muted-foreground">
-                  Excellence in Education, Character & Future Leadership
-                </p>
-                <p className="text-[11px] text-muted-foreground">
-                  Mirpur, Dhaka-1216, Bangladesh • admissions@dcms.edu.bd
-                </p>
-              </div>
-            </div>
+      {/* Receipt preview card */}
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
 
-            {/* Receipt & Verification Badge */}
-            <div className="text-center sm:text-right space-y-1">
-              <span className="inline-block px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 text-xs font-black tracking-widest uppercase">
-                {receipt.payment?.status || "PAID & VALIDATED"}
-              </span>
-              <p className="text-xs font-mono text-muted-foreground">
-                Receipt No: <strong className="text-foreground">{receipt.receiptNo}</strong>
-              </p>
-              <p className="text-xs font-mono text-muted-foreground">
-                Date: {new Date(receipt.issuedAt || Date.now()).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </p>
+        {/* Header */}
+        <div className="bg-blue-700 text-white px-8 py-6">
+          <p className="text-[11px] font-medium uppercase tracking-widest text-blue-200 mb-1">Official Receipt</p>
+          <h1 className="text-xl font-bold">Dhaka Central Model School</h1>
+          <p className="text-xs text-blue-200 mt-1">Mirpur, Dhaka-1216 · admissions@dcms.edu.bd</p>
+        </div>
+
+        <div className="px-8 py-6 space-y-6">
+
+          {/* Meta row */}
+          <div className="flex items-start justify-between flex-wrap gap-3">
+            <div>
+              <p className="text-[11px] text-gray-400 uppercase tracking-wider">Receipt No.</p>
+              <p className="text-sm font-semibold font-mono text-gray-900">{receipt.receiptNo}</p>
             </div>
+            <div>
+              <p className="text-[11px] text-gray-400 uppercase tracking-wider">Date Issued</p>
+              <p className="text-sm font-semibold text-gray-900">{formatDate(receipt.issuedAt)}</p>
+            </div>
+            <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold border border-green-200">
+              {payment?.status || "PAID"}
+            </span>
           </div>
 
-          {/* Subheader Title */}
-          <div className="text-center">
-            <h2 className="text-lg font-extrabold uppercase tracking-widest text-primary">
-              Official Admission Application & Fee Voucher
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Status: <span className="font-semibold text-foreground">{receipt.reviewStatus}</span>
-            </p>
-          </div>
+          <hr className="border-gray-100" />
 
-          {/* Main Details Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-xl bg-muted/20 border border-border/40">
-            {/* Applicant Photo */}
-            <div className="flex flex-col items-center justify-center p-2 text-center border-b md:border-b-0 md:border-r border-border/40 pb-4 md:pb-0">
-              <div className="relative h-28 w-28 rounded-xl overflow-hidden border-2 border-primary/30 shadow-md mb-2 bg-muted">
-                {receipt.applicant?.photoUrl ? (
-                  <Image
-                    src={receipt.applicant.photoUrl}
-                    alt="Applicant Photo"
-                    fill
-                    className="object-cover"
-                  />
+          {/* Applicant */}
+          <div>
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">Applicant</p>
+            <div className="flex items-center gap-4">
+              <div className="relative h-16 w-16 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 shrink-0">
+                {applicant?.photoUrl ? (
+                  <Image src={applicant.photoUrl} alt="Applicant" fill className="object-cover" />
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center text-muted-foreground">
-                    <User className="h-12 w-12" />
+                  <div className="h-full w-full flex items-center justify-center text-gray-300">
+                    <User className="h-7 w-7" />
                   </div>
                 )}
               </div>
-              <span className="text-xs font-bold text-foreground">
-                {receipt.applicant?.fullName}
-              </span>
-              <span className="text-[11px] font-mono text-primary font-bold">
-                {receipt.applicationNo}
-              </span>
-            </div>
-
-            {/* Applicant & Parent Information */}
-            <div className="space-y-2 text-xs md:col-span-2">
-              <h4 className="font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/30">
-                <User className="h-3.5 w-3.5 text-primary" />
-                <span>Candidate Information</span>
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 pt-1">
-                <div>
-                  <span className="text-muted-foreground">Candidate Name: </span>
-                  <strong className="text-foreground">{receipt.applicant?.fullName}</strong>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Target Class: </span>
-                  <strong className="text-foreground">{receipt.applicant?.targetClassId}</strong>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Email: </span>
-                  <span className="font-mono text-foreground">{receipt.applicant?.email || receipt.email}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Contact Phone: </span>
-                  <span className="font-mono text-foreground">{receipt.applicant?.phone}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Father&apos;s Name: </span>
-                  <span className="text-foreground">{receipt.applicant?.fatherName || "—"}</span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Mother&apos;s Name: </span>
-                  <span className="text-foreground">{receipt.applicant?.motherName || "—"}</span>
-                </div>
+              <div>
+                <p className="text-base font-bold text-gray-900">{applicant?.fullName}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{applicant?.email || receipt.email}</p>
+                <p className="text-xs font-mono text-blue-600 font-semibold mt-0.5">{receipt.applicationNo}</p>
               </div>
             </div>
           </div>
 
-          {/* Payment & Transaction Info */}
-          <div className="space-y-3">
-            <h4 className="font-bold uppercase tracking-wider text-xs text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/30">
-              <CreditCard className="h-3.5 w-3.5 text-primary" />
-              <span>Payment Details</span>
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl border border-border/40 bg-card text-xs">
-              <div>
-                <span className="text-muted-foreground block text-[11px]">Transaction ID</span>
-                <strong className="font-mono text-foreground">{receipt.payment?.tranId}</strong>
-              </div>
-              <div>
-                <span className="text-muted-foreground block text-[11px]">Payment Method</span>
-                <strong className="text-foreground">
-                  {receipt.payment?.provider} {receipt.payment?.cardType ? `(${receipt.payment.cardType})` : ""}
-                </strong>
-              </div>
-              <div>
-                <span className="text-muted-foreground block text-[11px]">Amount Paid</span>
-                <strong className="text-primary font-bold text-sm">
-                  {receipt.payment?.currency} {Number(receipt.payment?.amount || 100).toFixed(2)}
-                </strong>
-              </div>
-              <div>
-                <span className="text-muted-foreground block text-[11px]">Payment Status</span>
-                <strong className="text-emerald-600 font-bold">
-                  {receipt.payment?.status}
-                </strong>
-              </div>
+          {/* Application details */}
+          <div>
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Application Details</p>
+            <div className="bg-gray-50 rounded-lg px-4 py-1">
+              <Row label="Class Applied For" value={applicant?.targetClassId} />
+              <Row label="Phone"             value={applicant?.phone} />
+              <Row label="Father's Name"     value={applicant?.fatherName} />
+              <Row label="Mother's Name"     value={applicant?.motherName} />
+              <Row label="Review Status"     value={receipt.reviewStatus} />
             </div>
           </div>
 
-          {/* Verification Code Box & Official Signature */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t-2 border-border/40">
-            <div className="space-y-1.5 text-center sm:text-left">
-              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">
-                Security Verification Code
-              </span>
-              <div className="flex items-center gap-2">
-                <code className="px-3 py-1.5 rounded-lg bg-muted text-primary font-mono text-sm font-bold border">
-                  {receipt.verificationCode}
-                </code>
-                <button
-                  type="button"
-                  onClick={handleCopyCode}
-                  className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors print:hidden"
-                  title="Copy verification code"
-                >
-                  {copied ? (
-                    <Check className="h-4 w-4 text-emerald-600" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="text-center sm:text-right space-y-2">
-              <div className="inline-block border-b border-foreground/40 w-44 pb-1">
-                <ShieldCheck className="h-6 w-6 text-primary mx-auto sm:ml-auto" />
-              </div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                Authorized Admission Registrar
-              </p>
+          {/* Payment details */}
+          <div>
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Payment Details</p>
+            <div className="bg-gray-50 rounded-lg px-4 py-1">
+              <Row label="Transaction ID"  value={payment?.tranId} />
+              <Row label="Payment Method"  value={paymentMethod} />
+              <Row label="Paid On"         value={formatDate(payment?.paidAt)} />
+              <Row label="Amount Paid"     value={`${payment?.currency} ${Number(payment?.amount || 0).toFixed(2)}`} />
             </div>
           </div>
 
-          {/* Instructions note for student */}
-          <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-900 dark:text-amber-200 space-y-1">
-            <p className="font-bold">Important Instructions for Candidate:</p>
-            <ul className="list-disc list-inside space-y-0.5 text-[11px]">
-              <li>Please keep a printed copy of this receipt safe for your admission written test / viva interview.</li>
-              <li>Your login account has been provisioned. Once admitted by administration, you can sign in using your email and password.</li>
-              <li>Official interview dates and updates will be communicated via your registered email ({receipt.email}).</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Footer */}
+        <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+          <p className="text-[10px] text-gray-400">Generated: {new Date().toLocaleString("en-GB")}</p>
+          <p className="text-[10px] text-gray-400 font-mono">DCMS Admission System</p>
+        </div>
+
+      </div>
     </div>
   );
 }
