@@ -80,7 +80,16 @@
     "card3Btn": "Assistant Head Teacher Info >"
   },
   "NoticeBoard": {
+    "title": "Notice Board",
+    "subtitle": "Stay up-to-date with the latest announcements, circulars, and notifications.",
     "sectionTitle": "NOTICE BOARD",
+    "show": "Show",
+    "categories": {
+      "general": "General Notice",
+      "scholarship": "Scholarship & Fellowship",
+      "job": "Job Circulars",
+      "result": "Results & Tenders"
+    },
     "tabs": {
       "general": "General Notice",
       "scholarship": "Scholarship & Fellowship",

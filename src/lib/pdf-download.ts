@@ -1,284 +1,325 @@
 /**
  * pdf-download.ts
  *
- * Simple, reliable PDF utilities — no html2canvas, no color parsing issues.
- *
- *  - downloadReceiptAsPdf : draws the receipt directly with jsPDF text API
- *  - printNoticeDocument  : opens a clean print window for rich HTML content
+ * Lightweight, direct PDF generation system using jsPDF.
+ * - No html2canvas or CSS color parsing (no "lab"/"oklch" bugs).
+ * - Fast, 100% client-side generation without server round-trips.
+ * - Reusable across all documents (receipts, notices, reports).
  */
 
 import type { AdmissionReceipt } from "@/types/admission";
 import type { Notice } from "@/types/notice.types";
 
-// ─── Shared helpers ────────────────────────────────────────────────────────────
+// ─── Formatters ─────────────────────────────────────────────────────────────
 
-function formatDate(dateStr?: string) {
-  return new Date(dateStr || Date.now()).toLocaleDateString("en-GB", {
+function formatDate(dateStr?: string | null): string {
+  if (!dateStr) return "—";
+  return new Date(dateStr).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
 }
 
-// ─── Receipt PDF ───────────────────────────────────────────────────────────────
+function formatCurrency(amount?: number | null, currency = "BDT"): string {
+  const value = Number(amount || 0).toFixed(2);
+  return `${currency} ${value}`;
+}
+
+/** Converts rich HTML from Tiptap/WYSIWYG into clean plain text blocks */
+function htmlToParagraphs(html: string): string[] {
+  if (!html) return [];
+
+  const text = html
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n\n")
+    .replace(/<\/h[1-6]>/gi, "\n\n")
+    .replace(/<\/li>/gi, "\n")
+    .replace(/<li[^>]*>/gi, "•  ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+
+  return text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
+
+// ─── Reusable Table Drawer ──────────────────────────────────────────────────
+
+function drawKeyValueTable(
+  pdf: InstanceType<typeof import("jspdf").jsPDF>,
+  rows: [string, string][],
+  startY: number,
+  contentWidth: number,
+  startX: number
+): number {
+  const rowHeight = 6.5;
+  const tableHeight = rows.length * rowHeight + 3;
+
+  // Background box with border
+  pdf.setFillColor(249, 250, 251);
+  pdf.setDrawColor(229, 231, 235);
+  pdf.roundedRect(startX, startY, contentWidth, tableHeight, 1.5, 1.5, "FD");
+
+  rows.forEach(([label, value], index) => {
+    const rowY = startY + 5 + index * rowHeight;
+
+    // Label (left-aligned)
+    pdf.setFontSize(8);
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(107, 114, 128);
+    pdf.text(label, startX + 4, rowY);
+
+    // Value (right-aligned)
+    pdf.setFont("helvetica", "bold");
+    pdf.setTextColor(17, 24, 39);
+    pdf.text(value, startX + contentWidth - 4, rowY, { align: "right" });
+
+    // Inner divider line
+    if (index < rows.length - 1) {
+      pdf.setDrawColor(243, 244, 246);
+      pdf.line(startX + 3, rowY + 2, startX + contentWidth - 3, rowY + 2);
+    }
+  });
+
+  return startY + tableHeight;
+}
+
+// ─── 1. Admission Receipt PDF (Compact A5 Voucher Size) ────────────────────
+
+export interface DownloadReceiptOptions {
+  className?: string; // Human-readable class name (e.g. "Class 6")
+}
 
 /**
- * Builds and downloads the admission receipt as an A4 PDF.
- * Uses jsPDF's drawing API directly — no html2canvas, no CSS color issues.
+ * Generates and downloads a compact A5 admission voucher / receipt.
+ * Dedicated slip size (148mm × 210mm) eliminates empty A4 space.
  */
-export async function downloadReceiptAsPdf(receipt: AdmissionReceipt) {
+export async function downloadReceiptAsPdf(
+  receipt: AdmissionReceipt,
+  options?: DownloadReceiptOptions
+): Promise<void> {
   const { jsPDF } = await import("jspdf");
 
-  const pdf = new jsPDF({ unit: "mm", format: "a4" });
-  const W = 210; // page width
+  // A5 dimensions: 148mm × 210mm
+  const pdf = new jsPDF({ unit: "mm", format: "a5", orientation: "portrait" });
+  const pageWidth = 148;
+  const pageHeight = 210;
+  const margin = 14;
+  const contentWidth = pageWidth - margin * 2; // 120mm
 
-  // ── Blue header ──
+  // 1. Header banner (DCMS Blue)
   pdf.setFillColor(29, 78, 216);
-  pdf.rect(0, 0, W, 38, "F");
+  pdf.rect(0, 0, pageWidth, 32, "F");
 
-  pdf.setFontSize(8);
+  pdf.setFontSize(7.5);
   pdf.setFont("helvetica", "normal");
   pdf.setTextColor(191, 219, 254);
-  pdf.text("OFFICIAL RECEIPT", 20, 13);
+  pdf.text("OFFICIAL RECEIPT", margin, 11);
 
-  pdf.setFontSize(15);
+  pdf.setFontSize(13);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(255, 255, 255);
-  pdf.text("Dhaka Central Model School", 20, 23);
+  pdf.text("Dhaka Central Model School", margin, 19);
 
-  pdf.setFontSize(8);
+  pdf.setFontSize(7.5);
   pdf.setFont("helvetica", "normal");
   pdf.setTextColor(191, 219, 254);
-  pdf.text("Mirpur, Dhaka-1216  ·  admissions@dcms.edu.bd", 20, 31);
+  pdf.text("Mirpur, Dhaka-1216  ·  admissions@dcms.edu.bd", margin, 26);
 
-  // ── Receipt meta ──
-  let y = 52;
-
-  pdf.setFontSize(7.5);
-  pdf.setFont("helvetica", "normal");
+  // 2. Receipt metadata row
+  let y = 42;
+  pdf.setFontSize(7);
+  pdf.setFont("helvetica", "bold");
   pdf.setTextColor(156, 163, 175);
-  pdf.text("RECEIPT NO.", 20, y);
-  pdf.text("DATE ISSUED", 90, y);
-  pdf.text("STATUS", 162, y);
+  pdf.text("RECEIPT NO.", margin, y);
+  pdf.text("DATE ISSUED", margin + 44, y);
+  pdf.text("STATUS", pageWidth - margin - 22, y);
 
   y += 5;
-  pdf.setFontSize(10);
+  pdf.setFontSize(9);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(17, 24, 39);
-  pdf.text(receipt.receiptNo || "—", 20, y);
-  pdf.text(formatDate(receipt.issuedAt), 90, y);
+  pdf.text(receipt.receiptNo || "—", margin, y);
+  pdf.text(formatDate(receipt.issuedAt), margin + 44, y);
 
-  // Status pill
+  // Status badge
+  const status = receipt.payment?.status || "PAID";
   pdf.setFillColor(220, 252, 231);
-  pdf.roundedRect(160, y - 5, 30, 7, 2, 2, "F");
-  pdf.setFontSize(8);
-  pdf.setTextColor(21, 128, 61);
-  pdf.text(receipt.payment?.status || "PAID", 164, y);
-
-  y += 10;
-  pdf.setDrawColor(229, 231, 235);
-  pdf.line(20, y, 190, y);
-
-  // ── Applicant ──
-  y += 10;
+  pdf.roundedRect(pageWidth - margin - 24, y - 4.5, 24, 6, 1.5, 1.5, "F");
   pdf.setFontSize(7.5);
+  pdf.setTextColor(21, 128, 61);
+  pdf.text(status, pageWidth - margin - 12, y - 0.5, { align: "center" });
+
+  y += 8;
+  pdf.setDrawColor(229, 231, 235);
+  pdf.line(margin, y, pageWidth - margin, y);
+
+  // 3. Applicant Information
+  y += 8;
+  pdf.setFontSize(7);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(156, 163, 175);
-  pdf.text("APPLICANT", 20, y);
+  pdf.text("APPLICANT", margin, y);
 
-  y += 6;
-  pdf.setFontSize(13);
+  y += 5;
+  pdf.setFontSize(11);
   pdf.setTextColor(17, 24, 39);
-  pdf.text(receipt.applicant?.fullName || "—", 20, y);
+  pdf.text(receipt.applicant?.fullName || "—", margin, y);
 
-  y += 6;
-  pdf.setFontSize(9);
+  y += 4.5;
+  pdf.setFontSize(8);
   pdf.setFont("helvetica", "normal");
   pdf.setTextColor(107, 114, 128);
-  pdf.text(receipt.applicant?.email || receipt.email || "—", 20, y);
-
-  y += 5;
-  pdf.setFont("helvetica", "bold");
-  pdf.setTextColor(37, 99, 235);
-  pdf.text(receipt.applicationNo || "—", 20, y);
-
-  // ── Application details ──
-  y += 12;
-  pdf.setFontSize(7.5);
-  pdf.setFont("helvetica", "bold");
-  pdf.setTextColor(156, 163, 175);
-  pdf.text("APPLICATION DETAILS", 20, y);
+  pdf.text(receipt.applicant?.email || receipt.email || "—", margin, y);
 
   y += 4;
-  const detailRows: [string, string][] = [
-    ["Class Applied For", receipt.applicant?.targetClassId || "—"],
+  pdf.setFont("helvetica", "bold");
+  pdf.setTextColor(37, 99, 235);
+  pdf.text(receipt.applicationNo || "—", margin, y);
+
+  // 4. Application Details Table
+  y += 8;
+  pdf.setFontSize(7);
+  pdf.setFont("helvetica", "bold");
+  pdf.setTextColor(156, 163, 175);
+  pdf.text("APPLICATION DETAILS", margin, y);
+
+  y += 3;
+  const targetClass = options?.className || receipt.applicant?.targetClassId || "—";
+  const applicationRows: [string, string][] = [
+    ["Class Applied For", targetClass],
     ["Phone",             receipt.applicant?.phone         || "—"],
     ["Father's Name",     receipt.applicant?.fatherName    || "—"],
     ["Mother's Name",     receipt.applicant?.motherName    || "—"],
     ["Review Status",     receipt.reviewStatus             || "—"],
   ];
-  y = drawTable(pdf, detailRows, y);
+  y = drawKeyValueTable(pdf, applicationRows, y, contentWidth, margin);
 
-  // ── Payment details ──
-  y += 8;
-  pdf.setFontSize(7.5);
+  // 5. Payment Details Table
+  y += 6;
+  pdf.setFontSize(7);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(156, 163, 175);
-  pdf.text("PAYMENT DETAILS", 20, y);
+  pdf.text("PAYMENT DETAILS", margin, y);
 
-  const method = receipt.payment?.cardType
+  y += 3;
+  const paymentMethod = receipt.payment?.cardType
     ? `${receipt.payment.provider} (${receipt.payment.cardType})`
     : receipt.payment?.provider || "—";
 
-  y += 4;
   const paymentRows: [string, string][] = [
-    ["Transaction ID",  receipt.payment?.tranId  || "—"],
-    ["Payment Method",  method],
+    ["Transaction ID",  receipt.payment?.tranId || "—"],
+    ["Payment Method",  paymentMethod],
     ["Paid On",         formatDate(receipt.payment?.paidAt)],
-    [`Amount (${receipt.payment?.currency || ""})`,
-      Number(receipt.payment?.amount || 0).toFixed(2)],
+    ["Amount Paid",     formatCurrency(receipt.payment?.amount, receipt.payment?.currency)],
   ];
-  y = drawTable(pdf, paymentRows, y);
+  y = drawKeyValueTable(pdf, paymentRows, y, contentWidth, margin);
 
-  // ── Footer ──
+  // 6. Footer (pinned to bottom of A5 slip)
   pdf.setFillColor(249, 250, 251);
-  pdf.rect(0, 277, W, 20, "F");
+  pdf.rect(0, pageHeight - 14, pageWidth, 14, "F");
   pdf.setDrawColor(229, 231, 235);
-  pdf.line(0, 277, W, 277);
-  pdf.setFontSize(8);
+  pdf.line(0, pageHeight - 14, pageWidth, pageHeight - 14);
+
+  pdf.setFontSize(7);
   pdf.setFont("helvetica", "normal");
   pdf.setTextColor(156, 163, 175);
-  pdf.text(`Generated: ${new Date().toLocaleString("en-GB")}`, 20, 287);
-  pdf.text("DCMS Admission System", 155, 287);
+  pdf.text(`Generated: ${new Date().toLocaleString("en-GB")}`, margin, pageHeight - 5.5);
+  pdf.text("DCMS Admission System", pageWidth - margin, pageHeight - 5.5, { align: "right" });
 
-  pdf.save(`DCMS-Receipt-${receipt.applicationNo}.pdf`);
+  pdf.save(`DCMS-Receipt-${receipt.applicationNo || receipt.receiptNo}.pdf`);
 }
 
-/** Draws a two-column label/value table and returns the new Y position. */
-function drawTable(pdf: InstanceType<typeof import("jspdf").jsPDF>, rows: [string, string][], startY: number) {
-  const rowH = 8;
-  const tableH = rows.length * rowH + 4;
-
-  pdf.setFillColor(249, 250, 251);
-  pdf.setDrawColor(229, 231, 235);
-  pdf.roundedRect(20, startY, 170, tableH, 2, 2, "FD");
-
-  rows.forEach(([label, value], i) => {
-    const ry = startY + 6 + i * rowH;
-
-    pdf.setFontSize(9);
-    pdf.setFont("helvetica", "normal");
-    pdf.setTextColor(107, 114, 128);
-    pdf.text(label, 25, ry);
-
-    pdf.setFont("helvetica", "bold");
-    pdf.setTextColor(17, 24, 39);
-    pdf.text(value, 120, ry);
-
-    if (i < rows.length - 1) {
-      pdf.setDrawColor(243, 244, 246);
-      pdf.line(25, ry + 3, 185, ry + 3);
-    }
-  });
-
-  return startY + tableH;
-}
-
-// ─── Notice print window ────────────────────────────────────────────────────────
+// ─── 2. Notice PDF (Standard A4 Letterhead Direct Download) ─────────────────
 
 /**
- * Opens a clean print window for a notice.
- * Uses the browser's native print-to-PDF — handles rich HTML perfectly.
+ * Directly downloads an official school notice as an A4 PDF.
+ * Formatted as official school circular with letterhead, date, subject, and body.
  */
-export function printNoticeDocument(notice: Notice) {
-  const win = window.open("", "_blank", "width=900,height=700");
-  if (!win) return;
+export async function downloadNoticePdf(notice: Notice): Promise<void> {
+  const { jsPDF } = await import("jspdf");
 
-  const date = new Date(notice.noticeDate).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const margin = 20;
+  const contentWidth = pageWidth - margin * 2; // 170mm
 
-  win.document.write(`<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>${notice.subject}</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Times New Roman', Georgia, serif;
-      color: #111;
-      background: white;
-      padding: 20mm;
-    }
-    header {
-      text-align: center;
-      padding-bottom: 14px;
-      border-bottom: 2px solid #111;
-      margin-bottom: 20px;
-    }
-    header h1 {
-      font-size: 22pt;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    header p {
-      font-size: 10pt;
-      color: #555;
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .date { text-align: right; font-size: 11pt; margin-bottom: 18px; }
-    .notice-label {
-      text-align: center;
-      margin-bottom: 18px;
-    }
-    .notice-label span {
-      font-size: 13pt;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 6px;
-      border-bottom: 2px solid #111;
-      padding-bottom: 2px;
-      padding-inline: 12px;
-    }
-    .subject {
-      font-size: 13pt;
-      font-weight: 700;
-      margin-bottom: 24px;
-      line-height: 1.4;
-    }
-    .body {
-      font-size: 12pt;
-      line-height: 1.85;
-      text-align: justify;
-    }
-    @media print {
-      body { padding: 0; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Dhanbari Collegiate Model School</h1>
-    <p>Dhanbari, Tangail</p>
-  </header>
-  <div class="date">Date: ${date}</div>
-  <div class="notice-label"><span>Notice</span></div>
-  <div class="subject"><strong>Subject:</strong> ${notice.subject}</div>
-  <div class="body">${notice.body}</div>
-  <script>
-    window.onload = function () {
-      window.print();
-      window.onafterprint = function () { window.close(); };
-    };
-  </script>
-</body>
-</html>`);
+  let y = 24;
 
-  win.document.close();
+  // 1. Institutional Letterhead Header
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.setTextColor(17, 24, 39);
+  pdf.text("Dhanbari Collegiate Model School", pageWidth / 2, y, { align: "center" });
+
+  y += 6.5;
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(9.5);
+  pdf.setTextColor(107, 114, 128);
+  pdf.text("Dhanbari, Tangail", pageWidth / 2, y, { align: "center" });
+
+  y += 5.5;
+  pdf.setDrawColor(31, 41, 55);
+  pdf.setLineWidth(0.4);
+  pdf.line(margin, y, pageWidth - margin, y);
+
+  // 2. Date row
+  y += 9;
+  pdf.setFontSize(9.5);
+  pdf.setTextColor(75, 85, 99);
+  pdf.text(`Date: ${formatDate(notice.noticeDate)}`, pageWidth - margin, y, { align: "right" });
+
+  // 3. NOTICE Title Badge
+  y += 11;
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(12);
+  pdf.setTextColor(17, 24, 39);
+  pdf.text("NOTICE", pageWidth / 2, y, { align: "center" });
+
+  // Underline beneath NOTICE
+  const titleWidth = pdf.getTextWidth("NOTICE");
+  pdf.setLineWidth(0.5);
+  pdf.line(pageWidth / 2 - titleWidth / 2 - 4, y + 2, pageWidth / 2 + titleWidth / 2 + 4, y + 2);
+
+  // 4. Subject line
+  y += 13;
+  pdf.setFontSize(11);
+  pdf.setFont("helvetica", "bold");
+  pdf.setTextColor(17, 24, 39);
+  const subjectLines = pdf.splitTextToSize(`Subject: ${notice.subject}`, contentWidth);
+  pdf.text(subjectLines, margin, y);
+  y += subjectLines.length * 6 + 4;
+
+  // 5. Notice Body Paragraphs
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(10);
+  pdf.setTextColor(31, 41, 55);
+
+  const paragraphs = htmlToParagraphs(notice.body);
+
+  for (const para of paragraphs) {
+    const lines = pdf.splitTextToSize(para, contentWidth);
+    const blockHeight = lines.length * 5.5;
+
+    // Check page break
+    if (y + blockHeight > pageHeight - margin - 15) {
+      pdf.addPage();
+      y = margin;
+    }
+
+    pdf.text(lines, margin, y);
+    y += blockHeight + 4;
+  }
+
+  // File slug
+  const filename = `${notice.subject.slice(0, 40).replace(/[^a-zA-Z0-9_-]/g, "_") || "Notice"}.pdf`;
+  pdf.save(filename);
 }

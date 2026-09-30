@@ -5,6 +5,7 @@ import Image from "next/image";
 import { CheckCircle2, Download, Loader2, RotateCcw, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { downloadReceiptAsPdf } from "@/lib/pdf-download";
+import { useClassesQuery } from "@/hooks/queries/use-class-queries";
 import type { AdmissionReceipt } from "@/types/admission";
 
 interface ReceiptStepProps {
@@ -31,18 +32,25 @@ function Row({ label, value }: { label: string; value?: string | null }) {
 
 export function ReceiptStep({ receipt, onReset }: ReceiptStepProps) {
   const [isDownloading, setIsDownloading] = useState(false);
+  const { data: classesData } = useClassesQuery();
+
+  const { applicant, payment } = receipt;
+
+  // Resolve human-readable class name from targetClassId UUID
+  const className =
+    classesData?.find((c) => c.id === applicant?.targetClassId)?.name ||
+    applicant?.targetClassId ||
+    "—";
 
   const handleDownload = async () => {
     if (isDownloading) return;
     setIsDownloading(true);
     try {
-      await downloadReceiptAsPdf(receipt);
+      await downloadReceiptAsPdf(receipt, { className });
     } finally {
       setIsDownloading(false);
     }
   };
-
-  const { applicant, payment } = receipt;
 
   const paymentMethod = payment?.cardType
     ? `${payment.provider} (${payment.cardType})`
@@ -78,7 +86,7 @@ export function ReceiptStep({ receipt, onReset }: ReceiptStepProps) {
       </div>
 
       {/* Receipt preview card */}
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs">
 
         {/* Header */}
         <div className="bg-blue-700 text-white px-8 py-6">
@@ -131,7 +139,7 @@ export function ReceiptStep({ receipt, onReset }: ReceiptStepProps) {
           <div>
             <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Application Details</p>
             <div className="bg-gray-50 rounded-lg px-4 py-1">
-              <Row label="Class Applied For" value={applicant?.targetClassId} />
+              <Row label="Class Applied For" value={className} />
               <Row label="Phone"             value={applicant?.phone} />
               <Row label="Father's Name"     value={applicant?.fatherName} />
               <Row label="Mother's Name"     value={applicant?.motherName} />

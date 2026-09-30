@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { ArrowLeft, Download } from "lucide-react";
-import { printNoticeDocument } from "@/lib/pdf-download";
+import { ArrowLeft, Download, Loader2 } from "lucide-react";
+import { downloadNoticePdf } from "@/lib/pdf-download";
 import type { Notice } from "@/types/notice.types";
 
 const SERIF = "'Times New Roman', Georgia, 'Hind Siliguri', serif";
@@ -21,6 +22,17 @@ interface NoticeViewPageProps {
 
 export function NoticeViewPage({ notice }: NoticeViewPageProps) {
   const router = useRouter();
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (downloading) return;
+    setDownloading(true);
+    try {
+      await downloadNoticePdf(notice);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-neutral-100 dark:bg-background py-8 px-4">
@@ -36,11 +48,16 @@ export function NoticeViewPage({ notice }: NoticeViewPageProps) {
         </button>
 
         <button
-          onClick={() => printNoticeDocument(notice)}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors shadow-xs cursor-pointer"
+          onClick={handleDownload}
+          disabled={downloading}
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors shadow-xs disabled:opacity-60 cursor-pointer"
         >
-          <Download className="h-4 w-4" />
-          Download PDF
+          {downloading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Download className="h-4 w-4" />
+          )}
+          <span>Download PDF</span>
         </button>
       </div>
 
