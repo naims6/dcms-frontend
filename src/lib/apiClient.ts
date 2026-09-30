@@ -105,11 +105,11 @@ async function request<T>(
     }
 
     const errorData = await res.json().catch(() => ({}));
-    const message =
-      errorData.message ||
-      (Array.isArray(errorData.errors)
-        ? errorData.errors.join(", ")
-        : `Error ${res.status}`);
+    // When the backend returns "Validation failed" + an errors array of field messages, prefer the array.
+    const hasErrors = Array.isArray(errorData.errors) && errorData.errors.length > 0;
+    const message = hasErrors
+      ? errorData.errors.join(" • ")
+      : errorData.message || `Error ${res.status}`;
     throw new ApiError(message, res.status, errorData.errors, errorData.error);
   }
 

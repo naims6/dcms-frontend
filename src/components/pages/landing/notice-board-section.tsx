@@ -9,7 +9,6 @@ import {
   GraduationCap,
   Briefcase,
   BarChart2,
-  Download,
   Eye,
   ChevronLeft,
   ChevronRight,
@@ -17,7 +16,6 @@ import {
   Loader2,
 } from "lucide-react";
 import { useNoticeFeedQuery } from "@/hooks/queries/use-notice-queries";
-import { downloadNoticePdfApi } from "@/services/notice.service";
 import { NoticeCategory, PaginatedNoticesResponse } from "@/types/notice.types";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useToast } from "@/hooks/use-toast";
@@ -42,13 +40,12 @@ interface NoticeBoardSectionProps {
 
 export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoardSectionProps) {
   const t = useTranslations("NoticeBoard");
-  const { toast, toastState, dismiss } = useToast();
+  const { toastState, dismiss } = useToast();
 
   const [activeTab, setActiveTab]         = useState<TabId>("GENERAL");
   const [searchInput, setSearchInput]     = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(5);
   const [page, setPage]                   = useState(1);
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const debouncedSearch = useDebounce(searchInput);
 
@@ -73,84 +70,78 @@ export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoa
     setPage(1);
   };
 
-  const handleDownload = async (noticeId: string, subject: string) => {
-    try {
-      setDownloadingId(noticeId);
-      const blob = await downloadNoticePdfApi(noticeId);
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement("a");
-      a.href     = url;
-      a.download = `${subject.slice(0, 40).replace(/\s+/g, "_")}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch {
-      toast("error", "Failed to download PDF. Please try again.");
-    } finally {
-      setDownloadingId(null);
-    }
-  };
-
   const formatDate = (dateStr: string) =>
     new Date(dateStr).toLocaleDateString("en-GB", {
       day: "2-digit", month: "2-digit", year: "numeric",
     });
 
   const getPageNumbers = (): (number | "...")[] => {
-    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
-    const pages: (number | "...")[] = [1];
-    if (page > 3) pages.push("...");
-    for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) pages.push(i);
-    if (page < totalPages - 2) pages.push("...");
-    pages.push(totalPages);
-    return pages;
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (page <= 4) {
+      return [1, 2, 3, 4, 5, "...", totalPages];
+    }
+    if (page >= totalPages - 3) {
+      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, "...", page - 1, page, page + 1, "...", totalPages];
   };
 
   return (
-    <section className={`w-full ${hideTitle ? "pb-16 pt-8 md:pb-24 md:pt-12" : "py-16 md:py-24"} bg-background`}>
+    <section className="w-full py-12 md:py-16 bg-muted/30">
       {toastState && <Toast state={toastState} onDismiss={dismiss} />}
-
-      <div className="container mx-auto px-4">
-
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {!hideTitle && (
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground uppercase mb-4">
-              {t("sectionTitle")}
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
+              {t("title")}
             </h2>
-            <div className="w-16 h-1.5 bg-primary mx-auto rounded-full" />
+            <p className="mt-3 text-base sm:text-lg text-muted-foreground">
+              {t("subtitle")}
+            </p>
           </div>
         )}
 
-        <div className="border border-border/60 bg-card rounded-xl shadow-md overflow-hidden flex flex-col">
-
-          {/* ── Tabs ────────────────────────────────────────────── */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1 p-2 bg-muted/60">
-            {TABS.map(({ id, labelKey, icon: Icon }) => (
+        {/* ── Category Tabs ────────────────────────────────────────── */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8">
+          {TABS.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
               <button
-                key={id}
-                onClick={() => handleTabChange(id)}
-                className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 ${
-                  activeTab === id
-                    ? "bg-primary text-primary-foreground shadow-sm scale-[1.02]"
-                    : "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`
+                  inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer
+                  ${
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 scale-[1.02]"
+                      : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground border border-border/80"
+                  }
+                `}
               >
-                <Icon className="h-5 w-5 shrink-0" />
-                <span className="truncate">{t(`tabs.${labelKey}`)}</span>
+                <Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isActive ? "text-primary-foreground" : "text-muted-foreground"}`} />
+                <span>{t(`categories.${tab.labelKey}`)}</span>
               </button>
-            ))}
-          </div>
+            );
+          })}
+        </div>
 
-          {/* ── Controls ─────────────────────────────────────────── */}
-          <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-background border-b border-border/50 gap-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        {/* ── Table Card ───────────────────────────────────────────── */}
+        <div className="bg-card border border-border/60 rounded-xl shadow-xs overflow-hidden">
+          {/* Controls Bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-b border-border/60 bg-muted/20">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground w-full sm:w-auto">
+              <span>{t("show")}</span>
               <select
-                className="bg-transparent border border-border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary"
+                className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer"
                 value={entriesPerPage}
                 onChange={(e) => { setEntriesPerPage(Number(e.target.value)); setPage(1); }}
               >
-                {ENTRIES_OPTIONS.map((n) => <option key={n} value={n}>{n}</option>)}
+                {ENTRIES_OPTIONS.map((val) => (
+                  <option key={val} value={val}>{val}</option>
+                ))}
               </select>
               <span>{t("entriesPerPage")}</span>
             </div>
@@ -174,7 +165,7 @@ export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoa
                 <tr className="bg-primary text-primary-foreground">
                   <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[18%] sm:w-[15%]">{t("table.date")}</th>
                   <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm border-l border-white/20">{t("table.title")}</th>
-                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[28%] sm:w-[22%] text-center border-l border-white/20">{t("table.attachment")}</th>
+                  <th className="py-3 px-2 sm:px-4 font-semibold text-xs sm:text-sm w-[24%] sm:w-[18%] text-center border-l border-white/20">{t("table.attachment")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border text-foreground">
@@ -201,29 +192,15 @@ export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoa
                         {notice.subject}
                       </td>
                       <td className="py-3 px-2 sm:px-4 text-center border-l border-border/40 align-middle">
-                        <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                        <div className="flex items-center justify-center">
                           <Link
                             href={`/notice/${notice.id}`}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs"
-                            title={t("table.view")}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs"
+                            title={t("table.viewDetails")}
                           >
                             <Eye className="h-3.5 w-3.5" />
-                            <span>{t("table.view")}</span>
+                            <span>{t("table.viewDetails")}</span>
                           </Link>
-                          <button
-                            type="button"
-                            onClick={() => handleDownload(notice.id, notice.subject)}
-                            disabled={downloadingId === notice.id}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium border border-border bg-card hover:bg-muted text-foreground transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-xs"
-                            title={t("modal.downloadPdf")}
-                          >
-                            {downloadingId === notice.id ? (
-                              <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
-                            ) : (
-                              <Download className="h-3.5 w-3.5 text-muted-foreground" />
-                            )}
-                            <span className="hidden sm:inline">{t("table.download")}</span>
-                          </button>
                         </div>
                       </td>
                     </tr>
@@ -248,39 +225,50 @@ export function NoticeBoardSection({ hideTitle = false, initialFeed }: NoticeBoa
               {Math.min(page * entriesPerPage, meta.total)}{" "}
               {t("pagination.of")} {meta.total} {t("pagination.entries")}
             </p>
-            <div className="flex bg-background border border-border rounded-md overflow-hidden">
+
+            <div className="flex items-center gap-1">
               <button
-                className="px-3 py-1 border-r border-border hover:bg-muted text-muted-foreground disabled:opacity-40"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page <= 1}
+                disabled={page === 1}
+                className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-border bg-card text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+                aria-label="Previous Page"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              {getPageNumbers().map((p, idx) =>
-                p === "..." ? (
-                  <span key={`e-${idx}`} className="px-3 py-1 border-r border-border text-muted-foreground flex items-center text-sm">…</span>
+
+              {getPageNumbers().map((num, idx) =>
+                num === "..." ? (
+                  <span key={`dots-${idx}`} className="px-2 text-xs text-muted-foreground">
+                    ...
+                  </span>
                 ) : (
                   <button
-                    key={p}
-                    onClick={() => setPage(p as number)}
-                    className={`px-3 py-1 border-r border-border transition-colors text-sm ${
-                      page === p ? "bg-primary/10 text-primary font-semibold" : "hover:bg-muted text-foreground"
-                    }`}
+                    key={`page-${num}`}
+                    onClick={() => setPage(Number(num))}
+                    className={`
+                      inline-flex items-center justify-center h-8 min-w-[2rem] px-2 rounded-md text-xs font-medium transition-colors
+                      ${
+                        page === num
+                          ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                          : "border border-border bg-card text-foreground hover:bg-muted"
+                      }
+                    `}
                   >
-                    {p}
+                    {num}
                   </button>
-                ),
+                )
               )}
+
               <button
-                className="px-3 py-1 hover:bg-muted text-muted-foreground disabled:opacity-40"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages}
+                className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-border bg-card text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+                aria-label="Next Page"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </section>

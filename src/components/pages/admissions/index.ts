@@ -3,3 +3,8 @@ export { AcademicInformation } from "./academic-information";
 export { ParentInformation } from "./parent-information";
 export { ContactInformation } from "./contact-information";
 export { AdditionalInformation } from "./additional-information";
+export { AdmissionStepper } from "./admission-stepper";
+export { VerifyEmailStep } from "./verify-email-step";
+export { PaymentStep } from "./payment-step";
+export { ReceiptStep } from "./receipt-step";
+export { TrackApplicationModal } from "./track-application-modal";
