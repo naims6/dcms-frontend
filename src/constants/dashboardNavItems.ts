@@ -8,6 +8,7 @@ import {
   List,
   FilePlus,
   UserPlus,
+  ClipboardList,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -32,6 +33,12 @@ export const dashboardNavItems: NavItem[] = [
     title: "Overview",
     path: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Admissions",
+    path: "/dashboard/admissions",
+    icon: ClipboardList,
+    permission: "ADMISSIONS_READ",
   },
   {
     title: "Students",

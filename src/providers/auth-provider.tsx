@@ -78,7 +78,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (user.roles?.includes("ADMIN") || user.permissions.includes("*")) {
         return true;
       }
-      return user.permissions.includes(permission);
+      if (user.permissions.includes(permission)) return true;
+      const normalizedTarget = permission.toLowerCase().replace(/_/g, ":");
+      return user.permissions.some((p) => {
+        const normalizedP = p.toLowerCase().replace(/_/g, ":");
+        return (
+          normalizedP === normalizedTarget ||
+          normalizedP.replace(/s:/, ":") === normalizedTarget.replace(/s:/, ":")
+        );
+      });
     },
     [user],
   );
@@ -89,9 +97,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (user.roles?.includes("ADMIN") || user.permissions.includes("*")) {
         return true;
       }
-      return permissions.some((p) => user.permissions.includes(p));
+      return permissions.some((p) => hasPermission(p));
     },
-    [user],
+    [user, hasPermission],
   );
 
   return (

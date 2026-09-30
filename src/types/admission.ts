@@ -112,3 +112,113 @@ export interface StudentInformationProps {
   photoPreview: string | null;
   onPhotoSelect: (file: File | null) => void;
 }
+
+// ── Admin / Dashboard Admission Types ──────────────────────────────────────────
+
+export interface AdminAdmissionApplication {
+  id: string;
+  applicationNo: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  dateOfBirth?: string | null;
+  gender?: Gender | null;
+  bloodGroup?: BloodGroup | null;
+  religion?: Religion | null;
+  nationality?: string | null;
+  nationalIdOrBirthReg?: string | null;
+  photoUrl?: string | null;
+  photoKey?: string | null;
+  fatherName?: string | null;
+  fatherPhone?: string | null;
+  fatherOccupation?: string | null;
+  fatherNid?: string | null;
+  motherName?: string | null;
+  motherPhone?: string | null;
+  motherOccupation?: string | null;
+  motherNid?: string | null;
+  localGuardianName?: string | null;
+  localGuardianPhone?: string | null;
+  localGuardianRelation?: string | null;
+  localGuardianAddress?: string | null;
+  presentStreetAddress?: string | null;
+  presentUpazila?: string | null;
+  presentDistrict?: string | null;
+  presentDivision?: string | null;
+  presentPostCode?: string | null;
+  sameAsPresentAddress?: boolean;
+  permanentStreetAddress?: string | null;
+  permanentUpazila?: string | null;
+  permanentDistrict?: string | null;
+  permanentDivision?: string | null;
+  permanentPostCode?: string | null;
+  targetClassId: string;
+  previousSchoolName?: string | null;
+  previousClass?: string | null;
+  previousGpa?: string | null;
+  previousBoardRoll?: string | null;
+  previousPassingYear?: number | null;
+  status: ApplicationStatus;
+  isEmailVerified: boolean;
+  rejectionReason?: string | null;
+  reviewedBy?: string | null;
+  reviewedAt?: string | null;
+  createdStudentId?: string | null;
+  paymentTransactionId?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminAdmissionPayment {
+  id: string;
+  tranId: string;
+  amount: number;
+  currency: string;
+  status: string;
+  provider: string;
+  paidAt?: string | null;
+}
+
+export interface AdminAdmissionDetailData {
+  application: AdminAdmissionApplication;
+  payment: AdminAdmissionPayment | null;
+}
+
+export interface GetAdminApplicationsQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: ApplicationStatus;
+}
+
+export interface PaginatedAdminApplicationsResponse {
+  data: AdminAdmissionApplication[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+export interface AcceptApplicationResponseData {
+  message: string;
+  studentId: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
+
+export interface RejectApplicationDto {
+  reason: string;
+}
+
+export interface RejectApplicationResponseData {
+  message: string;
+  applicationNo: string;
+  status: ApplicationStatus;
+  rejectionReason: string;
+}

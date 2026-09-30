@@ -30,4 +30,9 @@ export const queryKeys = {
     all: ["classes"] as const,
     list: () => ["classes", "list"] as const,
   },
+  admissions: {
+    all: ["admissions"] as const,
+    list: (params?: Record<string, unknown>) => ["admissions", "list", params || {}] as const,
+    detail: (id: string) => ["admissions", "detail", id] as const,
+  },
 };
