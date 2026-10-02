@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type AdmissionFormValues } from "@/schemas/admissions";
 import { applyAdmissionApi } from "@/services/admission.service";
 import type { ApplyAdmissionResponse } from "@/types/admission";
@@ -10,14 +10,18 @@ export function useAdmissionForm() {
 
   const handlePhotoSelect = (file: File | null) => {
     setPhotoFile(file);
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPhotoPreview(url);
-    } else {
-      if (photoPreview) URL.revokeObjectURL(photoPreview);
-      setPhotoPreview(null);
-    }
   };
+
+  useEffect(() => {
+    const url = photoFile ? URL.createObjectURL(photoFile) : null;
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPhotoPreview(url);
+
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [photoFile]);
 
   const onSubmit = async (
     data: AdmissionFormValues,
@@ -36,7 +40,11 @@ export function useAdmissionForm() {
       }
 
       // Strip frontend-only fields — backend DTO does not accept these
-      const { confirmPassword: _confirmPassword, agreeTerms: _agreeTerms, ...backendData } = data;
+      const {
+        confirmPassword: _confirmPassword,
+        agreeTerms: _agreeTerms,
+        ...backendData
+      } = data;
 
       // Append all backend-safe form values
       Object.entries(backendData).forEach(([key, value]) => {
