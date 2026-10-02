@@ -182,7 +182,7 @@ export function AdmissionsManagement() {
   ).length;
 
   return (
-    <PermissionGuard requiredPermission="ADMISSIONS_READ">
+    <PermissionGuard requiredPermission="admissions:read">
       <div className="space-y-6 animate-in fade-in-0 duration-300">
         {/* Page Toast */}
         {toastState && <Toast state={toastState} onDismiss={dismiss} />}

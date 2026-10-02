@@ -1,12 +1,3 @@
-/**
- * pdf-download.ts
- *
- * Lightweight, direct PDF generation system using jsPDF.
- * - No html2canvas or CSS color parsing (no "lab"/"oklch" bugs).
- * - Fast, 100% client-side generation without server round-trips.
- * - Reusable across all documents (receipts, notices, reports).
- */
-
 import type { AdmissionReceipt } from "@/types/admission";
 import type { Notice } from "@/types/notice.types";
 
