@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { ArrowLeft, Download, Loader2 } from "lucide-react";
 import { downloadNoticePdf } from "@/lib/pdf-download";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 import type { Notice } from "@/types/notice.types";
 
 const SERIF = "'Times New Roman', Georgia, 'Hind Siliguri', serif";
@@ -115,7 +116,7 @@ export function NoticeViewPage({ notice }: NoticeViewPageProps) {
           <div
             className="notice-prose text-gray-800 text-[12pt] leading-[1.85] text-justify"
             style={{ fontFamily: SERIF }}
-            dangerouslySetInnerHTML={{ __html: notice.body }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(notice.body) }}
           />
 
         </div>

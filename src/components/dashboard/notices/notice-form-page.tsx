@@ -13,6 +13,7 @@ import {
   useUpdateNoticeMutation,
 } from "@/hooks/queries/use-notice-queries";
 import { useToast } from "@/hooks/use-toast";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 import { Toast } from "@/components/shared/Toast";
 import { DashboardPageHeader } from "@/components/dashboard/shared/DashboardPageHeader";
 import {
@@ -354,7 +355,9 @@ export function NoticeFormPage({ mode, notice }: NoticeFormPageProps) {
                 <div
                   className="notice-prose max-h-64 overflow-hidden text-sm"
                   dangerouslySetInnerHTML={{
-                    __html: stripHtml(body) ? body : "<p>Your notice body will appear here…</p>",
+                    __html: stripHtml(body)
+                      ? sanitizeHtml(body)
+                      : "<p>Your notice body will appear here…</p>",
                   }}
                 />
               </div>
