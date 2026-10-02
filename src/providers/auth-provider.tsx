@@ -68,25 +68,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await fetchCurrentUserRefetch();
   }, [fetchCurrentUserRefetch]);
 
-  /**
-   * Permission Helper:
-   * Returns true if user is ADMIN, has wildcard '*', or possesses specific permission string
-   */
+
   const hasPermission = useCallback(
     (permission: string): boolean => {
       if (!user || !user.permissions) return false;
       if (user.roles?.includes("ADMIN") || user.permissions.includes("*")) {
         return true;
       }
-      if (user.permissions.includes(permission)) return true;
-      const normalizedTarget = permission.toLowerCase().replace(/_/g, ":");
-      return user.permissions.some((p) => {
-        const normalizedP = p.toLowerCase().replace(/_/g, ":");
-        return (
-          normalizedP === normalizedTarget ||
-          normalizedP.replace(/s:/, ":") === normalizedTarget.replace(/s:/, ":")
-        );
-      });
+      return user.permissions.includes(permission);
     },
     [user],
   );

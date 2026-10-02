@@ -38,7 +38,7 @@ export const dashboardNavItems: NavItem[] = [
     title: "Admissions",
     path: "/dashboard/admissions",
     icon: ClipboardList,
-    permission: "ADMISSIONS_READ",
+    permission: "admissions:read",
   },
   {
     title: "Students",
@@ -47,7 +47,11 @@ export const dashboardNavItems: NavItem[] = [
     permission: "students:read",
     children: [
       { title: "All Students", path: "/dashboard/students", icon: List },
-      { title: "Create Student", path: "/dashboard/students/create", icon: UserPlus },
+      {
+        title: "Create Student",
+        path: "/dashboard/students/create",
+        icon: UserPlus,
+      },
     ],
   },
   {
@@ -69,7 +73,11 @@ export const dashboardNavItems: NavItem[] = [
     permission: "notices:read",
     children: [
       { title: "All Notices", path: "/dashboard/notices", icon: List },
-      { title: "Create Notice", path: "/dashboard/notices/create", icon: FilePlus },
+      {
+        title: "Create Notice",
+        path: "/dashboard/notices/create",
+        icon: FilePlus,
+      },
     ],
   },
 ];

@@ -199,7 +199,7 @@ export function AdmissionRow({
             </Button>
           </Link>
 
-          <Can perform="ADMISSIONS_UPDATE">
+          <Can perform="admissions:update">
             {!isAdmitted && (
               <Button
                 variant="ghost"

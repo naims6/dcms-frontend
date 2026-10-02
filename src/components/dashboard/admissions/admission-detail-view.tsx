@@ -213,7 +213,7 @@ export function AdmissionDetailView({
     classNames.get(application.targetClassId) || application.targetClassId;
 
   return (
-    <PermissionGuard requiredPermission="ADMISSIONS_READ">
+    <PermissionGuard requiredPermission="admissions:read">
       <div className="space-y-6 animate-in fade-in-0 duration-300">
         {toastState && <Toast state={toastState} onDismiss={dismiss} />}
 
@@ -264,7 +264,7 @@ export function AdmissionDetailView({
           </div>
 
           {/* Action Buttons */}
-          <Can perform="ADMISSIONS_UPDATE">
+          <Can perform="admissions:update">
             <div className="flex items-center gap-2 self-start sm:self-auto">
               {!isAdmitted && (
                 <Button
