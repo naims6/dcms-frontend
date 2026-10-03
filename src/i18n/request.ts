@@ -25,6 +25,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const alumniForum = (
     await import(`../../messages/${locale}/alumni-forum.json`)
   ).default;
+  const privacy = (await import(`../../messages/${locale}/privacy.json`))
+    .default;
 
   // When you add a new page, just add another import above and spread it below
   return {
@@ -39,6 +41,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...admissions,
       ...teacher,
       ...alumniForum,
+      ...privacy,
     },
   };
 });
